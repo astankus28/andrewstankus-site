@@ -7,9 +7,9 @@ window.EVENTS = [
     "client": "Proof Public House",
     "venue": "Proof Public House, 4116 Lorain Ave.",
     "city": "Cleveland, OH",
-    "category": "Commercial \u00b7 Food & Drink",
+    "category": "Commercial \u00b7 Menu Photography",
     "photos": 32,
-    "summary": "Pierogi, Parmageddon and a punk-rock soundtrack. We shot the menu at Matt Fish's Ohio City hangout, from starters to zero-proof cocktails."
+    "summary": "Pierogi, Parmageddon and a punk-rock soundtrack. We shot the updated menu at Matt Fish's Ohio City hangout, from starters to zero-proof cocktails."
   },
   {
     "slug": "somich-associates-open-house-2026-11-12",
