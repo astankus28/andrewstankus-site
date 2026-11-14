@@ -5,8 +5,8 @@ Run from the repo root:  python3 tools/build.py
 Cloudflare Pages runs this automatically on every change (see README.md).
 
 Reads:
-  content/events/*.md    one file per event / post (edited in Pages CMS)
-  data/site.json         homepage content (edited in Pages CMS)
+  content/events/*.md    one file per event / post
+  data/site.json         homepage content
 
 Writes:
   events/<slug>/index.html   recap page per event
@@ -204,7 +204,7 @@ def index_page(events):
 
 
 def clean_path(p):
-    """Pages CMS stores '/images/x.jpg'; pages use paths relative to the root."""
+    """Pages use image paths relative to the site root."""
     return (p or "").strip().lstrip("/")
 
 
