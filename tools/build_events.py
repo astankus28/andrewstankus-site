@@ -55,7 +55,7 @@ def event_page(ev, prev_ev, next_ev):
     folder = f"{up}images/events/{ev['slug']}"
     url = f"{SITE}/events/{ev['slug']}/"
     when = nice_date(ev["date"])
-    title = f"{ev['title']} — {where(ev) or ev.get('city', '')} | Andrew Stankus Agency"
+    title = f"{ev['title']} — {ev.get('city', '')} | Andrew Stankus Agency"
     photos = "\n".join(
         f'    <button aria-label="Open photo {i}"><div class="slot" data-hint="images/events/{ev["slug"]}/{i:02d}.jpg">'
         f'<img src="{folder}/{i:02d}.jpg" alt="{e(ev["title"])} — photo {i}" loading="lazy"></div></button>'
