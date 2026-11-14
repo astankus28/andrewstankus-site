@@ -658,7 +658,7 @@ $('#inqForm').onsubmit = async e => {
     form.reset();
     msg.textContent = "Thank you, we've got it. Expect a reply within one business day.";
   } catch (err) {
-    msg.innerHTML = 'Something went wrong. Please email <a href="mailto:${MAIL}">${MAIL}</a> or call (305) 814-0142.';
+    msg.innerHTML = `Something went wrong. Please email <a href="mailto:${MAIL}">${MAIL}</a> or call (305) 814-0142.`;
   }
   btn.disabled = false; btn.textContent = 'Send inquiry';
 };
