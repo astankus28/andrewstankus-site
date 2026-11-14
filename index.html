@@ -33,7 +33,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Jost:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,6 +48,7 @@
     --accent: #c9a96e;
     --serif: 'Cormorant Garamond', Georgia, serif;
     --sans: 'Inter', system-ui, sans-serif;
+    --display: 'Jost', 'Futura', 'Helvetica Neue', sans-serif;
     --pad: clamp(1.25rem, 4vw, 4rem);
   }
 
@@ -112,14 +113,14 @@
   .hero-slide.on img { transform: scale(1); }
   .hero::after {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(180deg, rgba(11,11,11,.55) 0%, rgba(11,11,11,0) 30%, rgba(11,11,11,.25) 60%, rgba(11,11,11,.92) 100%);
+    background: linear-gradient(180deg, rgba(11,11,11,.55) 0%, rgba(11,11,11,0) 28%, rgba(11,11,11,.45) 58%, rgba(11,11,11,.95) 100%);
   }
   .hero-copy { position: absolute; left: var(--pad); right: var(--pad); bottom: clamp(3rem, 8vh, 6rem); z-index: 2; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; }
-  .hero h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(3rem, 8.5vw, 8rem); line-height: 0.92; letter-spacing: -0.02em; }
-  .hero h1 em { font-style: italic; color: var(--accent); }
-  .hero .label { display: block; margin-bottom: 1.4rem; color: var(--paper); opacity: .8; }
+  .hero h1 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(2.8rem, 7.5vw, 7rem); line-height: 0.95; letter-spacing: -0.01em; text-shadow: 0 2px 30px rgba(0,0,0,.45); }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .label { display: block; margin-bottom: 1.2rem; color: var(--paper); text-shadow: 0 1px 12px rgba(0,0,0,.6); }
   .hero-side { text-align: right; max-width: 290px; }
-  .hero-side p { font-size: 0.9rem; color: rgba(243,239,232,.75); margin-bottom: 1.5rem; }
+  .hero-side p { font-size: 0.95rem; color: var(--paper); margin-bottom: 1.5rem; text-shadow: 0 1px 12px rgba(0,0,0,.7); }
   .hero-dots { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1.5rem; }
   .hero-dots button { width: 26px; height: 2px; background: rgba(243,239,232,.25); }
   .hero-dots button.on { background: var(--accent); }
