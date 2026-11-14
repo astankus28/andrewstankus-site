@@ -26,6 +26,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 1.1rem var(--pad); background: rgba(11,11,11,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .wordmark { display: flex; flex-direction: column; line-height: 1; }
 .wordmark b { font-family: var(--serif); font-weight: 400; font-size: 1.45rem; }
+.wordmark img { height: 40px; width: auto; display: block; }
 .wordmark span { font-size: .55rem; letter-spacing: .55em; text-transform: uppercase; color: var(--accent); margin-top: .35rem; }
 .nav-links { display: flex; gap: 2.2rem; align-items: center; list-style: none; }
 .nav-links a { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(243,239,232,.75); }

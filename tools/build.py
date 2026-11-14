@@ -58,7 +58,7 @@ def nice_date(d):
 
 def nav(up, active=""):
     return f'''<nav>
-  <a href="{up}index.html" class="wordmark" aria-label="Andrew Stankus Agency home"><b>Andrew Stankus</b><span>Agency</span></a>
+  <a href="{up}index.html" class="wordmark" aria-label="Andrew Stankus Agency home"><img src="{up}assets/asa-logo.svg" alt="ASA, Andrew Stankus Agency" width="100" height="55"></a>
   <ul class="nav-links">
     <li><a href="{up}events/index.html"{' class="on"' if active == 'events' else ''}>Events</a></li>
     <li><a href="{up}index.html#work">Portfolio</a></li>
@@ -117,6 +117,9 @@ def event_page(ev, prev_ev, next_ev):
 <html lang="en">
 <head>
 {GTM}<meta charset="UTF-8">
+<link rel="icon" href="{up}assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{e(title)}</title>
 <meta name="description" content="{e(ev.get('summary', ''))}">
@@ -195,6 +198,9 @@ def index_page(events):
 <html lang="en">
 <head>
 {GTM}<meta charset="UTF-8">
+<link rel="icon" href="{up}assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events | Andrew Stankus Agency — Event Photography Miami & Cleveland</title>
 <meta name="description" content="Recent events covered by Andrew Stankus Agency: corporate events, openings, launches and celebrations in Miami and Cleveland.">

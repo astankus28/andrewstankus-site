@@ -10,6 +10,9 @@
 <title>Andrew Stankus Agency | Event & Commercial Photography — Miami · Cleveland</title>
 <meta name="description" content="Andrew Stankus Agency — event and commercial photography in Miami and Cleveland. Advertising for Uber Eats, DoorDash, Grubhub, Amazon, ezCater and hospitality brands; corporate, brand and private events.">
 <meta name="author" content="Andrew Stankus">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
 <link rel="canonical" href="https://www.andrewstankus.com/">
 
 <meta property="og:type" content="website">
@@ -94,10 +97,13 @@
     display: flex; align-items: center; justify-content: space-between;
     padding: 1.6rem var(--pad); transition: background .35s, padding .35s;
   }
-  nav:not(.solid) .wordmark, nav:not(.solid) .nav-links a:not(.nav-cta) { text-shadow: 0 1px 14px rgba(0,0,0,.75); }
+  nav:not(.solid) .wordmark img { filter: drop-shadow(0 1px 10px rgba(0,0,0,.6)); }
+  nav:not(.solid) .nav-links a:not(.nav-cta) { text-shadow: 0 1px 14px rgba(0,0,0,.75); }
   nav.solid { background: rgba(11,11,11,0.92); backdrop-filter: blur(14px); padding: 1rem var(--pad); border-bottom: 1px solid var(--line); }
   .wordmark { display: flex; flex-direction: column; line-height: 1; }
   .wordmark b { font-family: var(--serif); font-weight: 400; font-size: 1.45rem; letter-spacing: 0.02em; }
+  .wordmark img { height: 52px; width: auto; display: block; transition: height .35s; }
+  nav.solid .wordmark img { height: 40px; }
   .wordmark span { font-size: 0.55rem; letter-spacing: 0.55em; text-transform: uppercase; color: var(--accent); margin-top: 0.35rem; }
   .nav-links { display: flex; gap: 2.4rem; align-items: center; list-style: none; }
   .nav-links a { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,239,232,0.75); transition: color .2s; }
@@ -296,7 +302,7 @@
 
 <nav id="nav">
   <a href="#top" class="wordmark" aria-label="Andrew Stankus Agency home">
-    <b>Andrew Stankus</b><span>Agency</span>
+    <img src="assets/asa-logo.svg" alt="ASA, Andrew Stankus Agency" width="120" height="66">
   </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="events/index.html">Events</a></li>
