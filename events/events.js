@@ -2,13 +2,13 @@
 window.EVENTS = [
   {
     "slug": "somich-associates-open-house-2026-11-12",
-    "title": "Somich & Associates CPAs Open House",
+    "title": "Somich & Associates CPAs Opens Its New Willoughby Home",
     "date": "2026-11-12",
     "client": "Somich & Associates CPAs",
     "venue": "Somich & Associates CPAs, 38879 Mentor Avenue",
     "city": "Willoughby, OH",
     "category": "Corporate",
     "photos": 73,
-    "summary": "Somich & Associates CPAs opened the doors to its new Willoughby office with an afternoon-into-evening celebration for clients, friends and the local business community."
+    "summary": "New address, same handshake. Somich & Associates CPAs threw open the doors on Mentor Avenue for an afternoon-into-evening celebration of the clients and neighbors who built the firm."
   }
 ];
