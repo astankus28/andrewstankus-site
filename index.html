@@ -162,6 +162,19 @@
   .tile:hover .cap { opacity: 1; }
   .tile.hide { display: none; }
 
+  /* CREDITS */
+  .fest { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 2.5rem; }
+  .fest span { border: 1px solid var(--line); padding: .6rem 1rem; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+  .fest i { font-style: normal; color: var(--accent); margin-left: .4rem; }
+  .credits { list-style: none; display: grid; grid-template-columns: 1fr 1fr; column-gap: 3rem; border-top: 1px solid var(--line); }
+  .credits a { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: .1rem 1rem; padding: 1.15rem 0; border-bottom: 1px solid var(--line); transition: padding .25s; }
+  .credits a:hover { padding-left: .6rem; }
+  .credits b { font-family: var(--serif); font-weight: 400; font-size: 1.4rem; }
+  .credits a:hover b { color: var(--accent); }
+  .credits span { grid-column: 1; font-size: .78rem; color: var(--muted); }
+  .credits em { grid-row: 1; grid-column: 2; font-style: normal; font-size: .7rem; letter-spacing: .15em; color: var(--muted); }
+  @media (max-width: 760px) { .credits { grid-template-columns: 1fr; } }
+
   /* SERVICES */
   .services { background: var(--ink2); }
   .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
@@ -308,7 +321,7 @@
   <div><b>17</b><span>Years behind the lens</span></div>
   <div><b>2</b><span>Cities · Miami & Cleveland</span></div>
   <div><b>24h</b><span>Selects delivered</span></div>
-  <div><b>Press</b><span>Society & editorial coverage</span></div>
+  <div><b>1,291</b><span>Events covered for World Red Eye</span></div>
 </div>
 
 <!-- RECENT WORK -->
@@ -327,6 +340,36 @@
     <div class="filters" id="filters"></div>
   </div>
   <div class="masonry" id="masonry"></div>
+</section>
+
+<!-- SELECTED CREDITS (World Red Eye years, 2015–2019) -->
+<section id="credits" style="padding-top:0">
+  <div class="head reveal">
+    <div><span class="label">Selected Credits</span><h2 class="title">1,291 nights in <em>Miami</em></h2></div>
+    <p style="max-width:380px;color:var(--muted);font-size:.9rem">Photographed for World Red Eye, 2015–2019. Each credit links to the published gallery.</p>
+  </div>
+  <div class="fest reveal">
+    <span>Art Basel Miami Beach <i>2015–2018</i></span>
+    <span>Miami Music Week / Ultra <i>2015–2018</i></span>
+    <span>South Beach Wine & Food Festival <i>2016–2019</i></span>
+    <span>Miami International Film Festival <i>2016–2017</i></span>
+    <span>Miami Swim Week <i>2015–2017</i></span>
+    <span>Miami Open <i>2016</i></span>
+  </div>
+  <ul class="credits reveal">
+    <li><a href="https://worldredeye.com/2015/12/dior-homme-presents-tailor%c2%b9s-cut/" target="_blank" rel="noopener"><b>Dior Homme</b><span>Tailor's Cut · Art Basel</span><em>2015</em></a></li>
+    <li><a href="https://worldredeye.com/2015/12/larry-gagosian-jeffrey-deitch-unrealism-opening-reception-king-of-arms-mass-processional-performance/" target="_blank" rel="noopener"><b>Gagosian × Jeffrey Deitch</b><span>UNREALISM opening</span><em>2015</em></a></li>
+    <li><a href="https://worldredeye.com/2015/12/perez-art-museum-miami-stewardship-dinner-in-honor-of-nari-ward-hosted-by-town-country-and-chopard/" target="_blank" rel="noopener"><b>Pérez Art Museum Miami</b><span>Stewardship Dinner · Town & Country, Chopard</span><em>2015</em></a></li>
+    <li><a href="https://worldredeye.com/2015/12/sothebys-kicks-off-miami-art-week-with-cristina-lei-rodriguez-installation-at-1-hotel-south-beach/" target="_blank" rel="noopener"><b>Sotheby's</b><span>Miami Art Week kickoff · 1 Hotel</span><em>2015</em></a></li>
+    <li><a href="https://worldredeye.com/2018/09/ocean-drive-magazine-pamm-celebrate-fall-collection-tory-burch-miami-design-district/" target="_blank" rel="noopener"><b>Tory Burch</b><span>Fall collection · Ocean Drive & PAMM</span><em>2018</em></a></li>
+    <li><a href="https://worldredeye.com/2015/11/fortune-international-group-chateau-group-ocean-drive-magazine-host-broker-celebration-at-ralph-lauren-bal-harbour/" target="_blank" rel="noopener"><b>Ralph Lauren Bal Harbour</b><span>Ritz-Carlton Residences soirée</span><em>2015</em></a></li>
+    <li><a href="https://worldredeye.com/2017/12/miami-city-ballets-nutcracker-magic-childrens-gala-brunch-at-adrienne-arsht-center/" target="_blank" rel="noopener"><b>Miami City Ballet</b><span>Nutcracker Gala · Arsht Center</span><em>2017</em></a></li>
+    <li><a href="https://worldredeye.com/2018/06/miami-beach-chamber-of-commerce-96th-annual-gala-at-the-loews-miami-beach/" target="_blank" rel="noopener"><b>Miami Beach Chamber of Commerce</b><span>96th Annual Gala · Loews</span><em>2018</em></a></li>
+    <li><a href="https://worldredeye.com/2016/01/camp-standard-the-standard-spa-miami-beach-10-year-anniversary-day-1/" target="_blank" rel="noopener"><b>The Standard Spa</b><span>10-year anniversary</span><em>2016</em></a></li>
+    <li><a href="https://worldredeye.com/2016/03/tennis-for-brunch-at-soho-beach-house/" target="_blank" rel="noopener"><b>Lacoste</b><span>Tennis for Brunch · Soho Beach House</span><em>2016</em></a></li>
+    <li><a href="https://worldredeye.com/2018/02/ferrari-fort-lauderdale-hosts-exclusive-screening-ferrari-488-pista-mizner-parker/" target="_blank" rel="noopener"><b>Ferrari</b><span>488 Pista private screening</span><em>2018</em></a></li>
+    <li><a href="https://worldredeye.com/2019/02/dinner-hosted-nina-compton-edouardo-jordan-dolester-miles-john-kunkel-part-american-airlines-dinner-series-yardbird-southern-table-bar/" target="_blank" rel="noopener"><b>SOBEWFF × American Airlines</b><span>Chef dinner series · Yardbird</span><em>2019</em></a></li>
+  </ul>
 </section>
 
 <!-- SERVICES -->
