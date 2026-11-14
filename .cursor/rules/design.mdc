@@ -1,0 +1,12 @@
+---
+description: Andrew Stankus Agency site — keep the existing design exactly as it is
+alwaysApply: true
+---
+Before making any change, read DESIGN.md in the repo root and follow it strictly.
+
+- Do NOT change the look of the site: same colors, fonts, spacing, square corners, buttons and animations.
+- Reuse existing classes and components; copy an existing section rather than inventing new styles.
+- No new frameworks, CSS libraries or build tools. Plain HTML, CSS and JS only.
+- Never edit generated files (events/*/index.html, events/events.js, data/site.js, sitemap.xml, robots.txt).
+  Change content/, data/site.json or tools/build.py, then run `python3 tools/build.py`.
+- If a request would require a visual redesign, ask the owner first instead of doing it.

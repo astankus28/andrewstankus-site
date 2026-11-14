@@ -1,5 +1,8 @@
 # Andrew Stankus Agency — andrewstankus.com
 
+> **Changing the code (Cursor, Claude or a developer)? Read [DESIGN.md](DESIGN.md) first.**
+> The design stays exactly as it is: same colors, fonts, spacing and components.
+
 ## Editing the site
 
 Go to **https://app.pagescms.org**, sign in with GitHub, and open
