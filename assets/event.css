@@ -92,6 +92,10 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 .lb-prev { left: .5rem; } .lb-next { right: .5rem; }
 
 @media (max-width: 900px) {
+  /* Phones/tablets: show the whole cover photo instead of cropping its sides */
+  .ev-hero { height: auto; min-height: 0; aspect-ratio: 3 / 2; }
+  .ev-hero::after { display: none; }
+  .ev-head { margin-top: 2rem; }
   .nav-links li:not(:last-child) { display: none; }
   .recap { grid-template-columns: 1fr; gap: 1.5rem; }
   .idx { grid-template-columns: 1fr 1fr; }
