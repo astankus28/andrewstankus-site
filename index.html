@@ -24,7 +24,6 @@
   "url": "https://www.andrewstankus.com/",
   "image": "https://www.andrewstankus.com/images/hero/01.jpg",
   "telephone": "+1-305-814-0142",
-  "email": "andrew@andrewstankus.com",
   "founder": { "@type": "Person", "name": "Andrew Stankus" },
   "areaServed": ["Miami", "Miami Beach", "Cleveland", "Northeast Ohio"],
   "description": "Event and commercial advertising photography agency.",
@@ -497,6 +496,7 @@
    data/site.js and events/events.js, which this page reads.
    ================================================================= */
 const SITE = window.SITE || {};
+const MAIL = ['andrew', 'andrewstankus.com'].join('@');
 const RECENT = (window.EVENTS || []).slice(0, 3);
 const PORTFOLIO = (SITE.portfolio || []).filter(p => p.image).map(p => ({ src: p.image, cat: p.category || 'Other', shape: p.shape || 'wide', caption: p.caption || '' }));
 const FILTERS = ['All', ...new Set(PORTFOLIO.map(p => p.cat))];
@@ -643,7 +643,7 @@ $('#inqForm').onsubmit = async e => {
   const msg = $('#inqMsg'), btn = $('#inqBtn');
   if (f.botcheck) return;                       // hidden field only bots fill in
   if (!SITE.form_key) {                          // no form service set up: fall back to email app
-    location.href = `mailto:andrew@andrewstankus.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    location.href = `mailto:${MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     return;
   }
   btn.disabled = true; btn.textContent = 'Sending…'; msg.textContent = '';
@@ -658,7 +658,7 @@ $('#inqForm').onsubmit = async e => {
     form.reset();
     msg.textContent = "Thank you, we've got it. Expect a reply within one business day.";
   } catch (err) {
-    msg.innerHTML = 'Something went wrong. Please email <a href="mailto:andrew@andrewstankus.com">andrew@andrewstankus.com</a> or call (305) 814-0142.';
+    msg.innerHTML = 'Something went wrong. Please email <a href="mailto:${MAIL}">${MAIL}</a> or call (305) 814-0142.';
   }
   btn.disabled = false; btn.textContent = 'Send inquiry';
 };
