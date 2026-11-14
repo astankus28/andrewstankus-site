@@ -30,6 +30,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.andrewstankus.com"
+PHOTOS = "https://photos.andrewstankus.com/"
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
          '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400'
@@ -264,6 +265,11 @@ def build_site_data():
     site = json.loads((ROOT / "data/site.json").read_text())
     for key in ("about_photo", "agency_photo"):
         site[key] = clean_path(site.get(key) or "")
+    for key in ("hero", "commercial_photos", "portfolio"):
+        for item in site.get(key) or []:
+            r2 = (item.get("r2_photo") or "").strip().lstrip("/")
+            if r2:
+                item["image"] = r2 if re.match(r"^https?://", r2) else PHOTOS + quote(r2)
     for key, field in [("hero", "image"), ("commercial_photos", "image"), ("portfolio", "image"), ("clients", "logo")]:
         for item in site.get(key) or []:
             if item.get(field):

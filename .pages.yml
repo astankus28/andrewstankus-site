@@ -89,8 +89,11 @@ content:
         type: object
         list: true
         fields:
+          - name: r2_photo
+            label: Photo from R2 (folder/file, e.g. proof-public-house-ohio-city/07.jpg)
+            type: string
           - name: image
-            label: Photo
+            label: Or upload a photo here
             type: image
       - name: about_photo
         label: Your portrait (About section)
@@ -114,8 +117,11 @@ content:
         type: object
         list: true
         fields:
+          - name: r2_photo
+            label: Photo from R2 (folder/file, e.g. proof-public-house-ohio-city/07.jpg)
+            type: string
           - name: image
-            label: Photo
+            label: Or upload a photo here
             type: image
           - name: alt
             label: Description
@@ -136,8 +142,11 @@ content:
         type: object
         list: true
         fields:
+          - name: r2_photo
+            label: Photo from R2 (folder/file, e.g. proof-public-house-ohio-city/07.jpg)
+            type: string
           - name: image
-            label: Photo
+            label: Or upload a photo here
             type: image
           - name: category
             label: Category (becomes a filter button)
