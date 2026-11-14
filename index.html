@@ -553,7 +553,7 @@ RECENT.forEach(ev => {
   const cover = slot(ev.cover, 'Cover photo', ev.title, '4/5');
   const count = document.createElement('span');
   count.className = 'count'; count.textContent = ev.photos + ' photos';
-  cover.appendChild(count);
+  if (ev.photos) cover.appendChild(count);
   const isNew = (now - new Date(ev.date)) / 864e5 < 21;
   card.appendChild(cover);
   card.insertAdjacentHTML('beforeend',

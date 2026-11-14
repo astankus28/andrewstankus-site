@@ -53,8 +53,15 @@ content:
       - name: summary
         label: Summary (one or two sentences, shown on cards and in the gold intro)
         type: text
+      - name: photo_folder
+        label: Photo folder in R2 (e.g. 2026-11-20-gala). Every photo in it is shown in file-name order; the first is the cover.
+        type: string
+      - name: captions
+        label: Captions for the folder photos, in order (optional)
+        type: string
+        list: true
       - name: photos
-        label: Photos (first one is the cover)
+        label: Or pick individual photos instead of a folder (first one is the cover)
         type: object
         list: true
         fields:
