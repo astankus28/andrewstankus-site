@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Andrew Stankus Agency | Event, Corporate & Society Photography — Miami · Cleveland</title>
+<title>Andrew Stankus Agency | Event & Commercial Photography — Miami · Cleveland</title>
 <meta name="description" content="Andrew Stankus Agency — event and commercial photography in Miami and Cleveland. Advertising for Uber Eats, DoorDash, Grubhub, Amazon, ezCater and hospitality brands; galas, corporate and society events.">
 <meta name="author" content="Andrew Stankus">
 <link rel="canonical" href="https://www.andrewstankus.com/">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.andrewstankus.com/">
-<meta property="og:title" content="Andrew Stankus Agency — Event & Society Photography">
+<meta property="og:title" content="Andrew Stankus Agency | Event & Commercial Photography">
 <meta property="og:description" content="Events and advertising photography. Miami · Cleveland · Anywhere.">
 <meta property="og:image" content="https://www.andrewstankus.com/images/hero/01.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -233,6 +233,10 @@
   .f input:focus, .f select:focus, .f textarea:focus { border-color: var(--accent); }
   .f textarea { resize: vertical; min-height: 90px; }
   form .btn { justify-self: start; grid-column: 1 / -1; }
+  form .btn:disabled { opacity: .6; cursor: wait; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .form-msg { grid-column: 1 / -1; font-size: .9rem; color: var(--accent); min-height: 1.4em; }
+  .form-msg a { text-decoration: underline; }
 
   footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--line); }
   footer a:hover { color: var(--paper); }
@@ -464,7 +468,9 @@
     <div class="f"><label for="fv">Venue / City</label><input id="fv" name="venue"></div>
     <div class="f"><label for="fg">Guest count</label><input id="fg" name="guests"></div>
     <div class="f full"><label for="fm">Tell us about it</label><textarea id="fm" name="message"></textarea></div>
-    <button type="submit" class="btn btn-gold">Send inquiry</button>
+    <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit" class="btn btn-gold" id="inqBtn">Send inquiry</button>
+    <p class="form-msg" id="inqMsg" role="status"></p>
   </form>
 </section>
 
@@ -482,7 +488,7 @@
   <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
 </div>
 
-<script src="data/site.js?v=a3afa20f0b"></script>
+<script src="data/site.js?v=daa9018991"></script>
 <script src="events/events.js?v=7e323e186a"></script>
 <script>
 /* =================================================================
@@ -629,11 +635,32 @@ $('#lb').addEventListener('touchstart', e => tx = e.touches[0].clientX, { passiv
 $('#lb').addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); });
 
 // Inquiry form → opens the visitor's email app addressed to you
-$('#inqForm').onsubmit = e => {
+$('#inqForm').onsubmit = async e => {
   e.preventDefault();
-  const f = Object.fromEntries(new FormData(e.target));
+  const form = e.target, f = Object.fromEntries(new FormData(form));
+  const subject = 'New inquiry: ' + f.type + (f.date ? ' on ' + f.date : '') + ' from ' + f.name;
   const body = `Name: ${f.name}\nEmail: ${f.email}\nDate: ${f.date}\nType: ${f.type}\nVenue/City: ${f.venue}\nGuests: ${f.guests}\n\n${f.message}`;
-  location.href = `mailto:andrew@andrewstankus.com?subject=${encodeURIComponent('Inquiry: ' + f.type + (f.date ? ' — ' + f.date : ''))}&body=${encodeURIComponent(body)}`;
+  const msg = $('#inqMsg'), btn = $('#inqBtn');
+  if (f.botcheck) return;                       // hidden field only bots fill in
+  if (!SITE.form_key) {                          // no form service set up: fall back to email app
+    location.href = `mailto:andrew@andrewstankus.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    return;
+  }
+  btn.disabled = true; btn.textContent = 'Sending…'; msg.textContent = '';
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ access_key: SITE.form_key, subject, from_name: 'andrewstankus.com', replyto: f.email,
+        name: f.name, email: f.email, event_date: f.date, event_type: f.type, venue: f.venue, guests: f.guests, message: f.message, botcheck: '' })
+    });
+    const out = await res.json();
+    if (!out.success) throw new Error(out.message);
+    form.reset();
+    msg.textContent = "Thank you, we've got it. Expect a reply within one business day.";
+  } catch (err) {
+    msg.innerHTML = 'Something went wrong. Please email <a href="mailto:andrew@andrewstankus.com">andrew@andrewstankus.com</a> or call (305) 814-0142.';
+  }
+  btn.disabled = false; btn.textContent = 'Send inquiry';
 };
 
 // Nav, menu, reveal, year

@@ -339,6 +339,14 @@ def main():
         f"window.EVENTS = {json.dumps(slim, indent=2, ensure_ascii=False)};\n")
     build_site_data()
     stamp_versions()
+    urls = [f"{SITE}/", f"{SITE}/events/"] + [f"{SITE}/events/{ev['slug']}/" for ev in events]
+    newest = events[0]["date"] if events else date.today().isoformat()
+    (ROOT / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "".join(f"  <url><loc>{u}</loc><lastmod>{(events[i - 2]['date'] if i >= 2 else newest)}</lastmod></url>\n"
+                  for i, u in enumerate(urls))
+        + "</urlset>\n")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
     print(f"Built {len(events)} event page(s) and homepage data.")
     if "--optimize" in sys.argv:
         optimize_images()
