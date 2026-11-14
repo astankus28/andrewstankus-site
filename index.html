@@ -208,6 +208,7 @@
   .client-list { display: flex; flex-wrap: wrap; gap: .9rem 2.2rem; margin-top: 2.2rem; padding-top: 1.8rem; border-top: 1px solid var(--line); font-family: var(--serif); font-size: 1.55rem; color: var(--paper); }
   .comm-imgs { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 1rem; height: clamp(420px, 48vw, 640px); }
   .comm-imgs .slot:first-child { grid-row: span 2; }
+  .client-list .logo { height: 30px; width: auto; object-fit: contain; filter: brightness(0) invert(.93); opacity: .9; align-self: center; }
 
   /* ABOUT */
   .about { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
@@ -278,14 +279,10 @@
 
 <!--
   ================================================================
-  HOW TO ADD PHOTOS (no code knowledge needed)
+  HOW TO EDIT THIS SITE
   ----------------------------------------------------------------
-  Every photo on this page is listed in the "SITE CONTENT" block
-  near the bottom of this file. Each one points to a file inside
-  the /images folder. Drop a JPG with that exact name into that
-  folder and it appears. Until then the spot shows a grey box.
-
-  Export JPGs ~2400px on the long side, quality ~80.
+  Content is edited at app.pagescms.org (see README.md), not here.
+  Export JPGs ~2400px on the long side before uploading.
   ================================================================
 -->
 
@@ -321,12 +318,7 @@
 </header>
 
 <!-- CREDENTIALS -->
-<div class="strip">
-  <div><b>17</b><span>Years behind the lens</span></div>
-  <div><b>Thousands</b><span>Of campaigns</span></div>
-  <div><b>1,291</b><span>Events covered for World Red Eye</span></div>
-  <div><b>5,000+</b><span>Shoots & events completed</span></div>
-</div>
+<div class="strip" id="stats"></div>
 
 <!-- RECENT WORK -->
 <section id="recent">
@@ -357,11 +349,7 @@
       <div class="client-list" id="clientList"></div>
       <a href="#inquire" class="btn btn-line" style="margin-top:2.2rem">Brief us on a campaign</a>
     </div>
-    <div class="comm-imgs reveal">
-      <div class="slot" data-hint="images/events/proof-public-house-ohio-city/01.jpg"><img src="images/events/proof-public-house-ohio-city/01.jpg" alt="Proof Public House, Cleveland — food photography by Andrew Stankus Agency" loading="lazy"></div>
-      <div class="slot" data-hint="images/events/proof-public-house-ohio-city/13.jpg"><img src="images/events/proof-public-house-ohio-city/13.jpg" alt="Proof Burger at Proof Public House — Andrew Stankus Agency" loading="lazy"></div>
-      <div class="slot" data-hint="images/events/proof-public-house-ohio-city/25.jpg"><img src="images/events/proof-public-house-ohio-city/25.jpg" alt="Dismantle Me zero-proof cocktail at Proof Public House — Andrew Stankus Agency" loading="lazy"></div>
-    </div>
+    <div class="comm-imgs reveal" id="commImgs"></div>
   </div>
 </section>
 
@@ -494,59 +482,23 @@
   <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
 </div>
 
+<script src="data/site.js"></script>
 <script src="events/events.js"></script>
 <script>
 /* =================================================================
-   SITE CONTENT — edit this block to update the site.
+   SITE CONTENT lives in data/site.json and content/events/*.md.
+   Edit it at app.pagescms.org; tools/build.py turns it into
+   data/site.js and events/events.js, which this page reads.
    ================================================================= */
-
-// Homepage slideshow: 4–6 of your strongest, widest frames.
-const HERO = [
-  'images/hero/01.jpg',
-  'images/hero/02.jpg',
-  'images/hero/03.jpg',
-  'images/hero/04.jpg',
-  'images/hero/05.jpg',
-];
-
-// RECENT WORK comes from events/events.json (see tools/build_events.py).
-// The homepage shows the newest 3; every event gets its own recap page.
+const SITE = window.SITE || {};
 const RECENT = (window.EVENTS || []).slice(0, 3);
-
-// PORTFOLIO — your best 40–60. Categories must match the FILTERS list.
-// shape: 'tall' (portrait), 'wide' (landscape) or 'square'.
-const FILTERS = ['All', 'Commercial', 'Events', 'Corporate', 'Society', 'Portraits', 'Hospitality'];
-const PORTFOLIO = [
-  { src: 'images/events/proof-public-house-ohio-city/01.jpg', cat: 'Commercial', shape: 'wide', caption: 'Proof Public House' },
-  { src: 'images/events/proof-public-house-ohio-city/07.jpg', cat: 'Commercial', shape: 'wide', caption: 'Pierogi · Proof Public House' },
-  { src: 'images/events/proof-public-house-ohio-city/24.jpg', cat: 'Commercial', shape: 'tall', caption: 'Purple Rain · Proof Public House' },
-  { src: 'images/work/events-01.jpg',      cat: 'Events',      shape: 'tall',   caption: 'Gala' },
-  { src: 'images/work/events-02.jpg',      cat: 'Events',      shape: 'wide',   caption: 'Benefit dinner' },
-  { src: 'images/work/society-01.jpg',     cat: 'Society',     shape: 'tall',   caption: 'Society' },
-  { src: 'images/work/corporate-01.jpg',   cat: 'Corporate',   shape: 'wide',   caption: 'Corporate' },
-  { src: 'images/work/events-03.jpg',      cat: 'Events',      shape: 'square', caption: 'Arrivals' },
-  { src: 'images/work/portraits-01.jpg',   cat: 'Portraits',   shape: 'tall',   caption: 'Portrait' },
-  { src: 'images/work/hospitality-01.jpg', cat: 'Hospitality', shape: 'wide',   caption: 'Restaurant' },
-  { src: 'images/work/society-02.jpg',     cat: 'Society',     shape: 'square', caption: 'Private party' },
-  { src: 'images/work/corporate-02.jpg',   cat: 'Corporate',   shape: 'tall',   caption: 'Keynote' },
-  { src: 'images/work/events-04.jpg',      cat: 'Events',      shape: 'wide',   caption: 'The room' },
-  { src: 'images/events/proof-public-house-ohio-city/17.jpg', cat: 'Commercial', shape: 'wide', caption: 'Parmageddon · Proof Public House' },
-  { src: 'images/events/proof-public-house-ohio-city/12.jpg', cat: 'Commercial', shape: 'wide', caption: 'Chicken & Sausage Gumbo · Proof Public House' },
-  { src: 'images/events/proof-public-house-ohio-city/26.jpg', cat: 'Commercial', shape: 'tall', caption: 'Parinoid · Proof Public House' },
-  { src: 'images/work/portraits-02.jpg',   cat: 'Portraits',   shape: 'square', caption: 'Headshot' },
-];
-
-// TESTIMONIALS — real quotes only. Section stays hidden while empty.
-const QUOTES = [
-  // { text: 'Quote here.', who: 'Name, Title — Company' },
-];
-
-// COMMERCIAL CLIENTS — shown in the Commercial section.
-const CLIENTS = [
-  'Uber Eats', 'DoorDash', 'Grubhub', 'Postmates', 'Amazon', 'ezCater', 'ChowNow', 'Slice', 'Hospitality Brands',
-];
-
-/* ================================================================= */
+const PORTFOLIO = (SITE.portfolio || []).filter(p => p.image).map(p => ({ src: p.image, cat: p.category || 'Other', shape: p.shape || 'wide', caption: p.caption || '' }));
+const FILTERS = ['All', ...new Set(PORTFOLIO.map(p => p.cat))];
+const HERO = (SITE.hero || []).map(h => h.image).filter(Boolean).length
+  ? SITE.hero.map(h => h.image).filter(Boolean)
+  : [...new Set([...(window.EVENTS || []).map(e => e.cover), ...PORTFOLIO.filter(p => p.shape === 'wide').map(p => p.src)].filter(Boolean))].slice(0, 5);
+const QUOTES = (SITE.quotes || []).filter(q => q.text);
+const CLIENTS = (SITE.clients || []).filter(c => c.name || c.logo);
 
 const $ = s => document.querySelector(s);
 const shapes = { tall: '4/5', wide: '3/2', square: '1/1' };
@@ -598,7 +550,7 @@ RECENT.forEach(ev => {
   const card = document.createElement('a');
   card.className = 'story reveal';
   card.href = `events/${ev.slug}/index.html`;
-  const cover = slot(`images/events/${ev.slug}/01.jpg`, `images/events/${ev.slug}/01.jpg`, ev.title, '4/5');
+  const cover = slot(ev.cover, 'Cover photo', ev.title, '4/5');
   const count = document.createElement('span');
   count.className = 'count'; count.textContent = ev.photos + ' photos';
   cover.appendChild(count);
@@ -633,6 +585,11 @@ PORTFOLIO.forEach((p, i) => {
   $('#masonry').appendChild(t);
 });
 
+// Stats & commercial photos
+$('#stats').innerHTML = (SITE.stats || []).map(st => `<div><b>${st.number}</b><span>${st.label}</span></div>`).join('');
+(SITE.commercial_photos || []).filter(c => c.image).slice(0, 3).forEach(c => $('#commImgs').appendChild(slot(c.image, c.image, c.alt || 'Andrew Stankus Agency commercial photography')));
+$('#commImgs').hidden = !$('#commImgs').children.length;
+
 // Testimonials & clients
 if (QUOTES.length) {
   $('#quotes').hidden = false;
@@ -643,7 +600,9 @@ if (QUOTES.length) {
     qi = (qi + 1) % qs.length; qs[qi].classList.add('on'); }, 7000); }
 }
 if (CLIENTS.length) {
-  $('#clientList').innerHTML = CLIENTS.map(c => `<span>${c}</span>`).join('');
+  $('#clientList').innerHTML = CLIENTS.map(c => c.logo
+    ? `<img class="logo" src="${c.logo}" alt="${c.name || ''}" title="${c.name || ''}">`
+    : `<span>${c.name}</span>`).join('');
 }
 
 // Lightbox

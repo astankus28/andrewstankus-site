@@ -1,0 +1,153 @@
+# Pages CMS configuration — https://pagescms.org
+# Sign in at https://app.pagescms.org with GitHub to edit this site.
+media:
+  input: images
+  output: /images
+  categories: [image]
+
+content:
+  - name: events
+    label: Events & Posts
+    type: collection
+    path: content/events
+    format: yaml-frontmatter
+    filename: '{fields.title}-{year}-{month}-{day}.md'
+    view:
+      primary: title
+      fields: [title, date, city]
+      sort: [date]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Headline
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: client
+        label: Client
+        type: string
+      - name: venue
+        label: Venue / address
+        type: string
+      - name: city
+        label: City
+        type: string
+        description: e.g. Cleveland, OH
+      - name: category
+        label: Type of coverage
+        type: select
+        options:
+          creatable: true
+          values:
+            - Corporate
+            - Gala & Society
+            - Brand Event
+            - Hospitality
+            - Commercial · Menu Photography
+            - Portraits
+      - name: summary
+        label: Summary (one or two sentences, shown on cards and in the gold intro)
+        type: text
+      - name: photos
+        label: Photos (first one is the cover)
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Photo
+            type: image
+          - name: caption
+            label: Caption (optional)
+            type: string
+      - name: body
+        label: Recap (leave a blank line between paragraphs)
+        type: text
+      - name: draft
+        label: Hide from site (draft)
+        type: boolean
+
+  - name: site
+    label: Homepage
+    type: file
+    path: data/site.json
+    format: json
+    fields:
+      - name: hero
+        label: Opening slideshow (4–6 wide photos; leave empty to use your portfolio)
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Photo
+            type: image
+      - name: stats
+        label: Stats row
+        type: object
+        list: true
+        fields:
+          - name: number
+            label: Big number / word
+            type: string
+          - name: label
+            label: Label
+            type: string
+      - name: commercial_photos
+        label: Commercial section photos (3)
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Photo
+            type: image
+          - name: alt
+            label: Description
+            type: string
+      - name: clients
+        label: Commercial clients
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: Name
+            type: string
+          - name: logo
+            label: Logo (optional, shown in one color)
+            type: image
+      - name: portfolio
+        label: Portfolio
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Photo
+            type: image
+          - name: category
+            label: Category (becomes a filter button)
+            type: select
+            options:
+              creatable: true
+              values: [Commercial, Events, Corporate, Society, Portraits, Hospitality]
+          - name: shape
+            label: Frame
+            type: select
+            options:
+              values: [wide, tall, square]
+          - name: caption
+            label: Caption
+            type: string
+      - name: quotes
+        label: Testimonials (section stays hidden while empty)
+        type: object
+        list: true
+        fields:
+          - name: text
+            label: Quote
+            type: text
+          - name: who
+            label: Name, title, company
+            type: string

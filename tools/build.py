@@ -1,19 +1,31 @@
 #!/usr/bin/env python3
-"""Build the /events pages from events/events.json.
+"""Build the site from the editable content files.
 
-Run from the repo root:  python3 tools/build_events.py
+Run from the repo root:  python3 tools/build.py
+Cloudflare Pages runs this automatically on every change (see README.md).
+
+Reads:
+  content/events/*.md    one file per event / post (edited in Pages CMS)
+  data/site.json         homepage content (edited in Pages CMS)
 
 Writes:
-  events/<slug>/index.html   one recap page per event
+  events/<slug>/index.html   recap page per event
   events/index.html          list of all events
-  events/events.js           data the homepage "Recent Work" section reads
+  events/events.js           newest events for the homepage
+  data/site.js               homepage content for index.html
 
-Photos for an event go in images/events/<slug>/01.jpg, 02.jpg, ... (cover = 01.jpg).
+With --optimize (used on Cloudflare), every JPG under images/ that is larger
+than 2400px is scaled down and stamped with the copyright notice, so a
+full-size upload is never served at full size.
 """
 import html
 import json
+import re
+import sys
 from datetime import date
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.andrewstankus.com"
@@ -52,21 +64,19 @@ def where(ev):
 
 def event_page(ev, prev_ev, next_ev):
     up = "../../"
-    folder = f"{up}images/events/{ev['slug']}"
     url = f"{SITE}/events/{ev['slug']}/"
     when = nice_date(ev["date"])
     title = f"{ev['title']} — {ev.get('city', '')} | Andrew Stankus Agency"
-    caps = ev.get("captions", [])
-    def cap(i):
-        return caps[i - 1] if i <= len(caps) and caps[i - 1] else ""
+    pics = ev["photos"]
+    cover = pics[0]["image"] if pics else ""
     photos = "\n".join(
-        f'    <button aria-label="Open photo {i}"><div class="slot" data-hint="images/events/{ev["slug"]}/{i:02d}.jpg">'
-        f'<img src="{folder}/{i:02d}.jpg" alt="{e(cap(i) + " — " if cap(i) else "")}{e(ev["title"])} — photo {i}" loading="lazy">'
-        + (f'<span class="cap">{e(cap(i))}</span>' if cap(i) else '') + '</div></button>'
-        for i in range(1, ev["photos"] + 1))
+        f'    <button aria-label="Open photo {i}"><div class="slot" data-hint="{e(p["image"])}">'
+        f'<img src="{up}{e(p["image"])}" alt="{e(p["caption"] + " — " if p["caption"] else "")}{e(ev["title"])} — photo {i}" loading="lazy">'
+        + (f'<span class="cap">{e(p["caption"])}</span>' if p["caption"] else '') + '</div></button>'
+        for i, p in enumerate(pics, 1))
     recap = "\n".join(f"      <p>{e(p)}</p>" for p in ev["recap"])
     meta = [("Date", when), ("Client", ev.get("client", "")), ("Venue", ev.get("venue", "")),
-            ("City", ev.get("city", "")), ("Coverage", ev.get("category", "")), ("Photos", str(ev["photos"]))]
+            ("City", ev.get("city", "")), ("Coverage", ev.get("category", "")), ("Photos", str(len(pics)))]
     meta_html = "".join(f"<div><small>{k}</small>{e(v)}</div>" for k, v in meta if v)
     pager = ""
     if prev_ev or next_ev:
@@ -78,7 +88,7 @@ def event_page(ev, prev_ev, next_ev):
     ld = {
         "@context": "https://schema.org", "@type": "ImageGallery", "name": ev["title"], "url": url,
         "datePublished": ev["date"], "description": ev.get("summary", ""),
-        "image": f"{SITE}/images/events/{ev['slug']}/01.jpg",
+        "image": f"{SITE}/{cover}",
         "author": {"@type": "Organization", "name": "Andrew Stankus Agency", "url": SITE + "/"},
         "contentLocation": {"@type": "Place", "name": where(ev)},
     }
@@ -93,7 +103,7 @@ def event_page(ev, prev_ev, next_ev):
 <meta property="og:type" content="article">
 <meta property="og:title" content="{e(ev['title'])} — {e(when)}">
 <meta property="og:description" content="{e(ev.get('summary', ''))}">
-<meta property="og:image" content="{SITE}/images/events/{ev['slug']}/01.jpg">
+<meta property="og:image" content="{SITE}/{cover}">
 <meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld)}</script>
@@ -103,8 +113,8 @@ def event_page(ev, prev_ev, next_ev):
 <body>
 {nav(up, 'events')}
 
-<div class="ev-hero slot" data-hint="Cover — images/events/{ev['slug']}/01.jpg">
-  <img src="{folder}/01.jpg" alt="{e(ev['title'])}">
+<div class="ev-hero slot" data-hint="Cover photo">
+  <img src="{up}{e(cover)}" alt="{e(ev['title'])}">
 </div>
 
 <header class="ev-head">
@@ -155,7 +165,7 @@ def index_page(events):
         y, m, d = map(int, ev["date"].split("-"))
         new = (today - date(y, m, d)).days < 21
         cards.append(f'''  <a class="card" href="{ev['slug']}/index.html">
-    <div class="slot" data-hint="images/events/{ev['slug']}/01.jpg"><img src="{up}images/events/{ev['slug']}/01.jpg" alt="{e(ev['title'])}" loading="lazy"></div>
+    <div class="slot" data-hint="Cover photo"><img src="{up}{e(ev['photos'][0]['image'] if ev['photos'] else '')}" alt="{e(ev['title'])}" loading="lazy"></div>
     <div class="card-meta">{'<span class="new">New</span>' if new else ''}<span>{e(nice_date(ev['date']))}</span><span>{e(ev.get('city', ''))}</span></div>
     <h3>{e(ev['title'])}</h3>
     <p>{e(ev.get('summary', ''))}</p>
@@ -188,23 +198,98 @@ def index_page(events):
 '''
 
 
-def main():
-    events = json.loads((ROOT / "events/events.json").read_text())
+def clean_path(p):
+    """Pages CMS stores '/images/x.jpg'; pages use paths relative to the root."""
+    return (p or "").strip().lstrip("/")
+
+
+def load_events():
+    events = []
+    for f in sorted((ROOT / "content/events").glob("*.md")):
+        text = f.read_text()
+        m = re.match(r"^---\s*\n(.*?)\n---\s*\n?(.*)$", text, re.S)
+        fm, body = (yaml.safe_load(m.group(1)) or {}, m.group(2)) if m else ({}, text)
+        if fm.get("draft"):
+            continue
+        photos = []
+        for p in fm.get("photos") or []:
+            if isinstance(p, str):
+                p = {"image": p}
+            if p and p.get("image"):
+                photos.append({"image": clean_path(p["image"]), "caption": (p.get("caption") or "").strip()})
+        d = fm.get("date") or date.today()
+        ev = {
+            "slug": f.stem,
+            "title": str(fm.get("title") or f.stem),
+            "date": d.isoformat() if hasattr(d, "isoformat") else str(d)[:10],
+            "client": str(fm.get("client") or ""),
+            "venue": str(fm.get("venue") or ""),
+            "city": str(fm.get("city") or ""),
+            "category": str(fm.get("category") or ""),
+            "summary": str(fm.get("summary") or ""),
+            "photos": photos,
+            "recap": [re.sub(r"\s+", " ", para).strip() for para in re.split(r"\n\s*\n", body) if para.strip()],
+        }
+        events.append(ev)
     events.sort(key=lambda x: x["date"], reverse=True)
+    return events
+
+
+def build_site_data():
+    site = json.loads((ROOT / "data/site.json").read_text())
+    for key, field in [("hero", "image"), ("commercial_photos", "image"), ("portfolio", "image"), ("clients", "logo")]:
+        for item in site.get(key) or []:
+            if item.get(field):
+                item[field] = clean_path(item[field])
+    (ROOT / "data/site.js").write_text(
+        "// Generated by tools/build.py from data/site.json, do not edit by hand.\n"
+        f"window.SITE = {json.dumps(site, indent=2, ensure_ascii=False)};\n")
+
+
+def optimize_images(max_px=2400):
+    from PIL import Image, ImageOps
+    import piexif
+    notice = f"Copyright {date.today().year} Andrew Stankus Agency. All rights reserved. andrewstankus.com".encode()
+    n = 0
+    for f in (ROOT / "images").rglob("*"):
+        if f.suffix.lower() not in (".jpg", ".jpeg", ".png", ".webp"):
+            continue
+        try:
+            im = Image.open(f)
+            if max(im.size) <= max_px:
+                continue
+            icc = im.info.get("icc_profile")
+            im = ImageOps.exif_transpose(im)
+            im.thumbnail((max_px, max_px), Image.LANCZOS)
+            if f.suffix.lower() in (".jpg", ".jpeg"):
+                exif = piexif.dump({"0th": {piexif.ImageIFD.Artist: b"Andrew Stankus", piexif.ImageIFD.Copyright: notice}})
+                im.convert("RGB").save(f, "JPEG", quality=82, optimize=True, progressive=True, exif=exif, icc_profile=icc)
+            else:
+                im.save(f)
+            n += 1
+        except Exception as err:  # never fail the deploy over one image
+            print(f"  skipped {f}: {err}")
+    print(f"Optimized {n} oversized image(s).")
+
+
+def main():
+    events = load_events()
     for i, ev in enumerate(events):
         out = ROOT / "events" / ev["slug"] / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(event_page(ev, events[i - 1] if i else None, events[i + 1] if i + 1 < len(events) else None))
-        img = ROOT / "images/events" / ev["slug"]
-        img.mkdir(parents=True, exist_ok=True)
-        (img / ".gitkeep").touch()
+    (ROOT / "events").mkdir(exist_ok=True)
     (ROOT / "events/index.html").write_text(index_page(events))
-    slim = [{k: ev.get(k, "") for k in ("slug", "title", "date", "client", "venue", "city", "category", "photos", "summary")}
-            for ev in events]
+    slim = [{"slug": ev["slug"], "title": ev["title"], "date": ev["date"], "client": ev["client"], "city": ev["city"],
+             "category": ev["category"], "summary": ev["summary"], "photos": len(ev["photos"]),
+             "cover": ev["photos"][0]["image"] if ev["photos"] else ""} for ev in events]
     (ROOT / "events/events.js").write_text(
-        "// Generated by tools/build_events.py from events/events.json, do not edit by hand.\n"
-        f"window.EVENTS = {json.dumps(slim, indent=2)};\n")
-    print(f"Built {len(events)} event page(s).")
+        "// Generated by tools/build.py from content/events, do not edit by hand.\n"
+        f"window.EVENTS = {json.dumps(slim, indent=2, ensure_ascii=False)};\n")
+    build_site_data()
+    print(f"Built {len(events)} event page(s) and homepage data.")
+    if "--optimize" in sys.argv:
+        optimize_images()
 
 
 if __name__ == "__main__":
