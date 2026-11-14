@@ -648,13 +648,20 @@ $('#inqForm').onsubmit = async e => {
   }
   btn.disabled = true; btn.textContent = 'Sending…'; msg.textContent = '';
   try {
-    const res = await fetch('https://api.web3forms.com/submit', {
+    const key = SITE.form_key.trim();
+    const res = /^https?:\/\//.test(key)
+      ? await fetch(key, {                         // e.g. a Formspree endpoint: https://formspree.io/f/xxxxxxx
+          method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ _subject: subject, _replyto: f.email, name: f.name, email: f.email, event_date: f.date,
+            event_type: f.type, venue: f.venue, guests: f.guests, message: f.message })
+        })
+      : await fetch('https://api.web3forms.com/submit', {
       method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ access_key: SITE.form_key, subject, from_name: 'andrewstankus.com', replyto: f.email,
+      body: JSON.stringify({ access_key: key, subject, from_name: 'andrewstankus.com', replyto: f.email,
         name: f.name, email: f.email, event_date: f.date, event_type: f.type, venue: f.venue, guests: f.guests, message: f.message, botcheck: '' })
     });
-    const out = await res.json();
-    if (!out.success) throw new Error(out.message);
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok || out.success === false || out.ok === false) throw new Error(out.message || res.status);
     form.reset();
     msg.textContent = "Thank you, we've got it. Expect a reply within one business day.";
   } catch (err) {

@@ -99,7 +99,7 @@ content:
             label: Or upload a photo here
             type: image
       - name: form_key
-        label: Contact form key (from web3forms.com; leave empty to use your email app instead)
+        label: Contact form key (Web3Forms access key, or a Formspree link like https://formspree.io/f/xxxx; leave empty to use the email app)
         type: string
       - name: about_photo
         label: Your portrait (About section)
