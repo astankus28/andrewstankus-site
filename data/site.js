@@ -21,15 +21,15 @@ window.SITE = {
   ],
   "commercial_photos": [
     {
-      "image": "images/events/proof-public-house-ohio-city/01.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/01.jpg",
       "alt": "Proof Public House, Cleveland"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/13.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/13.jpg",
       "alt": "Proof Burger at Proof Public House"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/25.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/25.jpg",
       "alt": "Dismantle Me zero-proof cocktail at Proof Public House"
     }
   ],
@@ -73,37 +73,37 @@ window.SITE = {
   ],
   "portfolio": [
     {
-      "image": "images/events/proof-public-house-ohio-city/01.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/01.jpg",
       "category": "Commercial",
       "shape": "wide",
       "caption": "Proof Public House"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/07.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/07.jpg",
       "category": "Commercial",
       "shape": "wide",
       "caption": "Pierogi · Proof Public House"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/24.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/24.jpg",
       "category": "Commercial",
       "shape": "tall",
       "caption": "Purple Rain · Proof Public House"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/17.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/17.jpg",
       "category": "Commercial",
       "shape": "wide",
       "caption": "Parmageddon · Proof Public House"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/12.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/12.jpg",
       "category": "Commercial",
       "shape": "wide",
       "caption": "Chicken & Sausage Gumbo · Proof Public House"
     },
     {
-      "image": "images/events/proof-public-house-ohio-city/26.jpg",
+      "image": "https://photos.andrewstankus.com/proof-public-house-ohio-city/26.jpg",
       "category": "Commercial",
       "shape": "tall",
       "caption": "Parinoid · Proof Public House"

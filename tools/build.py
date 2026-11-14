@@ -37,6 +37,15 @@ FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
 e = html.escape
 
 
+def href(up, p):
+    """Full URLs (R2 photos) stay as they are; site paths get the relative prefix."""
+    return p if re.match(r"^https?://", p or "") else f"{up}{p}"
+
+
+def absolute(p):
+    return p if re.match(r"^https?://", p or "") else f"{SITE}/{p}"
+
+
 def nice_date(d):
     y, m, dd = map(int, d.split("-"))
     return date(y, m, dd).strftime("%B %-d, %Y")
@@ -72,7 +81,7 @@ def event_page(ev, prev_ev, next_ev):
     cover = ev["cover"]
     photos = "\n".join(
         f'    <button aria-label="Open photo {i}"><div class="slot" data-hint="{e(p["image"])}">'
-        f'<img src="{up}{e(p["image"])}" alt="{e(p["caption"] + " — " if p["caption"] else "")}{e(ev["title"])} — photo {i}" loading="lazy">'
+        f'<img src="{e(href(up, p["image"]))}" alt="{e(p["caption"] + " — " if p["caption"] else "")}{e(ev["title"])} — photo {i}" loading="lazy">'
         + (f'<span class="cap">{e(p["caption"])}</span>' if p["caption"] else '') + '</div></button>'
         for i, p in enumerate(pics, 1))
     recap = "\n".join(f"      <p>{e(p)}</p>" for p in ev["recap"])
@@ -93,7 +102,7 @@ def event_page(ev, prev_ev, next_ev):
     ld = {
         "@context": "https://schema.org", "@type": "ImageGallery", "name": ev["title"], "url": url,
         "datePublished": ev["date"], "description": ev.get("summary", ""),
-        "image": f"{SITE}/{cover}",
+        "image": absolute(cover),
         "author": {"@type": "Organization", "name": "Andrew Stankus Agency", "url": SITE + "/"},
         "contentLocation": {"@type": "Place", "name": where(ev)},
     }
@@ -108,7 +117,7 @@ def event_page(ev, prev_ev, next_ev):
 <meta property="og:type" content="article">
 <meta property="og:title" content="{e(ev['title'])} — {e(when)}">
 <meta property="og:description" content="{e(ev.get('summary', ''))}">
-<meta property="og:image" content="{SITE}/{cover}">
+<meta property="og:image" content="{e(absolute(cover))}">
 <meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld)}</script>
@@ -119,7 +128,7 @@ def event_page(ev, prev_ev, next_ev):
 {nav(up, 'events')}
 
 <div class="ev-hero slot" data-hint="Cover photo">
-  <img src="{up}{e(cover)}" alt="{e(ev['title'])}">
+  <img src="{e(href(up, cover))}" alt="{e(ev['title'])}">
 </div>
 
 <header class="ev-head">
@@ -170,7 +179,7 @@ def index_page(events):
         y, m, d = map(int, ev["date"].split("-"))
         new = (today - date(y, m, d)).days < 21
         cards.append(f'''  <a class="card" href="{ev['slug']}/index.html">
-    <div class="slot" data-hint="Cover photo"><img src="{up}{e(ev['cover'])}" alt="{e(ev['title'])}" loading="lazy"></div>
+    <div class="slot" data-hint="Cover photo"><img src="{e(href(up, ev['cover']))}" alt="{e(ev['title'])}" loading="lazy"></div>
     <div class="card-meta">{'<span class="new">New</span>' if new else ''}<span>{e(nice_date(ev['date']))}</span><span>{e(ev.get('city', ''))}</span></div>
     <h3>{e(ev['title'])}</h3>
     <p>{e(ev.get('summary', ''))}</p>
@@ -205,7 +214,8 @@ def index_page(events):
 
 def clean_path(p):
     """Pages CMS stores '/images/x.jpg'; pages use paths relative to the root."""
-    return (p or "").strip().lstrip("/")
+    p = (p or "").strip()
+    return p if re.match(r"^https?://", p) else p.lstrip("/")
 
 
 def load_events():

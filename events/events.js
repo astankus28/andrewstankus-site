@@ -8,8 +8,8 @@ window.EVENTS = [
     "city": "Cleveland, OH",
     "category": "Commercial · Menu Photography",
     "summary": "Pierogi, Parmageddon and a punk-rock soundtrack. We shot the updated menu at Matt Fish's Ohio City hangout, from starters to zero-proof cocktails.",
-    "photos": 32,
-    "cover": "images/events/proof-public-house-ohio-city/01.jpg"
+    "photos": 0,
+    "cover": "api/cover?folder=proof-public-house-ohio-city"
   },
   {
     "slug": "somich-associates-open-house-2026-11-12",
@@ -19,7 +19,7 @@ window.EVENTS = [
     "city": "Willoughby, OH",
     "category": "Corporate",
     "summary": "New address, same handshake. Somich & Associates CPAs threw open the doors on Mentor Avenue for an afternoon-into-evening celebration of the clients and neighbors who built the firm.",
-    "photos": 73,
-    "cover": "images/events/somich-associates-open-house-2026-11-12/01.jpg"
+    "photos": 0,
+    "cover": "api/cover?folder=somich-associates-open-house-2026-11-12"
   }
 ];
