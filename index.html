@@ -585,9 +585,11 @@ PORTFOLIO.forEach((p, i) => {
   $('#masonry').appendChild(t);
 });
 
-// About & agency photos
+// About & agency photos (the photo column is hidden until a photo is set)
 if (SITE.about_photo) document.querySelector('#about .slot img').src = SITE.about_photo;
+else { document.querySelector('#about .slot').remove(); document.querySelector('#about .about').style.gridTemplateColumns = '1fr'; }
 if (SITE.agency_photo) document.querySelector('#process .slot img').src = SITE.agency_photo;
+else { document.querySelector('#process .slot').remove(); document.querySelector('#process .model').style.gridTemplateColumns = '1fr'; }
 
 // Stats & commercial photos
 $('#stats').innerHTML = (SITE.stats || []).map(st => `<div><b>${st.number}</b><span>${st.label}</span></div>`).join('');
