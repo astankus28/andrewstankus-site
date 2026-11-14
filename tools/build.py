@@ -193,7 +193,7 @@ def index_page(events):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events | Andrew Stankus Agency — Event Photography Miami & Cleveland</title>
-<meta name="description" content="Recent events covered by Andrew Stankus Agency: galas, corporate evenings, society and brand events in Miami and Cleveland.">
+<meta name="description" content="Recent events covered by Andrew Stankus Agency: corporate events, openings, launches and celebrations in Miami and Cleveland.">
 <link rel="canonical" href="{SITE}/events/">
 {FONTS}
 <link rel="stylesheet" href="{up}assets/event.css">
@@ -203,7 +203,7 @@ def index_page(events):
 <header class="idx-head">
   <span class="label">Events</span>
   <h1>Recent <em>coverage</em></h1>
-  <p>Galas, corporate evenings, society nights and brand events, with a recap and the full gallery for each.</p>
+  <p>Corporate events, openings, launches and celebrations, with a recap and the full gallery for each.</p>
 </header>
 <section class="idx">
 {chr(10).join(cards)}
