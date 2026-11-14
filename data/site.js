@@ -115,7 +115,7 @@ window.SITE = {
     }
   ],
   "quotes": [],
-  "about_photo": "",
+  "about_photo": "images/andrew.jpg",
   "agency_photo": "",
   "form_key": ""
 };
