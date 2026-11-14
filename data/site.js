@@ -11,10 +11,6 @@ window.SITE = {
       "label": "Of campaigns"
     },
     {
-      "number": "1,291",
-      "label": "Events covered for World Red Eye"
-    },
-    {
       "number": "5,000+",
       "label": "Shoots & events completed"
     }

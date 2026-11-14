@@ -132,7 +132,7 @@
   .btn-line:hover { border-color: var(--paper); }
 
   /* CREDENTIAL STRIP */
-  .strip { padding: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: repeat(4, 1fr); }
+  .strip { padding: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: repeat(var(--n, 4), 1fr); }
   .strip div { padding: 2.2rem var(--pad); border-right: 1px solid var(--line); }
   .strip div:last-child { border-right: 0; }
   .strip b { display: block; font-family: var(--serif); font-weight: 300; font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1; margin-bottom: .5rem; }
@@ -593,6 +593,7 @@ else { document.querySelector('#process .slot').remove(); document.querySelector
 
 // Stats & commercial photos
 $('#stats').innerHTML = (SITE.stats || []).map(st => `<div><b>${st.number}</b><span>${st.label}</span></div>`).join('');
+$('#stats').style.setProperty('--n', Math.max(1, (SITE.stats || []).length));
 (SITE.commercial_photos || []).filter(c => c.image).slice(0, 3).forEach(c => $('#commImgs').appendChild(slot(c.image, c.image, c.alt || 'Andrew Stankus Agency commercial photography')));
 $('#commImgs').hidden = !$('#commImgs').children.length;
 
