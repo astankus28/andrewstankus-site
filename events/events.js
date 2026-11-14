@@ -8,7 +8,7 @@ window.EVENTS = [
     "venue": "Proof Public House, 4116 Lorain Ave.",
     "city": "Cleveland, OH",
     "category": "Commercial \u00b7 Food & Drink",
-    "photos": 31,
+    "photos": 32,
     "summary": "Pierogi, Parmageddon and a punk-rock soundtrack. We shot the menu at Matt Fish's Ohio City hangout, from starters to zero-proof cocktails."
   },
   {
