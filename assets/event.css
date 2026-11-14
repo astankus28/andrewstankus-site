@@ -103,3 +103,5 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 }
 .gallery .slot:not(.empty) { aspect-ratio: auto; }
 .gallery .slot:not(.empty) img { height: auto; }
+.gallery .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1rem .8rem; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; text-align: left; background: linear-gradient(transparent, rgba(0,0,0,.7)); opacity: 0; transition: opacity .3s; }
+.gallery button:hover .cap { opacity: 1; }

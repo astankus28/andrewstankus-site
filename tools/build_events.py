@@ -56,9 +56,13 @@ def event_page(ev, prev_ev, next_ev):
     url = f"{SITE}/events/{ev['slug']}/"
     when = nice_date(ev["date"])
     title = f"{ev['title']} — {ev.get('city', '')} | Andrew Stankus Agency"
+    caps = ev.get("captions", [])
+    def cap(i):
+        return caps[i - 1] if i <= len(caps) and caps[i - 1] else ""
     photos = "\n".join(
         f'    <button aria-label="Open photo {i}"><div class="slot" data-hint="images/events/{ev["slug"]}/{i:02d}.jpg">'
-        f'<img src="{folder}/{i:02d}.jpg" alt="{e(ev["title"])} — photo {i}" loading="lazy"></div></button>'
+        f'<img src="{folder}/{i:02d}.jpg" alt="{e(cap(i) + " — " if cap(i) else "")}{e(ev["title"])} — photo {i}" loading="lazy">'
+        + (f'<span class="cap">{e(cap(i))}</span>' if cap(i) else '') + '</div></button>'
         for i in range(1, ev["photos"] + 1))
     recap = "\n".join(f"      <p>{e(p)}</p>" for p in ev["recap"])
     meta = [("Date", when), ("Client", ev.get("client", "")), ("Venue", ev.get("venue", "")),
