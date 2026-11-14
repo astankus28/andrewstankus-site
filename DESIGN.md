@@ -13,8 +13,9 @@ explicitly asks for a design change.
   - `--accent #c9a96e` (gold: labels, italics in headlines, buttons, hover)
   - `--line rgba(243,239,232,0.12)` (all borders and dividers)
   - No new colors, no gradients beyond the existing photo overlays, no light mode.
-- **Fonts.** Cormorant Garamond (serif) for headlines, names and numbers, and Inter (sans) for
-  everything else, both from the existing Google Fonts link. No other fonts.
+- **Fonts.** Cormorant Garamond (serif) for section headlines, names and numbers; Inter (sans) for
+  body and labels; **Jost** (bold, uppercase) only for the homepage slideshow headline (`--display`),
+  chosen by the owner for readability over photos. All from the existing Google Fonts link. No other fonts.
 - **Typography style:**
   - Headlines are light serif (weight 300–400) with **one italic gold word** (`<em>`),
     e.g. "Selected <em>work</em>"
