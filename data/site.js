@@ -109,5 +109,7 @@ window.SITE = {
       "caption": "Parinoid · Proof Public House"
     }
   ],
-  "quotes": []
+  "quotes": [],
+  "about_photo": "",
+  "agency_photo": ""
 };

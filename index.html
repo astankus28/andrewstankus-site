@@ -585,6 +585,10 @@ PORTFOLIO.forEach((p, i) => {
   $('#masonry').appendChild(t);
 });
 
+// About & agency photos
+if (SITE.about_photo) document.querySelector('#about .slot img').src = SITE.about_photo;
+if (SITE.agency_photo) document.querySelector('#process .slot img').src = SITE.agency_photo;
+
 // Stats & commercial photos
 $('#stats').innerHTML = (SITE.stats || []).map(st => `<div><b>${st.number}</b><span>${st.label}</span></div>`).join('');
 (SITE.commercial_photos || []).filter(c => c.image).slice(0, 3).forEach(c => $('#commImgs').appendChild(slot(c.image, c.image, c.alt || 'Andrew Stankus Agency commercial photography')));

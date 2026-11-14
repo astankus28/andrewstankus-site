@@ -262,6 +262,8 @@ def load_events():
 
 def build_site_data():
     site = json.loads((ROOT / "data/site.json").read_text())
+    for key in ("about_photo", "agency_photo"):
+        site[key] = clean_path(site.get(key) or "")
     for key, field in [("hero", "image"), ("commercial_photos", "image"), ("portfolio", "image"), ("clients", "logo")]:
         for item in site.get(key) or []:
             if item.get(field):

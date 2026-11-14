@@ -92,6 +92,12 @@ content:
           - name: image
             label: Photo
             type: image
+      - name: about_photo
+        label: Your portrait (About section)
+        type: image
+      - name: agency_photo
+        label: Behind-the-scenes photo (The Agency section)
+        type: image
       - name: stats
         label: Stats row
         type: object
