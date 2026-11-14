@@ -42,7 +42,7 @@
     const title = gallery.dataset.title || '';
     let caps = [];
     try { caps = JSON.parse(gallery.dataset.captions || '[]'); } catch (e) {}
-    const api = (document.querySelector('link[rel=stylesheet][href*="assets/event.css"]').getAttribute('href').replace('assets/event.css', '')) + 'api/photos?folder=' + encodeURIComponent(folder);
+    const api = (document.querySelector('link[rel=stylesheet][href*="assets/event.css"]').getAttribute('href').split('assets/event.css')[0]) + 'api/photos?folder=' + encodeURIComponent(folder);
     try {
       const { photos = [] } = await (await fetch(api)).json();
       gallery.innerHTML = photos.map((src, n) => {
