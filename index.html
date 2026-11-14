@@ -140,7 +140,7 @@
 
   /* RECENT WORK */
   .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  .story { cursor: pointer; text-align: left; }
+  .story { display: block; cursor: pointer; text-align: left; }
   .story .slot { aspect-ratio: 4/5; margin-bottom: 1.1rem; }
   .story .slot img { transition: transform .8s ease; }
   .story:hover .slot img { transform: scale(1.04); }
@@ -294,7 +294,7 @@
     <b>Andrew Stankus</b><span>Agency</span>
   </a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#recent">Recent</a></li>
+    <li><a href="events/index.html">Events</a></li>
     <li><a href="#work">Portfolio</a></li>
     <li><a href="#commercial">Commercial</a></li>
     <li><a href="#services">Services</a></li>
@@ -332,7 +332,7 @@
 <section id="recent">
   <div class="head reveal">
     <div><span class="label">Recent Work</span><h2 class="title">Fresh from <em>the floor</em></h2></div>
-    <p style="max-width:340px;color:var(--muted);font-size:.9rem">The latest events we've covered. Tap any story to see the gallery.</p>
+    <div style="max-width:340px"><p style="color:var(--muted);font-size:.9rem;margin-bottom:1.2rem">The latest events we've covered, each with a recap and the full gallery.</p><a href="events/index.html" class="btn btn-line">All events →</a></div>
   </div>
   <div class="recent-grid" id="recentGrid"></div>
 </section>
@@ -494,6 +494,7 @@
   <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
 </div>
 
+<script src="events/events.js"></script>
 <script>
 /* =================================================================
    SITE CONTENT — edit this block to update the site.
@@ -508,20 +509,9 @@ const HERO = [
   'images/hero/05.jpg',
 ];
 
-// RECENT WORK — newest first. After each event, copy one block,
-// put it at the TOP, and drop the photos in its folder named 01.jpg, 02.jpg, ...
-const RECENT = [
-  {
-    title: 'Corporate Evening',
-    client: 'Private corporate client',
-    city: 'Cleveland, OH',
-    date: '2026-11-12',
-    folder: 'images/recent/2026-11-12-corporate',
-    photos: 12,
-  },
-  // { title: 'Event name', client: 'Host / client', city: 'City', date: 'YYYY-MM-DD',
-  //   folder: 'images/recent/YYYY-MM-DD-name', photos: 15 },
-];
+// RECENT WORK comes from events/events.json (see tools/build_events.py).
+// The homepage shows the newest 3; every event gets its own recap page.
+const RECENT = (window.EVENTS || []).slice(0, 3);
 
 // PORTFOLIO — your best 40–60. Categories must match the FILTERS list.
 // shape: 'tall' (portrait), 'wide' (landscape) or 'square'.
@@ -601,9 +591,10 @@ if (HERO.length > 1) setInterval(() => go((cur + 1) % HERO.length), 5500);
 // Recent work
 const now = Date.now();
 RECENT.forEach(ev => {
-  const card = document.createElement('button');
+  const card = document.createElement('a');
   card.className = 'story reveal';
-  const cover = slot(`${ev.folder}/01.jpg`, `${ev.folder}/01.jpg`, ev.title, '4/5');
+  card.href = `events/${ev.slug}/index.html`;
+  const cover = slot(`images/events/${ev.slug}/01.jpg`, `images/events/${ev.slug}/01.jpg`, ev.title, '4/5');
   const count = document.createElement('span');
   count.className = 'count'; count.textContent = ev.photos + ' photos';
   cover.appendChild(count);
@@ -613,9 +604,6 @@ RECENT.forEach(ev => {
     `<div class="story-meta">${isNew ? '<span class="new">New</span>' : ''}<span>${fmtDate(ev.date)}</span><span>${ev.city}</span></div>
      <h3>${ev.title}</h3>
      <div class="story-meta" style="margin-top:.4rem">${ev.client}</div>`);
-  card.onclick = () => openLB(
-    Array.from({ length: ev.photos }, (_, i) => ({ src: `${ev.folder}/${pad(i + 1)}.jpg`, caption: '' })),
-    0, `${ev.title} · ${fmtDate(ev.date)}`);
   $('#recentGrid').appendChild(card);
 });
 
