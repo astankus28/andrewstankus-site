@@ -31,6 +31,10 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.andrewstankus.com"
 PHOTOS = "https://photos.andrewstankus.com/"
+GTM = """<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KVKC466D');</script>
+<!-- End Google Tag Manager -->
+"""
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
          '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400'
@@ -112,7 +116,7 @@ def event_page(ev, prev_ev, next_ev):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+{GTM}<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{e(title)}</title>
 <meta name="description" content="{e(ev.get('summary', ''))}">
@@ -190,7 +194,7 @@ def index_page(events):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+{GTM}<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events | Andrew Stankus Agency — Event Photography Miami & Cleveland</title>
 <meta name="description" content="Recent events covered by Andrew Stankus Agency: corporate events, openings, launches and celebrations in Miami and Cleveland.">
