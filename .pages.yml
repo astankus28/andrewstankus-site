@@ -50,6 +50,9 @@ content:
             - Hospitality
             - Commercial · Menu Photography
             - Portraits
+      - name: photographer
+        label: Photographer (leave empty if you shot it; otherwise their name for the credit)
+        type: string
       - name: summary
         label: Summary (one or two sentences, shown on cards and in the gold intro)
         type: text

@@ -87,8 +87,10 @@ def event_page(ev, prev_ev, next_ev):
         for i, p in enumerate(pics, 1))
     recap = "\n".join(f"      <p>{e(p)}</p>" for p in ev["recap"])
     meta = [("Date", when), ("Client", ev.get("client", "")), ("Venue", ev.get("venue", "")),
-            ("City", ev.get("city", "")), ("Coverage", ev.get("category", "")), ("Photos", str(len(pics)) if pics else "")]
+            ("City", ev.get("city", "")), ("Coverage", ev.get("category", "")), ("Photographer", ev.get("photographer", "")), ("Photos", str(len(pics)) if pics else "")]
     meta_html = "".join(f"<div><small>{k}</small>{e(v)}</div>" for k, v in meta if v)
+    credit = (f"Photography by {e(ev['photographer'])} for Andrew Stankus Agency" if ev["photographer"]
+              else "Photography by Andrew Stankus Agency")
     folder_attrs = ""
     if ev["folder"]:
         folder_attrs = (f' data-folder="{e(ev["folder"])}" data-title="{e(ev["title"])}"'
@@ -142,7 +144,7 @@ def event_page(ev, prev_ev, next_ev):
   <div class="lede">{e(ev.get('summary', ''))}</div>
   <div>
 {recap}
-    <div class="credit">Photography by Andrew Stankus Agency</div>
+    <div class="credit">{credit}</div>
   </div>
 </section>
 
@@ -249,6 +251,7 @@ def load_events():
             "venue": str(fm.get("venue") or ""),
             "city": str(fm.get("city") or ""),
             "category": str(fm.get("category") or ""),
+            "photographer": str(fm.get("photographer") or "").strip(),
             "summary": str(fm.get("summary") or ""),
             "photos": photos,
             "folder": folder,
