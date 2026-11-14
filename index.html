@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Andrew Stankus Agency | Event, Corporate & Society Photography — Miami · Cleveland</title>
-<meta name="description" content="Andrew Stankus Agency — event, corporate, society and hospitality photography in Miami and Cleveland. 17 years behind the lens, same-night selects, full galleries fast.">
+<meta name="description" content="Andrew Stankus Agency — event and commercial photography in Miami and Cleveland. Advertising for Uber Eats, DoorDash, Grubhub, Amazon, ezCater and hospitality brands; galas, corporate and society events.">
 <meta name="author" content="Andrew Stankus">
 <link rel="canonical" href="https://www.andrewstankus.com/">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.andrewstankus.com/">
 <meta property="og:title" content="Andrew Stankus Agency — Event & Society Photography">
-<meta property="og:description" content="Galas, corporate events, society and hospitality. Miami · Cleveland · Anywhere.">
+<meta property="og:description" content="Events and advertising photography. Miami · Cleveland · Anywhere.">
 <meta property="og:image" content="https://www.andrewstankus.com/images/hero/01.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -27,7 +27,7 @@
   "email": "andrew@andrewstankus.com",
   "founder": { "@type": "Person", "name": "Andrew Stankus" },
   "areaServed": ["Miami", "Miami Beach", "Cleveland", "Northeast Ohio"],
-  "description": "Event, corporate, society and hospitality photography agency.",
+  "description": "Event and commercial advertising photography agency.",
   "sameAs": ["https://www.instagram.com/andrewstankus"]
 }
 </script>
@@ -201,10 +201,13 @@
   .quote p { font-family: var(--serif); font-weight: 300; font-style: italic; font-size: clamp(1.6rem, 3.4vw, 2.6rem); line-height: 1.3; margin: 1.8rem 0; }
   .quote cite { font-style: normal; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
 
-  /* CLIENTS */
-  .clients { padding-top: 4rem; padding-bottom: 4rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .clients .label { display: block; text-align: center; margin-bottom: 2rem; color: var(--muted); }
-  .client-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem 3.5rem; font-family: var(--serif); font-size: 1.5rem; color: rgba(243,239,232,.55); }
+  /* COMMERCIAL */
+  .commercial { background: var(--ink2); }
+  .comm-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+  .commercial p { color: rgba(243,239,232,.78); margin-top: 1.3rem; max-width: 500px; }
+  .client-list { display: flex; flex-wrap: wrap; gap: .9rem 2.2rem; margin-top: 2.2rem; padding-top: 1.8rem; border-top: 1px solid var(--line); font-family: var(--serif); font-size: 1.55rem; color: var(--paper); }
+  .comm-imgs { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 1rem; height: clamp(420px, 48vw, 640px); }
+  .comm-imgs .slot:first-child { grid-row: span 2; }
 
   /* ABOUT */
   .about { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
@@ -263,7 +266,7 @@
     .strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
     .recent-grid { grid-template-columns: 1fr 1fr; }
     .svc-grid { grid-template-columns: 1fr 1fr; }
-    .model, .about, .inquire { grid-template-columns: 1fr; }
+    .model, .about, .inquire, .comm-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .recent-grid, .svc-grid { grid-template-columns: 1fr; }
@@ -293,6 +296,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#recent">Recent</a></li>
     <li><a href="#work">Portfolio</a></li>
+    <li><a href="#commercial">Commercial</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#inquire" class="nav-cta">Book a date</a></li>
@@ -309,7 +313,7 @@
       <h1>The night,<br><em>kept.</em></h1>
     </div>
     <div class="hero-side">
-      <p>A photo agency for galas, corporate events, society nights and the hospitality brands behind them.</p>
+      <p>A photo agency for advertising and events: national brand campaigns, galas, corporate nights and society.</p>
       <a href="#inquire" class="btn btn-gold">Check availability</a>
       <div class="hero-dots" id="heroDots"></div>
     </div>
@@ -319,8 +323,8 @@
 <!-- CREDENTIALS -->
 <div class="strip">
   <div><b>17</b><span>Years behind the lens</span></div>
+  <div><b>10</b><span>Years in advertising</span></div>
   <div><b>2</b><span>Cities · Miami & Cleveland</span></div>
-  <div><b>24h</b><span>Selects delivered</span></div>
   <div><b>1,291</b><span>Events covered for World Red Eye</span></div>
 </div>
 
@@ -340,6 +344,25 @@
     <div class="filters" id="filters"></div>
   </div>
   <div class="masonry" id="masonry"></div>
+</section>
+
+<!-- COMMERCIAL -->
+<section id="commercial" class="commercial">
+  <div class="comm-grid">
+    <div class="reveal">
+      <span class="label">Commercial & Advertising</span>
+      <h2 class="title" style="margin-top:1rem">Images that <em>sell</em></h2>
+      <p>Advertising has been the core of the business for ten years. We've shot for the platforms and brands that shape how people order, shop and stay, from menu and hero imagery for national delivery platforms to campaign and lifestyle work for hospitality groups.</p>
+      <p>Same crew, same standards, whether it's a single restaurant or a multi-city platform rollout.</p>
+      <div class="client-list" id="clientList"></div>
+      <a href="#inquire" class="btn btn-line" style="margin-top:2.2rem">Brief us on a campaign</a>
+    </div>
+    <div class="comm-imgs reveal">
+      <div class="slot" data-hint="Commercial hero — images/commercial/01.jpg"><img src="images/commercial/01.jpg" alt="Commercial food photography by Andrew Stankus Agency" loading="lazy"></div>
+      <div class="slot" data-hint="images/commercial/02.jpg"><img src="images/commercial/02.jpg" alt="Advertising photography" loading="lazy"></div>
+      <div class="slot" data-hint="images/commercial/03.jpg"><img src="images/commercial/03.jpg" alt="Hospitality brand photography" loading="lazy"></div>
+    </div>
+  </div>
 </section>
 
 <!-- SELECTED CREDITS (World Red Eye years, 2015–2019) -->
@@ -378,10 +401,10 @@
     <div><span class="label">Services</span><h2 class="title">What we <em>cover</em></h2></div>
   </div>
   <div class="svc-grid reveal">
-    <div class="svc"><span class="n">01</span><h3>Galas & Benefits</h3><p>Arrivals, step-and-repeat, the room, the speeches, the moments in between. Captioned and press-ready.</p></div>
+    <div class="svc"><span class="n">01</span><h3>Galas & Society</h3><p>Benefits, milestone parties and private dinners: arrivals, the room, the speeches and the moments in between.</p></div>
     <div class="svc"><span class="n">02</span><h3>Corporate Events</h3><p>Conferences, client evenings, holiday parties and launches. Polished images your team will actually use.</p></div>
-    <div class="svc"><span class="n">03</span><h3>Society & Private</h3><p>Milestone birthdays, private dinners and home parties covered with discretion.</p></div>
-    <div class="svc"><span class="n">04</span><h3>Brand & Hospitality</h3><p>Restaurants, hotels and venues: food, interiors and the people who make them work.</p></div>
+    <div class="svc"><span class="n">03</span><h3>Hospitality</h3><p>Restaurants, hotels and venues: food, interiors, ambiance and the people who make them work.</p></div>
+    <div class="svc"><span class="n">04</span><h3>Commercial & Advertising</h3><p>Campaign, menu and hero imagery for delivery platforms, e-commerce and hospitality brands, built to perform at scroll speed.</p></div>
     <div class="svc"><span class="n">05</span><h3>Portraits & Headshots</h3><p>Executive, team and personal-brand portraits, on location or set up on-site at your event.</p></div>
     <div class="svc"><span class="n">06</span><h3>Press Distribution</h3><p>Named, captioned selects formatted for media, social and newsletters, sent while the event is still news.</p></div>
   </div>
@@ -412,11 +435,6 @@
   <div id="quoteBox"></div>
 </section>
 
-<!-- CLIENTS (hidden automatically until you add names below) -->
-<div class="clients" id="clients" hidden>
-  <span class="label">Clients & venues</span>
-  <div class="client-list" id="clientList"></div>
-</div>
 
 <!-- ABOUT -->
 <section id="about">
@@ -427,8 +445,8 @@
     <div class="reveal">
       <span class="label">Founder</span>
       <h2 class="title" style="margin-top:1rem">Andrew <em>Stankus</em></h2>
-      <p>Andrew learned event photography in Miami's busiest rooms, covering nightlife and society events for World Red Eye. Over seventeen years he has photographed galas, brand launches, restaurants and private parties, and built a reputation for being in the right place without anyone noticing he's there.</p>
-      <p>Andrew Stankus Agency brings that big-city approach to Miami and Cleveland: experienced shooters, fast turnaround, and images that make an event look as good as it felt.</p>
+      <p>Andrew learned event photography in Miami's busiest rooms, covering nightlife and society events for World Red Eye. Over seventeen years he has photographed galas, brand launches and private parties, and spent the last ten building an advertising practice for Uber Eats, DoorDash, Grubhub, Amazon, ezCater and dozens of hospitality brands.</p>
+      <p>Andrew Stankus Agency brings both sides together in Miami and Cleveland: the instincts of an event photographer and the discipline of a commercial one.</p>
       <div class="sig">— Andrew</div>
     </div>
   </div>
@@ -453,7 +471,7 @@
     <div class="f"><label for="ft">Event type</label>
       <select id="ft" name="type">
         <option>Gala / Benefit</option><option>Corporate event</option><option>Private / Society</option>
-        <option>Brand / Hospitality</option><option>Portraits / Headshots</option><option>Other</option>
+        <option>Commercial / Advertising</option><option>Hospitality</option><option>Portraits / Headshots</option><option>Other</option>
       </select></div>
     <div class="f"><label for="fv">Venue / City</label><input id="fv" name="venue"></div>
     <div class="f"><label for="fg">Guest count</label><input id="fg" name="guests"></div>
@@ -507,8 +525,9 @@ const RECENT = [
 
 // PORTFOLIO — your best 40–60. Categories must match the FILTERS list.
 // shape: 'tall' (portrait), 'wide' (landscape) or 'square'.
-const FILTERS = ['All', 'Events', 'Corporate', 'Society', 'Portraits', 'Hospitality'];
+const FILTERS = ['All', 'Commercial', 'Events', 'Corporate', 'Society', 'Portraits', 'Hospitality'];
 const PORTFOLIO = [
+  { src: 'images/work/commercial-01.jpg',  cat: 'Commercial',  shape: 'tall',   caption: 'Food hero' },
   { src: 'images/work/events-01.jpg',      cat: 'Events',      shape: 'tall',   caption: 'Gala' },
   { src: 'images/work/events-02.jpg',      cat: 'Events',      shape: 'wide',   caption: 'Benefit dinner' },
   { src: 'images/work/society-01.jpg',     cat: 'Society',     shape: 'tall',   caption: 'Society' },
@@ -519,7 +538,7 @@ const PORTFOLIO = [
   { src: 'images/work/society-02.jpg',     cat: 'Society',     shape: 'square', caption: 'Private party' },
   { src: 'images/work/corporate-02.jpg',   cat: 'Corporate',   shape: 'tall',   caption: 'Keynote' },
   { src: 'images/work/events-04.jpg',      cat: 'Events',      shape: 'wide',   caption: 'The room' },
-  { src: 'images/work/hospitality-02.jpg', cat: 'Hospitality', shape: 'tall',   caption: 'Food' },
+  { src: 'images/work/commercial-02.jpg',  cat: 'Commercial',  shape: 'tall',   caption: 'Campaign' },
   { src: 'images/work/portraits-02.jpg',   cat: 'Portraits',   shape: 'square', caption: 'Headshot' },
 ];
 
@@ -528,9 +547,9 @@ const QUOTES = [
   // { text: 'Quote here.', who: 'Name, Title — Company' },
 ];
 
-// CLIENTS & VENUES — only ones you've actually shot (with permission).
+// COMMERCIAL CLIENTS — shown in the Commercial section.
 const CLIENTS = [
-  // 'Client name',
+  'Uber Eats', 'DoorDash', 'Grubhub', 'Amazon', 'ezCater', 'Hospitality Brands',
 ];
 
 /* ================================================================= */
@@ -632,7 +651,6 @@ if (QUOTES.length) {
     qi = (qi + 1) % qs.length; qs[qi].classList.add('on'); }, 7000); }
 }
 if (CLIENTS.length) {
-  $('#clients').hidden = false;
   $('#clientList').innerHTML = CLIENTS.map(c => `<span>${c}</span>`).join('');
 }
 
