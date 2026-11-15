@@ -2,8 +2,8 @@
 title: 'Green & Gold Gala 2026: A Knight at the Casino'
 date: '2026-11-14'
 client: Saint Paschal Baylon
-venue: Saint Paschal Baylon
-city: Cleveland, OH
+venue: Bellavie, 700 Beta Drive
+city: Mayfield Village, OH
 category: Gala & Society
 summary: Private preview for approval. The proposed Facebook post is below. The 197 best photos come first, in the order they were taken, followed by every other photo from the night.
 photo_folder: 2026-11-14-spb-gala-preview
@@ -14,6 +14,8 @@ cover_focus: top
 PROPOSED FACEBOOK POST, FOR APPROVAL
 
 💚💛 What a night at the 9th Annual Green and Gold Gala, A Knight at the Casino! 🎰✨
+
+📍 [Bellavie](https://bellaviecle.com), Mayfield Village
 
 Thank you to everyone who came out and helped make it one of the best nights of the SPB year. Your generosity brings us one step closer to air-conditioned classrooms for our Green Knights and their teachers.
 
