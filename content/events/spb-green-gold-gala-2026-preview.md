@@ -5,7 +5,7 @@ client: Saint Paschal Baylon
 venue: Saint Paschal Baylon
 city: Cleveland, OH
 category: Gala & Society
-summary: Private preview for approval. The proposed Facebook post is below. The 54 selects come first, in posting order, followed by every other photo from the night.
+summary: Private preview for approval. The proposed Facebook post is below. The 197 best photos come first, in the order they were taken, followed by every other photo from the night.
 photo_folder: 2026-11-14-spb-gala-preview
 unlisted: true
 ---
@@ -26,4 +26,4 @@ Find yourself in the photos below and tag your friends! 👇 📸 Photos by Andr
 
 PLEASE CONFIRM: spelling of all names; which honoree photos show Roberta Modica and which show Mary Connors; total raised, if we're including it; any photos to remove; whether to tag sponsor pages.
 
-Photos 1–54 are the selects. Everything after is the rest of the night, in the order it was shot. All images © 2026 Andrew Stankus. For review only.
+Photos 1–197 are the best of the night (photo 1 is the cover). Everything after is the rest of the night, in the order it was shot. All images © 2026 Andrew Stankus. For review only.
