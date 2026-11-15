@@ -19,7 +19,7 @@ Thank you to everyone who came out and helped make it one of the best nights of 
 
 Congratulations again to our 2026 Green Knights to Remember, Roberta Modica, the late Don Modica, and Mary Connors. Thank you for your years of faith, service and dedication to [Saint Paschal Baylon](https://www.saintpaschal.net).
 
-A huge thank you to our co-chairs John & Lisa Kane and Greg & Michel Baitt, our presenting sponsor The Sandy and Jim Foundation, our Platinum Sponsor Allergy Immunology Associates & Dr. Remie Saab, our Premier Sponsor [Seal Tech Asphalt & Concrete](https://sealtechoh.hibuwebsites.com), our Bar Sponsor the Rossi Family, along with [Bricker Graydon Wyatt](https://www.bricker.com), [Ancora](https://ancora.net) and Mike & Beth Mennel, and every sponsor, donor and volunteer who made the night happen. Thanks also to Brandon Edmond for the entertainment, Ms. Diane Raguz, Fr. Rosario and the [parish](https://church.saintpaschal.com) office staff.
+A huge thank you to our co-chairs John & Lisa Kane and Greg & Michel Baitt, our presenting sponsor The Sandy and Jim Foundation, our Platinum Sponsor [Allergy Immunology Associates](https://www.allergycleveland.com) & Dr. Remie Saab, our Premier Sponsor [Seal Tech Asphalt & Concrete](https://sealtechoh.hibuwebsites.com), our Bar Sponsor the Rossi Family, along with [Bricker Graydon Wyatt](https://www.bricker.com), [Ancora](https://ancora.net) and Mike & Beth Mennel, and every sponsor, donor and volunteer who made the night happen. Thanks also to Brandon Edmond for the entertainment, Ms. Diane Raguz, Fr. Rosario and the [parish](https://church.saintpaschal.com) office staff.
 
 Find yourself in the photos below and tag your friends! 👇 📸 Photos by Andrew Stankus | 🎥 Video by Matt Lobe
 
