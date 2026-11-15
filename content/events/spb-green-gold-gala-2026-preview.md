@@ -5,28 +5,20 @@ client: Saint Paschal Baylon
 venue: Bellavie, 700 Beta Drive
 city: Mayfield Village, OH
 category: Gala & Society
-summary: Private preview for approval. The proposed Facebook post is below. The 197 best photos come first, in the order they were taken, followed by every other photo from the night.
+summary: Green velvet, high stakes and a room full of Green Knights. Saint Paschal Baylon's ninth annual gala turned Bellavie into a casino for one night, all to bring air conditioning to the school's classrooms.
 photo_folder: 2026-11-14-spb-gala-preview
 unlisted: true
 cover_focus: top
 ---
 
-PROPOSED FACEBOOK POST, FOR APPROVAL
+Mayfield Village, OH – November 14, 2026 – For one night, [Bellavie](https://bellaviecle.com) became a casino with a cause. The 9th Annual Green and Gold Gala, A Knight at the Casino, filled the ballroom with green velvet, gold sequins and a crowd ready to play for [Saint Paschal Baylon](https://www.saintpaschal.net). The house rules were simple: the odds were always in favor of SPB, and every dollar went toward air conditioning in classrooms across the school, along with other facility improvements.
 
-💚💛 What a night at the 9th Annual Green and Gold Gala, A Knight at the Casino! 🎰✨
+First-time co-chairs John and Lisa Kane and Greg and Michel Baitt hosted the night and doubled as emcees, picking up where Brent and Cheryl Pietrafese left off after three years at the helm. The evening was presented by The Sandy and Jim Foundation, with Platinum Sponsor [Allergy Immunology Associates](https://www.allergycleveland.com) and Dr. Remie Saab, Premier Sponsor [Seal Tech Asphalt & Concrete](https://sealtechoh.hibuwebsites.com), Bar Sponsor the Rossi Family, and support from [Bricker Graydon Wyatt](https://www.bricker.com), [Ancora](https://ancora.net) and Mike & Beth Mennel.
 
-📍 [Bellavie](https://bellaviecle.com), Mayfield Village
+The heart of the night belonged to the 2026 Green Knights to Remember. Roberta Modica, whose music has lifted Masses at SPB for years, was honored alongside her late husband Don, who helped begin the endowment that still supports students every year; longtime friend Richard Fratianne presented the award. Then came Mary Connors, who spent 41 years in Catholic education at SPB, 40 of them in junior high, leading Power of the Pen and the Signing Angels along the way. Both emcees were once her seventh graders, and her longest-serving colleague, eighth grade teacher Paul Marten, did the honors.
 
-Thank you to everyone who came out and helped make it one of the best nights of the SPB year. Your generosity brings us one step closer to air-conditioned classrooms for our Green Knights and their teachers.
+After grace from [pastor](https://church.saintpaschal.com) Fr. Rosario Pushparaj and a round of raffles called by Principal Diane Raguz, DJ London Bridges, Brandon Edmond, took the live auction up a gear: a cooking class and wine pairing with SPB's own Chef Anthony Quagliata, a week on Anna Maria Island, a Disney on Ice suite from Brennan Industries, a day on patrol with Officer Jeff and the night's most hotly contested prize, Principal for a Day. Raise the Paddle, with a gift card night out from Lexus of Akron-Canton on the line, sent cash raining over the checkerboard dance floor.
 
-Congratulations again to our 2026 Green Knights to Remember, Roberta Modica, the late Don Modica, and Mary Connors. Thank you for your years of faith, service and dedication to [Saint Paschal Baylon](https://www.saintpaschal.net).
+By 9:00 the silent auction had closed, the dance floor was full and the Green Knights were a little closer to cooler classrooms. Seventy-one years in, the SPB community is still building.
 
-A huge thank you to our co-chairs John & Lisa Kane and Greg & Michel Baitt, our presenting sponsor The Sandy and Jim Foundation, our Platinum Sponsor [Allergy Immunology Associates](https://www.allergycleveland.com) & Dr. Remie Saab, our Premier Sponsor [Seal Tech Asphalt & Concrete](https://sealtechoh.hibuwebsites.com), our Bar Sponsor the Rossi Family, along with [Bricker Graydon Wyatt](https://www.bricker.com), [Ancora](https://ancora.net) and Mike & Beth Mennel, and every sponsor, donor and volunteer who made the night happen. Thanks also to Brandon Edmond for the entertainment, Ms. Diane Raguz, Fr. Rosario and the [parish](https://church.saintpaschal.com) office staff.
-
-Find yourself in the photos below and tag your friends! 👇 📸 Photos by Andrew Stankus | 🎥 Video by Matt Lobe
-
-#GreenKnights #SPBGala #AKnightAtTheCasino #GreenAndGoldGala
-
-PLEASE CONFIRM: spelling of all names; which honoree photos show Roberta Modica and which show Mary Connors; total raised, if we're including it; any photos to remove; whether to tag sponsor pages.
-
-Photos 1–197 are the best of the night (photo 1 is the cover). Everything after is the rest of the night, in the order it was shot. All images © 2026 Andrew Stankus. For review only.
+Photos by Andrew Stankus Agency. Video by Matt Lobe. All images © 2026 Andrew Stankus.
