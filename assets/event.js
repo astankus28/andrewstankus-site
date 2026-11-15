@@ -44,10 +44,11 @@
     try { caps = JSON.parse(gallery.dataset.captions || '[]'); } catch (e) {}
     const api = (document.querySelector('link[rel=stylesheet][href*="assets/event.css"]').getAttribute('href').split('assets/event.css')[0]) + 'api/photos?folder=' + encodeURIComponent(folder);
     try {
-      const { photos = [] } = await (await fetch(api)).json();
+      const { photos = [], sizes = [] } = await (await fetch(api)).json();
       gallery.innerHTML = photos.map((src, n) => {
         const cap = caps[n] || '';
-        return `<button aria-label="Open photo ${n + 1}"><div class="slot" data-hint="${esc(src)}"><img src="${esc(src)}" alt="${esc((cap ? cap + ' — ' : '') + title)} — photo ${n + 1}" loading="lazy">` +
+        const wh = sizes[n] ? ` width="${sizes[n][0]}" height="${sizes[n][1]}"` : '';
+        return `<button aria-label="Open photo ${n + 1}"><div class="slot" data-hint="${esc(src)}"><img src="${esc(src)}"${wh} alt="${esc((cap ? cap + ' — ' : '') + title)} — photo ${n + 1}" loading="lazy">` +
           (cap ? `<span class="cap">${esc(cap)}</span>` : '') + `</div></button>`;
       }).join('');
       const meta = document.querySelector('.meta');
