@@ -268,6 +268,14 @@
   .reveal.in { opacity: 1; transform: none; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
+  /* Phones: show the whole hero photo (3:2) under the nav, with the headline below it instead of over it. */
+  @media (max-width: 700px) {
+    .hero { height: auto; min-height: 0; padding-top: var(--hero-top, 96px); background: var(--ink); }
+    .hero-slides { position: relative; inset: auto; aspect-ratio: 3 / 2; }
+    .hero::after { display: none; }
+    .hero-copy { position: relative; left: auto; right: auto; bottom: auto; padding: 2rem var(--pad) 3rem; }
+    .hero h1, .hero .label, .hero-side p { text-shadow: none; }
+  }
   @media (max-width: 960px) {
     .nav-links { position: fixed; inset: 0; background: var(--ink); flex-direction: column; justify-content: center; gap: 2rem; transform: translateX(100%); transition: transform .4s; }
     .nav-links.open { transform: none; }
@@ -541,6 +549,9 @@ document.querySelectorAll('.slot > img').forEach(img => {
 });
 
 // Hero
+// On phones the hero photo sits below the nav; measure the nav so the photo starts right under it.
+const setHeroTop = () => document.documentElement.style.setProperty('--hero-top', (document.querySelector('nav')?.offsetHeight || 96) + 'px');
+setHeroTop(); addEventListener('resize', setHeroTop);
 const slides = $('#heroSlides'), dots = $('#heroDots');
 let cur = 0;
 HERO.forEach((src, i) => {
