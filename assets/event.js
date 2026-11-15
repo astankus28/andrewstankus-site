@@ -4,10 +4,24 @@
   const $ = s => document.querySelector(s);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+  // A photo that fails to load (often a dropped connection on a phone) is retried a few times
+  // before its slot is shown as empty.
+  function retryOrEmpty(img) {
+    const n = +(img.dataset.retry || 0);
+    const src = img.getAttribute('src') || '';
+    if (n < 3 && /^https?:|^\.|^\//.test(src)) {
+      img.dataset.retry = n + 1;
+      setTimeout(() => { img.src = src.replace(/([?&])r=\d+&?/, '$1').replace(/[?&]$/, '') + (src.includes('?') ? '&' : '?') + 'r=' + (n + 1); }, 800 * (n + 1));
+    } else {
+      img.parentElement.classList.add('empty');
+    }
+  }
+
   function markEmpty(root) {
     root.querySelectorAll('.slot > img').forEach(img => {
-      const fail = () => img.parentElement.classList.add('empty');
-      if (img.complete && !img.naturalWidth) fail(); else img.addEventListener('error', fail);
+      const fail = () => retryOrEmpty(img);
+      if (img.complete && !img.naturalWidth && img.getAttribute('src')) fail();
+      img.addEventListener('error', fail);
     });
   }
 
@@ -48,7 +62,7 @@
       gallery.innerHTML = photos.map((src, n) => {
         const cap = caps[n] || '';
         const wh = sizes[n] ? ` width="${sizes[n][0]}" height="${sizes[n][1]}"` : '';
-        return `<button aria-label="Open photo ${n + 1}"><div class="slot" data-hint="${esc(src)}"><img src="${esc(src)}"${wh} alt="${esc((cap ? cap + ' — ' : '') + title)} — photo ${n + 1}" loading="lazy">` +
+        return `<button aria-label="Open photo ${n + 1}"><div class="slot" data-hint=""><img src="${esc(src)}"${wh} alt="${esc((cap ? cap + ' — ' : '') + title)} — photo ${n + 1}" loading="lazy">` +
           (cap ? `<span class="cap">${esc(cap)}</span>` : '') + `</div></button>`;
       }).join('');
       const meta = document.querySelector('.meta');
