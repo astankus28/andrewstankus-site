@@ -80,6 +80,11 @@ content:
       - name: draft
         label: Hide from site (draft)
         type: boolean
+      - name: cover_focus
+        label: Cover crop (which part of the cover photo to keep in view when it's cropped)
+        type: select
+        options:
+          values: [top, upper, center, lower, bottom]
       - name: unlisted
         label: Private preview (page works by link only; not listed, not on Google)
         type: boolean

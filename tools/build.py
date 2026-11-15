@@ -138,7 +138,7 @@ def event_page(ev, prev_ev, next_ev):
 {nav(up, 'events')}
 
 <div class="ev-hero slot" data-hint="Cover photo">
-  <img src="{e(href(up, cover))}" alt="{e(ev['title'])}">
+  <img src="{e(href(up, cover))}" alt="{e(ev['title'])}"{f' style="object-position: {e(ev["cover_position"])}"' if ev.get("cover_position") else ""}>
 </div>
 
 <header class="ev-head">
@@ -268,6 +268,7 @@ def load_events():
             "captions": captions,
             "cover": cover,
             "unlisted": bool(fm.get("unlisted")),
+            "cover_position": {"top": "center top", "upper": "center 25%", "center": "", "lower": "center 75%", "bottom": "center bottom"}.get(str(fm.get("cover_focus") or "center").lower(), ""),
             "recap": [re.sub(r"\s+", " ", para).strip() for para in re.split(r"\n\s*\n", body) if para.strip()],
         }
         events.append(ev)
