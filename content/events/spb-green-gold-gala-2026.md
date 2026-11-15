@@ -7,7 +7,6 @@ city: Mayfield Village, OH
 category: Gala & Society
 summary: Green velvet, high stakes and a room full of Green Knights. Saint Paschal Baylon's ninth annual gala turned Bellavie into a casino for one night, all to bring air conditioning to the school's classrooms.
 photo_folder: 2026-11-14-spb-gala-preview
-unlisted: true
 cover_focus: top
 ---
 
