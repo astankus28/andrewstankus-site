@@ -275,6 +275,8 @@
     .hero::after { display: none; }
     .hero-copy { position: relative; left: auto; right: auto; bottom: auto; padding: 2rem var(--pad) 3rem; }
     .hero h1, .hero .label, .hero-side p { text-shadow: none; }
+    /* Recent events: one per row on phones, so show the whole (landscape) cover */
+    .story .slot { aspect-ratio: 3 / 2; }
   }
   @media (max-width: 960px) {
     .nav-links { position: fixed; inset: 0; background: var(--ink); flex-direction: column; justify-content: center; gap: 2rem; transform: translateX(100%); transition: transform .4s; }
