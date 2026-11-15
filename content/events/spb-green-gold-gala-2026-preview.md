@@ -8,7 +8,7 @@ category: Gala & Society
 summary: Private preview for approval. The proposed Facebook post is below. The 197 best photos come first, in the order they were taken, followed by every other photo from the night.
 photo_folder: 2026-11-14-spb-gala-preview
 unlisted: true
-cover_focus: upper
+cover_focus: top
 ---
 
 PROPOSED FACEBOOK POST, FOR APPROVAL
