@@ -1,5 +1,5 @@
 ---
-title: 'Green & Gold Gala 2026: A Knight at the Casino'
+title: 'Green & Gold Gala: A Knight at the Casino'
 date: '2026-11-14'
 client: Saint Paschal Baylon
 venue: Bellavie, 700 Beta Drive
@@ -9,6 +9,8 @@ summary: Green velvet, high stakes and a room full of Green Knights. Saint Pasch
 photo_folder: 2026-11-14-spb-gala-preview
 unlisted: true
 cover_focus: top
+captions:
+- John Kane, Lisa Kane, Mary Connors, Michel Baitt and Greg Baitt
 ---
 
 Mayfield Village, OH – November 14, 2026 – For one night, [Bellavie](https://bellaviecle.com) became a casino with a cause. The 9th Annual Green and Gold Gala, A Knight at the Casino, filled the ballroom with green velvet, gold sequins and a crowd ready to play for [Saint Paschal Baylon](https://www.saintpaschal.net). The house rules were simple: the odds were always in favor of SPB, and every dollar went toward air conditioning in classrooms across the school, along with other facility improvements.
