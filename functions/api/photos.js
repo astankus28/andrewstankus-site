@@ -9,11 +9,12 @@ export async function listFolder(env, folder) {
   let cursor;
   do {
     const page = await env.PHOTOS.list({ prefix, cursor, limit: 1000 });
-    for (const o of page.objects) if (IMG.test(o.key)) keys.push(o.key);
+    for (const o of page.objects) if (IMG.test(o.key)) keys.push({ key: o.key, v: (o.etag || '').replace(/"/g, '').slice(0, 8) });
     cursor = page.truncated ? page.cursor : undefined;
   } while (cursor);
-  keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-  return keys.map(k => PUBLIC + k.split('/').map(encodeURIComponent).join('/'));
+  keys.sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
+  // ?v=<etag> changes whenever a photo is replaced, so browsers and the CDN never show a stale copy.
+  return keys.map(({ key, v }) => PUBLIC + key.split('/').map(encodeURIComponent).join('/') + (v ? `?v=${v}` : ''));
 }
 
 export async function onRequestGet({ request, env }) {
