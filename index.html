@@ -119,7 +119,7 @@
   .hero-slides { position: absolute; inset: 0; }
   .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.6s ease; }
   .hero-slide.on { opacity: 1; }
-  .hero-slide img { transform: scale(1.06); transition: transform 7s ease-out; }
+  .hero-slide img { transform: scale(1.06); transform-origin: center top; object-position: center top; transition: transform 7s ease-out; }
   .hero-slide.on img { transform: scale(1); }
   .hero::after {
     content: ''; position: absolute; inset: 0; pointer-events: none;
