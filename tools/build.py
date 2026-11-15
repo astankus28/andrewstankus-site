@@ -77,6 +77,12 @@ def where(ev):
     return ", ".join(x for x in [ev.get("venue", ""), ev.get("city", "")] if x)
 
 
+def linkify(text):
+    """Turn [words](https://...) in recap text into links (opened in a new tab)."""
+    return re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)",
+                  r'<a href="\2" target="_blank" rel="noopener">\1</a>', text)
+
+
 def event_page(ev, prev_ev, next_ev):
     up = "../../"
     url = f"{SITE}/events/{ev['slug']}/"
@@ -89,7 +95,7 @@ def event_page(ev, prev_ev, next_ev):
         f'<img src="{e(href(up, p["image"]))}" alt="{e(p["caption"] + " — " if p["caption"] else "")}{e(ev["title"])} — photo {i}" loading="lazy">'
         + (f'<span class="cap">{e(p["caption"])}</span>' if p["caption"] else '') + '</div></button>'
         for i, p in enumerate(pics, 1))
-    recap = "\n".join(f"      <p>{e(p)}</p>" for p in ev["recap"])
+    recap = "\n".join(f"      <p>{linkify(e(p))}</p>" for p in ev["recap"])
     meta = [("Date", when), ("Client", ev.get("client", "")), ("Venue", ev.get("venue", "")),
             ("City", ev.get("city", "")), ("Coverage", ev.get("category", "")), ("Photographer", ev.get("photographer", "")), ("Photos", str(len(pics)) if pics else "")]
     meta_html = "".join(f"<div><small>{k}</small>{e(v)}</div>" for k, v in meta if v)
