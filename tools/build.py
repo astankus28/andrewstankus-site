@@ -121,7 +121,7 @@ def event_page(ev, prev_ev, next_ev):
 <link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{e(title)}</title>
+{'<meta name="robots" content="noindex, nofollow, noarchive">' + chr(10) if ev.get("unlisted") else ""}<title>{e(title)}</title>
 <meta name="description" content="{e(ev.get('summary', ''))}">
 <link rel="canonical" href="{url}">
 <meta property="og:type" content="article">
@@ -267,6 +267,7 @@ def load_events():
             "folder": folder,
             "captions": captions,
             "cover": cover,
+            "unlisted": bool(fm.get("unlisted")),
             "recap": [re.sub(r"\s+", " ", para).strip() for para in re.split(r"\n\s*\n", body) if para.strip()],
         }
         events.append(ev)
@@ -334,7 +335,15 @@ def stamp_versions():
 
 
 def main():
-    events = load_events()
+    everything = load_events()
+    # Unlisted events (private previews/proofs) get a page at their URL but are
+    # left out of the events list, homepage, pager and sitemap, and marked noindex.
+    for ev in everything:
+        if ev["unlisted"]:
+            out = ROOT / "events" / ev["slug"] / "index.html"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(event_page(ev, None, None))
+    events = [ev for ev in everything if not ev["unlisted"]]
     for i, ev in enumerate(events):
         out = ROOT / "events" / ev["slug"] / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)

@@ -80,6 +80,9 @@ content:
       - name: draft
         label: Hide from site (draft)
         type: boolean
+      - name: unlisted
+        label: Private preview (page works by link only; not listed, not on Google)
+        type: boolean
 
   - name: site
     label: Homepage
