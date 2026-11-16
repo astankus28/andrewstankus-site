@@ -152,7 +152,7 @@
   /* RECENT WORK */
   .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
   .story { display: block; cursor: pointer; text-align: left; }
-  .story .slot { aspect-ratio: 4/5; margin-bottom: 1.1rem; }
+  .story .slot { aspect-ratio: 3/2; margin-bottom: 1.1rem; }  /* wide, so group photos aren't cut off */
   .story .slot img { transition: transform .8s ease; }
   .story:hover .slot img { transform: scale(1.04); }
   .story .count { position: absolute; right: .8rem; bottom: .8rem; z-index: 2; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; background: rgba(11,11,11,.75); padding: .4rem .7rem; }
@@ -581,7 +581,7 @@ RECENT.forEach(ev => {
   const card = document.createElement('a');
   card.className = 'story reveal';
   card.href = `events/${ev.slug}/index.html`;
-  const cover = slot(ev.cover, 'Cover photo', ev.title, '4/5');
+  const cover = slot(ev.cover, 'Cover photo', ev.title, '3/2');
   const count = document.createElement('span');
   count.className = 'count'; count.textContent = ev.photos + ' photos';
   if (ev.photos) cover.appendChild(count);

@@ -72,7 +72,7 @@ nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center;
 .idx-head h1 em { color: var(--accent); }
 .idx-head p { color: var(--muted); max-width: 520px; margin-top: 1.2rem; }
 .idx { padding: 0 var(--pad) 6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem 1.5rem; }
-.card .slot { aspect-ratio: 4/5; margin-bottom: 1.1rem; }
+.card .slot { aspect-ratio: 3/2; margin-bottom: 1.1rem; }  /* wide, so group photos aren't cut off */
 .card .slot img { transition: transform .8s ease; }
 .card:hover .slot img { transform: scale(1.04); }
 .card-meta { display: flex; gap: 1rem; font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: .45rem; }
