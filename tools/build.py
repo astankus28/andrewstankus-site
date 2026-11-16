@@ -125,6 +125,7 @@ def event_page(ev, prev_ev, next_ev):
 {GTM}<meta charset="UTF-8">
 <link rel="icon" href="{up}assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
+<link rel="icon" href="{up}favicon.ico" sizes="any">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {'<meta name="robots" content="noindex, nofollow, noarchive">' + chr(10) if ev.get("unlisted") else ""}<title>{e(title)}</title>
@@ -206,6 +207,7 @@ def index_page(events):
 {GTM}<meta charset="UTF-8">
 <link rel="icon" href="{up}assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
+<link rel="icon" href="{up}favicon.ico" sizes="any">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events | Andrew Stankus Agency — Event Photography Miami & Cleveland</title>
