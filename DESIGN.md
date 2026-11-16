@@ -49,7 +49,10 @@ explicitly asks for a design change.
 
 - Edit: `index.html`, `assets/event.css`, `assets/event.js`, `tools/build.py` (event page
   templates), `content/events/*.md` (posts), `data/site.json` (homepage content).
-- **Generated, never edit by hand** (overwritten on every build): `events/*/index.html`,
+- Category pages (`/gala-photography/` etc.) come from `data/categories.json`; a post appears on the
+  page whose `match` list includes its "Type of coverage".
+- **Generated, never edit by hand** (overwritten on every build): `events/*/index.html`, the category
+  pages (`gala-photography/index.html` and the others listed in `data/categories.json`),
   `events/events.js`, `data/site.js`, `sitemap.xml`, `robots.txt`.
   Run `python3 tools/build.py` after changing content or templates.
 - Photos live in Cloudflare R2 (`photos.andrewstankus.com`), not in this repo.

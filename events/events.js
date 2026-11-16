@@ -6,7 +6,7 @@ window.EVENTS = [
     "date": "2026-11-14",
     "client": "Saint Paschal Baylon",
     "city": "Mayfield Village, OH",
-    "category": "Gala & Society",
+    "category": "Galas & Benefits",
     "summary": "Green velvet, high stakes and a room full of Green Knights. Saint Paschal Baylon's ninth annual gala turned Bellavie into a casino for one night, all to bring air conditioning to the school's classrooms.",
     "photos": 0,
     "cover": "api/cover?folder=2026-11-14-spb-gala-preview"
@@ -17,7 +17,7 @@ window.EVENTS = [
     "date": "2026-11-13",
     "client": "Proof Public House",
     "city": "Cleveland, OH",
-    "category": "Commercial · Menu Photography",
+    "category": "Restaurants & Food",
     "summary": "Pierogi, Parmageddon and a punk-rock soundtrack. We shot the updated menu at Matt Fish's Ohio City hangout, from starters to zero-proof cocktails.",
     "photos": 0,
     "cover": "api/cover?folder=proof-public-house-ohio-city"
@@ -28,7 +28,7 @@ window.EVENTS = [
     "date": "2026-11-12",
     "client": "Somich & Associates CPAs",
     "city": "Willoughby, OH",
-    "category": "Corporate",
+    "category": "Corporate Events",
     "summary": "New address, same handshake. Somich & Associates CPAs threw open the doors on Mentor Avenue for an afternoon-into-evening celebration of the clients and neighbors who built the firm.",
     "photos": 0,
     "cover": "api/cover?folder=somich-associates-open-house-2026-11-12"

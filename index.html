@@ -111,6 +111,10 @@
   .nav-links a:hover { color: var(--paper); }
   .nav-cta { border: 1px solid var(--accent); color: var(--accent) !important; padding: 0.7rem 1.3rem; }
   .nav-cta:hover { background: var(--accent); color: var(--ink) !important; }
+  .nav-links .drop { position: relative; }
+  .nav-links .drop ul { display: none; position: absolute; top: 100%; left: -1.4rem; padding: 1.4rem 0 .8rem; list-style: none; min-width: 16rem; background: rgba(11,11,11,.97); border: 1px solid var(--line); border-top: 0; }
+  .nav-links .drop:hover ul, .nav-links .drop:focus-within ul { display: block; }
+  .nav-links .drop ul a { display: block; padding: .55rem 1.4rem; text-shadow: none !important; }
   .burger { display: none; width: 28px; height: 18px; position: relative; }
   .burger i { position: absolute; left: 0; right: 0; height: 1px; background: var(--paper); }
   .burger i:nth-child(1) { top: 0; } .burger i:nth-child(2) { top: 50%; } .burger i:nth-child(3) { bottom: 0; }
@@ -283,6 +287,9 @@
     .nav-links { position: fixed; inset: 0; background: var(--ink); flex-direction: column; justify-content: center; gap: 2rem; transform: translateX(100%); transition: transform .4s; }
     .nav-links.open { transform: none; }
     .nav-links a { font-size: 1rem; }
+    .nav-links .drop { text-align: center; }
+    .nav-links .drop ul { display: block; position: static; background: none; border: 0; padding: .6rem 0 0; min-width: 0; }
+    .nav-links .drop ul a { font-size: .66rem; padding: .35rem 0; color: var(--muted); }
     .burger { display: block; z-index: 60; }
     .hero-copy { grid-template-columns: 1fr; }
     .hero-side { text-align: left; }
@@ -316,7 +323,8 @@
     <img src="assets/asa-logo.svg" alt="ASA, Andrew Stankus Agency" width="120" height="66">
   </a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="events/index.html">Events</a></li>
+    <li class="drop"><a href="events/index.html">Events</a>
+      <ul><li><a href="gala-photography/index.html">Galas &amp; Benefits</a></li><li><a href="corporate-event-photography/index.html">Corporate Events</a></li><li><a href="brand-event-photography/index.html">Openings &amp; Launches</a></li><li><a href="restaurant-food-photography/index.html">Restaurants &amp; Food</a></li><li><a href="private-event-photography/index.html">Private Celebrations</a></li></ul></li>
     <li><a href="#work">Portfolio</a></li>
     <li><a href="#commercial">Commercial</a></li>
     <li><a href="#services">Services</a></li>
@@ -510,7 +518,7 @@
 </div>
 
 <script src="data/site.js?v=9432f70087"></script>
-<script src="events/events.js?v=13a54e385a"></script>
+<script src="events/events.js?v=372c51447d"></script>
 <script>
 /* =================================================================
    SITE CONTENT lives in data/site.json and content/events/*.md.

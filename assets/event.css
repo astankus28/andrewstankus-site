@@ -119,3 +119,16 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 .recap h3:first-child { margin-top: 0; }
 .svc-recent { padding: 3rem var(--pad) 1rem; }
 .svc-recent .idx { padding: 2rem 0 0; }
+.ev-head.no-hero { margin-top: 0; padding-top: 5rem; }
+.recap a.more { display: inline-block; margin-top: 1.4rem; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; }
+
+/* Events dropdown in the menu */
+.nav-links .drop { position: relative; }
+.nav-links .drop ul { display: none; position: absolute; top: 100%; left: -1.4rem; padding: 1.4rem 0 .8rem; list-style: none; min-width: 16rem; background: rgba(11,11,11,.97); border: 1px solid var(--line); border-top: 0; }
+.nav-links .drop:hover ul, .nav-links .drop:focus-within ul { display: block; }
+.nav-links .drop ul a { display: block; padding: .55rem 1.4rem; }
+
+/* Category links on the events page */
+.cats { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2rem; }
+.cats a { border: 1px solid var(--line); padding: .65rem 1rem; font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(243,239,232,.75); transition: all .25s; }
+.cats a:hover { border-color: var(--paper); color: var(--paper); }

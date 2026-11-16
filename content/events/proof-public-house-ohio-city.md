@@ -4,7 +4,7 @@ date: '2026-11-13'
 client: Proof Public House
 venue: Proof Public House, 4116 Lorain Ave.
 city: Cleveland, OH
-category: Commercial · Menu Photography
+category: Restaurants & Food
 summary: Pierogi, Parmageddon and a punk-rock soundtrack. We shot the updated menu at Matt Fish's Ohio City hangout, from starters to zero-proof cocktails.
 photo_folder: proof-public-house-ohio-city
 captions:

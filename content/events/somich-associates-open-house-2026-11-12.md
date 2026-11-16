@@ -4,7 +4,7 @@ date: '2026-11-12'
 client: Somich & Associates CPAs
 venue: Somich & Associates CPAs, 38879 Mentor Avenue
 city: Willoughby, OH
-category: Corporate
+category: Corporate Events
 summary: New address, same handshake. Somich & Associates CPAs threw open the doors on Mentor Avenue for an afternoon-into-evening celebration of the clients and neighbors who built the firm.
 photo_folder: somich-associates-open-house-2026-11-12
 ---

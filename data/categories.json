@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Galas & Benefits",
+    "slug": "gala-photography",
+    "match": ["Gala & Society", "Galas & Benefits"],
+    "title": "Gala Photography in Cleveland & Miami",
+    "h1": "Gala <em>photography</em>",
+    "description": "Gala and benefit photography in Cleveland, Northeast Ohio and Miami. Arrivals, honorees, the program, the auction and the dance floor, photographed for the host, sponsors and press.",
+    "coverage": "Galas, benefits, awards nights",
+    "recent_label": "Recent galas",
+    "cta": "Planning a gala?",
+    "lede": "The room only looks like this once. We make sure the host, the honorees and every sponsor have the pictures to prove it.",
+    "intro": [
+      "Andrew Stankus Agency photographs galas, benefits and awards nights in Cleveland, across Northeast Ohio and in Miami. We cover the night the way the society pages do: the arrivals and the step-and-repeat, the room before the doors open, the honorees and the speeches, the paddles going up, and the dance floor once the program is done.",
+      "For nonprofits, that means images built for the year ahead: sponsor recognition, donor thank-yous, next year's invitation and the annual report. For the press, it means names captioned correctly and the right people in the frame."
+    ],
+    "cover": "Arrivals, red carpet and step-and-repeat portraits. Décor, tablescapes and the room. Honorees, emcees and the program. Live auction, raffles and Raise the Paddle. Sponsors and VIP groups. The after-party.",
+    "after": "A full online gallery for the host, a select set of highlights first for social and press, and a public recap on our Events page that gives sponsors and guests one more reason to share."
+  },
+  {
+    "name": "Corporate Events",
+    "slug": "corporate-event-photography",
+    "match": ["Corporate", "Corporate Events"],
+    "title": "Corporate Event Photography in Cleveland & Miami",
+    "h1": "Corporate event <em>photography</em>",
+    "description": "Corporate event photography in Cleveland, Northeast Ohio and Miami: client evenings, open houses, holiday parties, conferences and company milestones.",
+    "coverage": "Client nights, open houses, holiday parties, conferences",
+    "recent_label": "Recent corporate events",
+    "cta": "Planning a company event?",
+    "lede": "Your people, your clients and your brand, looking as good as the evening felt.",
+    "intro": [
+      "Andrew Stankus Agency photographs corporate events in Cleveland, across Northeast Ohio and in Miami: client appreciation nights, open houses, holiday parties, conferences, retirements and company anniversaries. We work quietly, know when to step in for the group shot and when to stay out of the conversation.",
+      "The result is a set of images your team will actually use: the website and LinkedIn, the newsletter, recruiting and next year's invitation."
+    ],
+    "cover": "Arrivals and guests. Executives, clients and teams. Speeches, presentations and awards. Branding, signage and the space. Headshots set up on-site, if you want them.",
+    "after": "A full online gallery, a set of highlights for social, and, if you'd like, a public recap on our Events page."
+  },
+  {
+    "name": "Openings & Launches",
+    "slug": "brand-event-photography",
+    "match": ["Brand Event", "Openings & Launches"],
+    "title": "Opening, Launch & Brand Event Photography in Cleveland & Miami",
+    "h1": "Openings &amp; <em>launches</em>",
+    "description": "Grand opening, product launch and brand activation photography in Cleveland, Northeast Ohio and Miami.",
+    "coverage": "Grand openings, product launches, activations",
+    "recent_label": "Recent openings & launches",
+    "cta": "Opening something new?",
+    "lede": "The first night only happens once. The pictures are how everyone who missed it finds out.",
+    "intro": [
+      "Andrew Stankus Agency photographs grand openings, ribbon cuttings, product launches, brand activations and pop-ups in Cleveland, across Northeast Ohio and in Miami.",
+      "We shoot for the brand and the press at the same time: the product and the space at their best, and the guests, partners and local names who showed up for it."
+    ],
+    "cover": "The space before the doors open. Product and branding details. The ribbon cutting and remarks. Guests, VIPs and press. The activation in action.",
+    "after": "A full online gallery, a select set of highlights for social and press, and a public recap on our Events page."
+  },
+  {
+    "name": "Restaurants & Food",
+    "slug": "restaurant-food-photography",
+    "match": ["Hospitality", "Commercial · Menu Photography", "Restaurants & Food"],
+    "title": "Restaurant & Food Photography in Cleveland & Miami",
+    "h1": "Restaurant &amp; food <em>photography</em>",
+    "description": "Restaurant, menu and food photography in Cleveland, Northeast Ohio and Miami, for delivery apps, websites and social: dishes, cocktails, interiors and the people behind them.",
+    "coverage": "Menus, delivery apps, interiors, chefs",
+    "recent_label": "Recent restaurant shoots",
+    "cta": "New menu coming?",
+    "lede": "Food that sells on a phone screen, and a room that makes people want to book a table.",
+    "intro": [
+      "Food and hospitality is the core of what we do. Andrew Stankus Agency has shot menus for UberEats, DoorDash, Grubhub and Postmates and for many hospitality brands, and photographs restaurants, bars and hotels in Cleveland, across Northeast Ohio and in Miami.",
+      "We shoot full menus for delivery apps, your website and social, plus the interiors, the bar and the people who make the place work."
+    ],
+    "cover": "Full menu shoots. Hero dishes and cocktails. Interiors, patios and ambiance. Chefs, owners and staff portraits. Openings and new-menu launches.",
+    "after": "Edited files ready for your delivery apps, website and social, and a feature on our Events page when you open or launch a new menu."
+  },
+  {
+    "name": "Private Celebrations",
+    "slug": "private-event-photography",
+    "match": ["Private Celebrations"],
+    "title": "Private Event Photography in Cleveland & Miami",
+    "h1": "Private <em>celebrations</em>",
+    "description": "Private event photography in Cleveland, Northeast Ohio and Miami: milestone birthdays, anniversaries, engagement parties and private dinners.",
+    "coverage": "Milestone birthdays, anniversaries, dinners",
+    "recent_label": "Recent celebrations",
+    "cta": "Planning a celebration?",
+    "lede": "The party you'll want to remember, photographed so you can actually enjoy it.",
+    "intro": [
+      "Andrew Stankus Agency photographs milestone birthdays, anniversaries, engagement parties, holiday gatherings and private dinners in Cleveland, across Northeast Ohio and in Miami.",
+      "It's the same eye we bring to galas and brand nights, scaled to your guest list."
+    ],
+    "cover": "Arrivals and every guest. Family and group portraits. Toasts and speeches. The décor, the tables and the details you planned for months. The dance floor.",
+    "after": "A private online gallery for you and your guests. Nothing goes public unless you want it to."
+  }
+]

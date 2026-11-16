@@ -4,7 +4,7 @@ date: '2026-11-14'
 client: Saint Paschal Baylon
 venue: Bellavie, 700 Beta Drive
 city: Mayfield Village, OH
-category: Gala & Society
+category: Galas & Benefits
 summary: Green velvet, high stakes and a room full of Green Knights. Saint Paschal Baylon's ninth annual gala turned Bellavie into a casino for one night, all to bring air conditioning to the school's classrooms.
 photo_folder: 2026-11-14-spb-gala-preview
 cover_focus: top

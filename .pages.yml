@@ -39,16 +39,16 @@ content:
         type: string
         description: e.g. Cleveland, OH
       - name: category
-        label: Type of coverage
+        label: Type of coverage (puts the post on that category's page, e.g. Galas & Benefits → /gala-photography/)
         type: select
         options:
           creatable: true
           values:
-            - Corporate
-            - Gala & Society
-            - Brand Event
-            - Hospitality
-            - Commercial · Menu Photography
+            - Galas & Benefits
+            - Corporate Events
+            - Openings & Launches
+            - Restaurants & Food
+            - Private Celebrations
             - Portraits
       - name: photographer
         label: Photographer (leave empty if you shot it; otherwise their name for the credit)

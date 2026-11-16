@@ -40,6 +40,15 @@ FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400'
          '&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">')
 e = html.escape
+CATEGORIES = json.loads((ROOT / "data/categories.json").read_text())
+
+
+def category_of(ev):
+    """The category page an event belongs to (matched on its 'Type of coverage'), or None."""
+    for c in CATEGORIES:
+        if ev.get("category", "") in c["match"]:
+            return c
+    return None
 
 
 def href(up, p):
@@ -60,7 +69,8 @@ def nav(up, active=""):
     return f'''<nav>
   <a href="{up}index.html" class="wordmark" aria-label="Andrew Stankus Agency home"><img src="{up}assets/asa-logo.svg" alt="ASA, Andrew Stankus Agency" width="100" height="55"></a>
   <ul class="nav-links">
-    <li><a href="{up}events/index.html"{' class="on"' if active == 'events' else ''}>Events</a></li>
+    <li class="drop"><a href="{up}events/index.html"{' class="on"' if active == 'events' else ''}>Events</a>
+      <ul>{"".join(f'<li><a href="{up}{c["slug"]}/index.html">{e(c["name"])}</a></li>' for c in CATEGORIES)}</ul></li>
     <li><a href="{up}index.html#work">Portfolio</a></li>
     <li><a href="{up}index.html#commercial">Commercial</a></li>
     <li><a href="{up}index.html#about">About</a></li>
@@ -96,8 +106,12 @@ def event_page(ev, prev_ev, next_ev):
         + (f'<span class="cap">{e(p["caption"])}</span>' if p["caption"] else '') + '</div></button>'
         for i, p in enumerate(pics, 1))
     recap = "\n".join(f"      <p>{linkify(e(p))}</p>" for p in ev["recap"])
+    cat = category_of(ev)
+    cat_name = cat["name"] if cat else ev.get("category", "")
+    crumb_cat = f'<a href="{up}{cat["slug"]}/index.html">{e(cat_name)}</a>' if cat else e(cat_name)
+    more = f'\n    <a class="more" href="{up}{cat["slug"]}/index.html">More {e(cat_name)} →</a>' if cat else ""
     meta = [("Date", when), ("Client", ev.get("client", "")), ("Venue", ev.get("venue", "")),
-            ("City", ev.get("city", "")), ("Coverage", ev.get("category", "")), ("Photographer", ev.get("photographer", "")), ("Photos", str(len(pics)) if pics else "")]
+            ("City", ev.get("city", "")), ("Coverage", cat_name), ("Photographer", ev.get("photographer", "")), ("Photos", str(len(pics)) if pics else "")]
     meta_html = "".join(f"<div><small>{k}</small>{e(v)}</div>" for k, v in meta if v)
     credit = (f"Photography by {e(ev['photographer'])} for Andrew Stankus Agency" if ev["photographer"]
               else "Photography by Andrew Stankus Agency")
@@ -150,7 +164,7 @@ def event_page(ev, prev_ev, next_ev):
 </div>
 
 <header class="ev-head">
-  <span class="crumb"><a href="../index.html">Events</a> &nbsp;/&nbsp; {e(ev.get('category', ''))}</span>
+  <span class="crumb"><a href="../index.html">Events</a> &nbsp;/&nbsp; {crumb_cat}</span>
   <h1>{e(ev['title'])}</h1>
   <div class="meta">{meta_html}</div>
 </header>
@@ -159,7 +173,7 @@ def event_page(ev, prev_ev, next_ev):
   <div class="lede">{e(ev.get('summary', ''))}</div>
   <div>
 {recap}
-    <div class="credit">{credit}</div>
+    <div class="credit">{credit}</div>{more}
   </div>
 </section>
 
@@ -223,11 +237,117 @@ def index_page(events):
   <span class="label">Events</span>
   <h1>Recent <em>coverage</em></h1>
   <p>Corporate events, openings, launches and celebrations, with a recap and the full gallery for each.</p>
+  <div class="cats">{"".join(f'<a href="{up}{c["slug"]}/index.html">{e(c["name"])}</a>' for c in CATEGORIES)}</div>
 </header>
 <section class="idx">
 {chr(10).join(cards)}
 </section>
 {FOOTER}
+<script src="{up}assets/event.js"></script>
+</body>
+</html>
+'''
+
+
+def card(ev, up):
+    y, m, d = map(int, ev["date"].split("-"))
+    new = (date.today() - date(y, m, d)).days < 21
+    return f'''  <a class="card" href="{up}events/{ev['slug']}/index.html">
+    <div class="slot" data-hint="Cover photo"><img src="{e(href(up, ev['cover']))}" alt="{e(ev['title'])}" loading="lazy"></div>
+    <div class="card-meta">{'<span class="new">New</span>' if new else ''}<span>{e(nice_date(ev['date']))}</span><span>{e(ev.get('city', ''))}</span></div>
+    <h3>{e(ev['title'])}</h3>
+    <p>{e(ev.get('summary', ''))}</p>
+  </a>'''
+
+
+def category_page(c, events):
+    """A service page per category (e.g. /gala-photography/): intro text for search, then every
+    event in that category, newest first, and the newest one's gallery."""
+    up = "../"
+    url = f"{SITE}/{c['slug']}/"
+    lead = events[0] if events else None
+    gal = next((ev for ev in events if ev["folder"]), None)
+    hero = (f'''<div class="ev-hero slot" data-hint="Cover photo">
+  <img src="{e(href(up, lead['cover']))}" alt="{e(c['name'])} photography by Andrew Stankus Agency"{f' style="object-position: {e(lead["cover_position"])}"' if lead.get("cover_position") else ""}>
+</div>
+''' if lead else "")
+    recent = (f'''<section class="svc-recent">
+  <span class="label">{e(c['recent_label'])}</span>
+  <div class="idx">
+{chr(10).join(card(ev, up) for ev in events)}
+  </div>
+</section>
+''' if events else "")
+    gallery = (f'''<section class="gallery" aria-label="Photo gallery" data-folder="{e(gal['folder'])}" data-title="{e(gal['title'])}" data-captions='{e(json.dumps(gal['captions']))}'>
+</section>
+''' if gal else "")
+    intro = "\n".join(f"    <p>{e(p)}</p>" for p in c["intro"])
+    ld = {"@context": "https://schema.org", "@type": "Service", "serviceType": c["name"] + " photography",
+          "name": c["title"], "url": url, "description": c["description"],
+          "provider": {"@type": "Organization", "name": "Andrew Stankus Agency", "url": SITE + "/"},
+          "areaServed": [{"@type": "City", "name": "Cleveland, OH"}, {"@type": "AdministrativeArea", "name": "Northeast Ohio"},
+                         {"@type": "City", "name": "Miami, FL"}]}
+    share = f'<meta property="og:image" content="{e(absolute(lead["share"]))}">\n' if lead else ""
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{GTM}<meta charset="UTF-8">
+<link rel="icon" href="{up}assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
+<link rel="icon" href="{up}favicon.ico" sizes="any">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{e(c['title'])} | Andrew Stankus Agency</title>
+<meta name="description" content="{e(c['description'])}">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{e(c['title'])} | Andrew Stankus Agency">
+<meta property="og:description" content="{e(c['description'])}">
+{share}<meta property="og:url" content="{url}">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{json.dumps(ld)}</script>
+{FONTS}
+<link rel="stylesheet" href="{up}assets/event.css">
+</head>
+<body>
+{nav(up, 'events')}
+
+{hero}
+<header class="ev-head{'' if lead else ' no-hero'}">
+  <span class="crumb"><a href="{up}events/index.html">Events</a> &nbsp;/&nbsp; {e(c['name'])}</span>
+  <h1>{c['h1']}</h1>
+  <div class="meta"><div><small>Based in</small>Cleveland · Miami</div><div><small>Serving</small>Northeast Ohio, South Florida &amp; beyond</div><div><small>Coverage</small>{e(c['coverage'])}</div></div>
+</header>
+
+<section class="recap">
+  <div class="lede">{e(c['lede'])}</div>
+  <div>
+{intro}
+    <h3>What we cover</h3>
+    <p>{e(c['cover'])}</p>
+    <h3>After the night</h3>
+    <p>{e(c['after'])}</p>
+    <h3>Video</h3>
+    <p>Pair photography with a highlight film or social cuts from our video partner, booked as one team.</p>
+  </div>
+</section>
+
+{recent}
+{gallery}
+<section class="cta">
+  <span class="label">{e(c['cta'])}</span>
+  <h2>Let's make yours look <em>this good.</em></h2>
+  <a href="{up}index.html#inquire" class="btn btn-gold">Check availability</a>
+</section>
+
+{FOOTER}
+
+<div class="lb" id="lb" aria-modal="true" role="dialog">
+  <div class="lb-top"><span>{e(gal['title'] if gal else c['name'])}</span><span id="lbCount"></span><button class="lb-x" id="lbX" aria-label="Close">×</button></div>
+  <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <div class="lb-stage" id="lbStage"></div>
+  <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
+</div>
 <script src="{up}assets/event.js"></script>
 </body>
 </html>
@@ -340,7 +460,8 @@ def stamp_versions():
     def ver(rel):
         f = ROOT / rel
         return hashlib.sha1(f.read_bytes()).hexdigest()[:10] if f.exists() else "0"
-    pages = [ROOT / "index.html", ROOT / "events/index.html"] + list((ROOT / "events").glob("*/index.html"))
+    pages = ([ROOT / "index.html", ROOT / "events/index.html"] + list((ROOT / "events").glob("*/index.html"))
+             + [ROOT / c["slug"] / "index.html" for c in CATEGORIES])
     for page in pages:
         html_text = page.read_text()
         new = re.sub(r'((?:\.\./)*)(data/site\.js|events/events\.js|assets/event\.js|assets/event\.css)(\?v=[0-9a-f]+)?"',
@@ -371,14 +492,22 @@ def main():
     (ROOT / "events/events.js").write_text(
         "// Generated by tools/build.py from content/events, do not edit by hand.\n"
         f"window.EVENTS = {json.dumps(slim, indent=2, ensure_ascii=False)};\n")
+    for c in CATEGORIES:
+        out = ROOT / c["slug"] / "index.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(category_page(c, [ev for ev in events if category_of(ev) is c]))
     build_site_data()
     stamp_versions()
-    urls = [f"{SITE}/", f"{SITE}/events/"] + [f"{SITE}/events/{ev['slug']}/" for ev in events]
     newest = events[0]["date"] if events else date.today().isoformat()
+    def latest(c):
+        evs = [ev for ev in events if category_of(ev) is c]
+        return evs[0]["date"] if evs else newest
+    urls = ([(f"{SITE}/", newest), (f"{SITE}/events/", newest)]
+            + [(f"{SITE}/{c['slug']}/", latest(c)) for c in CATEGORIES]
+            + [(f"{SITE}/events/{ev['slug']}/", ev["date"]) for ev in events])
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "".join(f"  <url><loc>{u}</loc><lastmod>{(events[i - 2]['date'] if i >= 2 else newest)}</lastmod></url>\n"
-                  for i, u in enumerate(urls))
+        + "".join(f"  <url><loc>{u}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls)
         + "</urlset>\n")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
     print(f"Built {len(events)} event page(s) and homepage data.")
