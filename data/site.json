@@ -1,19 +1,6 @@
 {
   "hero": [],
-  "stats": [
-    {
-      "number": "17",
-      "label": "Years behind the lens"
-    },
-    {
-      "number": "Thousands",
-      "label": "Of campaigns"
-    },
-    {
-      "number": "5,000+",
-      "label": "Shoots & events completed"
-    }
-  ],
+  "stats": [],
   "commercial_photos": [
     {
       "r2_photo": "proof-public-house-ohio-city/01.jpg",

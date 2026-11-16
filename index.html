@@ -508,7 +508,7 @@
   <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
 </div>
 
-<script src="data/site.js?v=67c8dc2ce0"></script>
+<script src="data/site.js?v=9432f70087"></script>
 <script src="events/events.js?v=13a54e385a"></script>
 <script>
 /* =================================================================
@@ -624,6 +624,7 @@ else { document.querySelector('#process .slot').remove(); document.querySelector
 // Stats & commercial photos
 $('#stats').innerHTML = (SITE.stats || []).map(st => `<div><b>${st.number}</b><span>${st.label}</span></div>`).join('');
 $('#stats').style.setProperty('--n', Math.max(1, (SITE.stats || []).length));
+if (!(SITE.stats || []).length) $('#stats').remove(); // no stats row when the list is empty
 (SITE.commercial_photos || []).filter(c => c.image).slice(0, 3).forEach(c => $('#commImgs').appendChild(slot(c.image, c.image, c.alt || 'Andrew Stankus Agency commercial photography')));
 $('#commImgs').hidden = !$('#commImgs').children.length;
 
