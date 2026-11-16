@@ -134,7 +134,8 @@ def event_page(ev, prev_ev, next_ev):
 <meta property="og:type" content="article">
 <meta property="og:title" content="{e(ev['title'])} — {e(when)}">
 <meta property="og:description" content="{e(ev.get('summary', ''))}">
-<meta property="og:image" content="{e(absolute(cover))}">
+<meta property="og:image" content="{e(absolute(ev["share"]))}">
+<meta property="og:image:alt" content="{e(ev['title'])}">
 <meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld)}</script>
@@ -258,8 +259,12 @@ def load_events():
         if folder:
             photos = []  # listed live from R2 by /api/photos
             cover = f"api/cover?folder={quote(folder)}"
+            # Share previews (Facebook etc.) need a horizontal photo: /api/share picks one.
+            share_photo = str(fm.get("share_photo") or "").strip().split("/")[-1]
+            share = f"api/share?folder={quote(folder)}" + (f"&photo={quote(share_photo)}" if share_photo else "")
         else:
             cover = photos[0]["image"] if photos else ""
+            share = cover
         d = fm.get("date") or date.today()
         ev = {
             "slug": f.stem,
@@ -275,6 +280,7 @@ def load_events():
             "folder": folder,
             "captions": captions,
             "cover": cover,
+            "share": share,
             "unlisted": bool(fm.get("unlisted")),
             "cover_position": {"top": "center top", "upper": "center 25%", "center": "", "lower": "center 75%", "bottom": "center bottom"}.get(str(fm.get("cover_focus") or "center").lower(), ""),
             "recap": [re.sub(r"\s+", " ", para).strip() for para in re.split(r"\n\s*\n", body) if para.strip()],

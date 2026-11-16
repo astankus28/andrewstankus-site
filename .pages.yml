@@ -59,6 +59,9 @@ content:
       - name: photo_folder
         label: Photo folder in R2 (e.g. 2026-11-20-gala). Every photo in it is shown in file-name order; the first is the cover.
         type: string
+      - name: share_photo
+        label: Share photo (optional) — file name of a horizontal photo in the folder, e.g. 0123.jpg, used as the big preview when the link is posted on Facebook. Leave empty to use the first horizontal photo.
+        type: string
       - name: captions
         label: Captions for the folder photos, in order (optional)
         type: string
