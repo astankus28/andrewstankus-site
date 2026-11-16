@@ -112,3 +112,10 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 .gallery .slot:not(.empty) img { height: auto; }
 .gallery .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 1rem .8rem; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; text-align: left; background: linear-gradient(transparent, rgba(0,0,0,.7)); opacity: 0; transition: opacity .3s; }
 .gallery button:hover .cap { opacity: 1; }
+
+/* Service pages (e.g. /gala-photography/) — reuse the event page pieces */
+.ev-head h1 em { color: var(--accent); font-style: italic; }
+.recap h3 { font-family: var(--serif); font-weight: 400; font-size: 1.45rem; line-height: 1.2; margin: 2rem 0 .5rem; }
+.recap h3:first-child { margin-top: 0; }
+.svc-recent { padding: 3rem var(--pad) 1rem; }
+.svc-recent .idx { padding: 2rem 0 0; }
