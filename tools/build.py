@@ -93,6 +93,14 @@ def linkify(text):
                   r'<a href="\2" target="_blank" rel="noopener">\1</a>', text)
 
 
+def breadcrumbs(items):
+    """Hidden breadcrumb data (schema.org BreadcrumbList) so Google can show Events › Category."""
+    return '<script type="application/ld+json">' + json.dumps({
+        "@context": "https://schema.org", "@type": "BreadcrumbList",
+        "itemListElement": [{"@type": "ListItem", "position": i, "name": n, "item": u}
+                            for i, (n, u) in enumerate(items, 1)]}) + '</script>'
+
+
 def event_page(ev, prev_ev, next_ev):
     up = "../../"
     url = f"{SITE}/events/{ev['slug']}/"
@@ -153,6 +161,7 @@ def event_page(ev, prev_ev, next_ev):
 <meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld)}</script>
+{breadcrumbs([("Home", SITE + "/"), ("Events", SITE + "/events/")] + ([(cat_name, f"{SITE}/{cat['slug']}/")] if cat else []) + [(ev["title"], url)])}
 {FONTS}
 <link rel="stylesheet" href="{up}assets/event.css">
 </head>
@@ -306,6 +315,7 @@ def category_page(c, events):
 {share}<meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld)}</script>
+{breadcrumbs([("Home", SITE + "/"), ("Events", SITE + "/events/"), (c["name"], url)])}
 {FONTS}
 <link rel="stylesheet" href="{up}assets/event.css">
 </head>
