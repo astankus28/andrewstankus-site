@@ -296,7 +296,10 @@ def category_page(c, events):
           "provider": {"@type": "Organization", "name": "Andrew Stankus Agency", "url": SITE + "/"},
           "areaServed": [{"@type": "City", "name": "Cleveland, OH"}, {"@type": "AdministrativeArea", "name": "Northeast Ohio"},
                          {"@type": "City", "name": "Miami, FL"}]}
-    share = f'<meta property="og:image" content="{e(absolute(lead["share"]))}">\n' if lead else ""
+    # Category pages with no events yet share the ASA logo card instead of a blank preview.
+    share = (f'<meta property="og:image" content="{e(absolute(lead["share"]))}">\n' if lead else
+             f'<meta property="og:image" content="{SITE}/assets/og-image.jpg">\n'
+             '<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n')
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
