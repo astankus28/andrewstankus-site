@@ -88,3 +88,20 @@
     initLightbox();
   })();
 })();
+
+// Event video: big play button over the cover frame; native controls appear once it plays.
+document.querySelectorAll('.ev-video').forEach(function (box) {
+  var v = box.querySelector('video');
+  if (!v) return;
+  var btn = document.createElement('button');
+  btn.className = 'ev-play';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Play video');
+  btn.innerHTML = '<span></span>';
+  v.controls = false;
+  box.classList.add('has-play');
+  box.insertBefore(btn, v.nextSibling);
+  btn.addEventListener('click', function () { v.controls = true; v.play(); });
+  v.addEventListener('play', function () { box.classList.add('playing'); v.controls = true; });
+  v.addEventListener('ended', function () { box.classList.remove('playing'); v.controls = false; });
+});
