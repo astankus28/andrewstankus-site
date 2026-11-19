@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /proof/
+Disallow: /studio/
+Disallow: /api/
 
 Sitemap: https://www.andrewstankus.com/sitemap.xml

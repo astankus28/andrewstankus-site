@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Your private gallery · Andrew Stankus Agency</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/event.css?v=dcd078b56b">
+</head>
+<body class="proofing">
+<nav>
+  <a href="/" class="wordmark" aria-label="Andrew Stankus Agency home"><img src="/assets/asa-logo.svg" alt="ASA, Andrew Stankus Agency" width="100" height="55"></a>
+  <ul class="nav-links">
+    <li><a href="mailto:andrew@andrewstankus.com" class="nav-cta">Questions? Email me</a></li>
+  </ul>
+</nav>
+
+<header class="ev-head no-hero pf-head">
+  <span class="label" id="pfProject">Private gallery</span>
+  <h1 id="pfTitle">Loading your <em>gallery</em></h1>
+  <div class="meta" id="pfMeta"></div>
+  <p class="pf-msg" id="pfMsg" hidden></p>
+</header>
+
+<section class="pf-done" id="pfDone" hidden></section>
+
+<section class="pf-finals" id="pfFinals" hidden>
+  <span class="label">Ready to download</span>
+  <h2>Your final <em>images</em></h2>
+  <div class="gallery pf-grid" id="pfFinalGrid"></div>
+</section>
+
+<section class="pf-how" id="pfHow" hidden>
+  <span class="label" id="pfRule"></span>
+  <p>Tap a photo to see it larger. Use <b>Select</b> to choose it, then press <b>Send my selection</b>.</p>
+</section>
+
+<section class="gallery pf-grid" id="pfGrid" aria-label="Your proofs"></section>
+
+<div class="pf-bar" id="pfBar" hidden>
+  <div class="pf-count"><b id="pfCount">0</b> <span id="pfOf"></span></div>
+  <div class="pf-note" id="pfNoteWrap" hidden><textarea id="pfNote" rows="2" maxlength="2000" placeholder="Optional note for Andrew (retouching requests, crops…)"></textarea></div>
+  <div class="pf-actions">
+    <button class="btn btn-line" id="pfNoteBtn" type="button">Add a note</button>
+    <button class="btn btn-gold" id="pfSend" type="button" disabled>Send my selection</button>
+  </div>
+  <p class="pf-err" id="pfErr" role="alert"></p>
+</div>
+
+<footer><span>© <span id="pfYear"></span> Andrew Stankus Agency</span><span>Miami · Cleveland</span>
+<a href="mailto:andrew@andrewstankus.com">andrew@andrewstankus.com</a></footer>
+
+<div class="lb" id="lb" aria-modal="true" role="dialog">
+  <div class="lb-top"><span id="lbName"></span><span id="lbCount"></span><button class="lb-x" id="lbX" aria-label="Close">×</button></div>
+  <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <div class="lb-stage" id="lbStage"></div>
+  <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
+  <div class="pf-lb-pick"><button class="btn btn-gold" id="lbPick" type="button">Select</button></div>
+</div>
+
+<script src="/assets/proof.js"></script>
+</body>
+</html>

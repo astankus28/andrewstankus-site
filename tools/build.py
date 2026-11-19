@@ -533,7 +533,7 @@ def main():
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"  <url><loc>{u}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls)
         + "</urlset>\n")
-    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /proof/\nDisallow: /studio/\nDisallow: /api/\n\nSitemap: {SITE}/sitemap.xml\n")
     print(f"Built {len(events)} event page(s) and homepage data.")
     if "--optimize" in sys.argv:
         optimize_images()

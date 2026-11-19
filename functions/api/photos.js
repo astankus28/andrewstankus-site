@@ -5,6 +5,8 @@ const IMG = /\.(jpe?g|png|webp|avif)$/i;
 
 export async function listFolder(env, folder) {
   const prefix = folder.replace(/^\/+|\/+$/g, '') + '/';
+  // Private client galleries (_proofing/…) are never listed here; see functions/_lib/proofing.js.
+  if (prefix.startsWith('_') || prefix === '/') return [];
   const keys = [];
   let cursor;
   do {
