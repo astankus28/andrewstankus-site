@@ -77,6 +77,15 @@ content:
           - name: caption
             label: Caption (optional)
             type: string
+      - name: video
+        label: Video (MP4 path, e.g. videos/my-event.mp4)
+        type: string
+      - name: video_poster
+        label: Video cover image (path)
+        type: string
+      - name: video_credit
+        label: Video by
+        type: string
       - name: body
         label: Recap (leave a blank line between paragraphs)
         type: text

@@ -8,6 +8,9 @@ category: Galas & Benefits
 summary: Green velvet, high stakes and a room full of Green Knights. Saint Paschal Baylon's ninth annual gala turned Bellavie into a casino for one night, all to bring air conditioning to the school's classrooms.
 photo_folder: 2026-11-14-spb-gala-preview
 cover_focus: top
+video: videos/spb-green-gold-gala-2026.mp4
+video_poster: videos/spb-green-gold-gala-2026.jpg
+video_credit: Matt Lobe
 ---
 
 Mayfield Village, OH – November 14, 2026 – For one night, [Bellavie](https://bellaviecle.com) became a casino with a cause. The 9th Annual Green and Gold Gala, A Knight at the Casino, filled the ballroom with green velvet, gold sequins and a crowd ready to play for [Saint Paschal Baylon](https://www.saintpaschal.net). The house rules were simple: the odds were always in favor of SPB, and every dollar went toward air conditioning in classrooms across the school, along with other facility improvements.

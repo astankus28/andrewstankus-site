@@ -127,6 +127,14 @@ def event_page(ev, prev_ev, next_ev):
     if ev["folder"]:
         folder_attrs = (f' data-folder="{e(ev["folder"])}" data-title="{e(ev["title"])}"'
                         f" data-captions='{e(json.dumps(ev['captions']))}'")
+    video = ""
+    if ev.get("video"):
+        poster = f' poster="{e(href(up, ev["video_poster"]))}"' if ev.get("video_poster") else ""
+        vcredit = f'<div class="credit">Video by {e(ev["video_credit"])}</div>' if ev.get("video_credit") else ""
+        video = (f'\n<section class="ev-video" aria-label="Event video">\n'
+                 f'  <video controls playsinline preload="metadata"{poster}>'
+                 f'<source src="{e(href(up, ev["video"]))}" type="video/mp4"></video>\n'
+                 f'  {vcredit}\n</section>\n')
     pager = ""
     if prev_ev or next_ev:
         a = (f'<a href="../{prev_ev["slug"]}/index.html"><small>← Newer</small><b>{e(prev_ev["title"])}</b></a>'
@@ -185,7 +193,7 @@ def event_page(ev, prev_ev, next_ev):
     <div class="credit">{credit}</div>{more}
   </div>
 </section>
-
+{video}
 <section class="gallery" aria-label="Photo gallery"{folder_attrs}>
 {photos}
 </section>
@@ -415,6 +423,9 @@ def load_events():
             "cover": cover,
             "share": share,
             "unlisted": bool(fm.get("unlisted")),
+            "video": clean_path(str(fm.get("video") or "")),
+            "video_poster": clean_path(str(fm.get("video_poster") or "")),
+            "video_credit": str(fm.get("video_credit") or "").strip(),
             "cover_position": {"top": "center top", "upper": "center 25%", "center": "", "lower": "center 75%", "bottom": "center bottom"}.get(str(fm.get("cover_focus") or "center").lower(), ""),
             "recap": [re.sub(r"\s+", " ", para).strip() for para in re.split(r"\n\s*\n", body) if para.strip()],
         }
