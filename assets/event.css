@@ -163,6 +163,8 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 .pf-done a, .pf-msg a { color: var(--accent); }
 .pf-finals { max-width: none; }
 .pf-finals .gallery { padding: 2rem 0 1rem; }
+.pf-dlall { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.pf-dlall small { color: var(--muted, inherit); opacity: .75; font-size: .8rem; }
 .pf-grid { padding-bottom: 9rem; columns: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; align-items: start; }
 .pf-finals .pf-grid { padding-bottom: 1rem; }
 .pf-grid .pf-tile { margin: 0; border: 1px solid transparent; transition: border-color .25s; }
