@@ -6,3 +6,8 @@ spacing and components. Make the requested change in the existing style, and ask
 before doing anything that would change how the site looks.
 
 See README.md for how content, photos (Cloudflare R2) and publishing work.
+
+## Post rule
+
+Every event or food post must link the featured business's official website
+the first time its name appears in the recap, using `[Name](https://...)`.

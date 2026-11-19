@@ -11,6 +11,8 @@ Go to **https://app.pagescms.org**, sign in with GitHub, and open
 - **Events & Posts**: add an event or food post: headline, date, city,
   summary, the photo folder name and the recap.
   Leave a blank line between recap paragraphs.
+  **Rule:** link the featured business's website the first time its name appears
+  in the recap, like `[Proof Public House](https://proofcleveland.com/)`.
 - **Homepage**: slideshow, stats row, commercial photos, client names and logos,
   portfolio grid and testimonials.
 

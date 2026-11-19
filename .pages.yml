@@ -87,7 +87,7 @@ content:
         label: Video by
         type: string
       - name: body
-        label: Recap (leave a blank line between paragraphs)
+        label: Recap (blank line between paragraphs; link the business on first mention like [Name](https://site.com))
         type: text
       - name: draft
         label: Hide from site (draft)
