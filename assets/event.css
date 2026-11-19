@@ -51,9 +51,17 @@ nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center;
 .recap a { color: var(--accent); border-bottom: 1px solid var(--line); }
 .recap a:hover { border-bottom-color: var(--accent); }
 .credit { margin-top: 2rem; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
-.ev-video { max-width: 980px; margin: 0 auto; padding: 3rem var(--pad) 0; text-align: center; }
-.ev-video video { display: block; margin: 0 auto; width: auto; max-width: 100%; max-height: 80vh; aspect-ratio: 9/16; background: #000; }
-.ev-video .credit { margin-top: 1rem; }
+.recap.has-video { grid-template-rows: auto 1fr; }
+.recap.has-video .lede { grid-column: 1; grid-row: 1; }
+.recap.has-video .recap-text { grid-column: 2; grid-row: 1 / span 2; }
+.ev-video { grid-column: 1; grid-row: 2; align-self: start; }
+.ev-video video { display: block; width: 100%; aspect-ratio: 9/16; background: #000; }
+.ev-video .credit { margin-top: .8rem; }
+@media (max-width: 900px) {
+  .recap.has-video .lede, .recap.has-video .recap-text, .ev-video { grid-column: 1; grid-row: auto; }
+  .ev-video video { width: auto; max-width: 100%; max-height: 70vh; margin: 0 auto; }
+  .ev-video { text-align: center; }
+}
 .gallery { padding: 3rem var(--pad) 5rem; columns: 3 300px; column-gap: 1rem; }
 .gallery button { display: block; width: 100%; margin-bottom: 1rem; break-inside: avoid; cursor: zoom-in; }
 .gallery .slot { aspect-ratio: var(--r, 3/2); }

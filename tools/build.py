@@ -131,10 +131,10 @@ def event_page(ev, prev_ev, next_ev):
     if ev.get("video"):
         poster = f' poster="{e(href(up, ev["video_poster"]))}"' if ev.get("video_poster") else ""
         vcredit = f'<div class="credit">Video by {e(ev["video_credit"])}</div>' if ev.get("video_credit") else ""
-        video = (f'\n<section class="ev-video" aria-label="Event video">\n'
-                 f'  <video controls playsinline preload="metadata"{poster}>'
+        video = (f'\n  <div class="ev-video">\n'
+                 f'    <video controls playsinline preload="metadata"{poster}>'
                  f'<source src="{e(href(up, ev["video"]))}" type="video/mp4"></video>\n'
-                 f'  {vcredit}\n</section>\n')
+                 f'    {vcredit}\n  </div>')
     pager = ""
     if prev_ev or next_ev:
         a = (f'<a href="../{prev_ev["slug"]}/index.html"><small>← Newer</small><b>{e(prev_ev["title"])}</b></a>'
@@ -186,14 +186,14 @@ def event_page(ev, prev_ev, next_ev):
   <div class="meta">{meta_html}</div>
 </header>
 
-<section class="recap">
+<section class="recap{' has-video' if video else ''}">
   <div class="lede">{e(ev.get('summary', ''))}</div>
-  <div>
+  <div class="recap-text">
 {recap}
     <div class="credit">{credit}</div>{more}
-  </div>
+  </div>{video}
 </section>
-{video}
+
 <section class="gallery" aria-label="Photo gallery"{folder_attrs}>
 {photos}
 </section>
