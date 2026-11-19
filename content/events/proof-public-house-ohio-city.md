@@ -42,7 +42,7 @@ captions:
 - ''
 ---
 
-Cleveland, OH – Matt Fish built an empire on grilled cheese and loud guitars. With Proof Public House on Lorain Avenue, his first brand-new concept in nearly two decades, he's turned the volume back up, and we shot the updated menu to make sure the food looks as loud as the room.
+Cleveland, OH – Matt Fish built an empire on grilled cheese and loud guitars. With [Proof Public House](https://proofcleveland.com/) on Lorain Avenue, his first brand-new concept in nearly two decades, he's turned the volume back up, and we shot the updated menu to make sure the food looks as loud as the room.
 
 The menu reads like a set list. Starters open hard with Beet Muhammara, Corn Dip, Pierogi and dueling Chicken and Tofu Wings. The middle of the set belongs to the sandwiches: the Proof Burger, the Spring Chicken, a Mapo Tofu Burger and the aptly named Parmageddon. A Chicken & Sausage Gumbo and a Vegan Shepherd's Pie prove the plant-based side of the menu isn't an afterthought, and the Peanut Butter Chocolate Cake is the encore.
 
