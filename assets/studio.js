@@ -90,7 +90,7 @@
     const files = (kind, label, hint) => `
       <div class="st-drop" data-kind="${kind}">
         <div class="st-drop-head"><span>${label} · ${p[kind].length}</span>
-          <label class="st-link" style="cursor:pointer">Add photos<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden data-kind="${kind}"></label></div>
+          <span><button type="button" class="st-link" data-from="${kind}">From a posted gallery</button> · <label class="st-link" style="cursor:pointer">Add photos<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden data-kind="${kind}"></label></span></div>
         ${p[kind].length ? `<div class="st-thumbs">${p[kind].map((f) => `
           <figure class="${kind === 'proofs' && p.selection?.includes(f.name) && p.submittedAt ? 'on' : ''}"><div class="slot" data-hint=""><img src="${esc(thumb(f.url))}" alt="" loading="lazy"></div>
           <figcaption>${esc(fileNo(f.name))}</figcaption><button class="x" type="button" title="Remove" data-del="${esc(f.name)}" data-kind="${kind}">×</button></figure>`).join('')}</div>`
@@ -229,6 +229,7 @@
       row.querySelectorAll('.st-drop').forEach((zone) => {
         const kind = zone.dataset.kind;
         zone.querySelector('input[type=file]').onchange = (e) => upload(p, kind, [...e.target.files], msg);
+        zone.querySelector('[data-from]').onclick = () => fromGallery(p, kind, msg);
         zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('over'); };
         zone.ondragleave = () => zone.classList.remove('over');
         zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('over'); upload(p, kind, [...e.dataTransfer.files], msg); };
@@ -241,6 +242,25 @@
         });
       });
     });
+  }
+
+  // Copy a gallery that's already posted on the site (an R2 folder) into this person's proofs or finals.
+  async function fromGallery(p, kind, msg) {
+    try {
+      msg.textContent = 'Loading galleries…';
+      const { folders } = await call('folders');
+      msg.textContent = '';
+      const list = folders.map((f, i) => `${i + 1}. ${f}`).join('\n');
+      const ans = prompt(`Copy which posted gallery into ${kind}? Type its number or folder name.\n\n${list}`);
+      if (!ans) return;
+      const from = /^\d+$/.test(ans.trim()) ? folders[+ans.trim() - 1] : ans.trim();
+      if (!folders.includes(from)) { msg.textContent = 'No gallery with that name.'; return; }
+      msg.textContent = `Copying ${from}…`;
+      const out = await call(`folders?id=${project.id}&person=${p.id}&kind=${kind}&from=${encodeURIComponent(from)}`, { method: 'POST' });
+      await openProject(project.id);
+      const m = app.querySelector(`.st-person[data-person="${p.id}"] [data-msg]`);
+      if (m) m.textContent = `Copied ${out.copied} photo${out.copied === 1 ? '' : 's'} from ${from}`;
+    } catch (err) { msg.textContent = err.message; }
   }
 
   async function upload(p, kind, files, msg) {
