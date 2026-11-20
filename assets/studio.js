@@ -163,8 +163,11 @@
       </form>
 
       ${s.mode === 'none'
-        ? `<h2>Gallery <em>links</em></h2>
-      <p class="muted">One link is enough for a whole office or company. Anyone you send it to can view and download.</p>
+        ? project.people.length
+        ? `<h2>Your gallery <em>link</em></h2>
+      <p class="muted">Add the photos below, then press Copy link or Email link and send it to anyone who needs the photos. One link works for the whole office.</p>
+      <form id="pf" class="st-row" style="display:none">`
+        : `<h2>Your gallery <em>link</em></h2>
       <form id="pf" class="st-row">
         <label class="st-field"><span>Name the link (who it's for)</span><textarea id="pNames" rows="2" placeholder="e.g. Somich &amp; Associates"></textarea></label>`
         : `<h2>People <em>(one private link each)</em></h2>
@@ -186,7 +189,14 @@
 
   async function openProject(id) {
     project = (await call('project?id=' + encodeURIComponent(id))).project;
+    await ensureLink();
     draw();
+  }
+
+  // Delivery projects don't need people: make their one shareable link automatically.
+  async function ensureLink() {
+    if (project.settings.mode !== 'none' || project.people.length) return;
+    try { project = (await act('addPeople', { names: [project.client || project.name.replace(/\s*·.*$/, '') || 'Gallery'] })).project; } catch (e) {}
   }
 
   function draw() {
@@ -207,6 +217,7 @@
           name: f.get('name'), client: f.get('client'),
           settings: { mode: f.get('mode'), count: f.get('count'), deadline: f.get('deadline'), message: f.get('message'), watermark: !!f.get('watermark'), downloadProofs: !!f.get('downloadProofs') },
         })).project;
+        await ensureLink();
         draw(); flash(app.querySelector('#sm'), 'Saved');
       } catch (err) { $('#sm').textContent = err.message; }
     };
