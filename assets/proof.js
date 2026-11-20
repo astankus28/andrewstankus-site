@@ -100,6 +100,12 @@
     const ok = n > 0 && (r.mode === 'any' || (r.mode === 'upto' ? n <= r.count : n === r.count));
     $('#pfSend').disabled = !ok;
     if (confirming && !ok) unconfirm();
+    // Selecting isn't sending: until they press the button, say so in the bar.
+    const err = $('#pfErr');
+    if (!confirming && (!err.textContent || err.dataset.hint)) {
+      err.textContent = ok ? 'Almost done: press Send my selection so Andrew receives your pick.' : '';
+      err.dataset.hint = ok ? '1' : '';
+    }
     lbPaint();
   }
 
@@ -112,7 +118,7 @@
       // Picking one photo out of a set swaps the choice instead of blocking it.
       if (r.mode !== 'any' && r.count === 1) picked.clear();
       else if (r.mode !== 'any' && picked.size >= r.count) {
-        $('#pfErr').textContent = `You can choose ${r.count}. Unselect one to pick another.`;
+        $('#pfErr').textContent = `You can choose ${r.count}. Unselect one to pick another.`; $('#pfErr').dataset.hint = '';
         return;
       }
       picked.add(name);
@@ -127,7 +133,13 @@
     $('#pfBar').classList.remove('confirm');
   }
 
+  // Warn before leaving the page with a selection that hasn't been sent yet.
+  addEventListener('beforeunload', (ev) => {
+    if (data && !data.submitted && picked.size) { ev.preventDefault(); ev.returnValue = ''; }
+  });
+
   async function send() {
+    $('#pfErr').dataset.hint = '';
     if (!confirming) {
       confirming = true;
       $('#pfBar').classList.add('confirm');
@@ -196,7 +208,7 @@
 
   $('#pfSend').onclick = send;
   $('#pfNoteBtn').onclick = () => {
-    if (confirming) { unconfirm(); $('#pfErr').textContent = ''; return; }
+    if (confirming) { unconfirm(); $('#pfErr').textContent = ''; paint(); return; }
     $('#pfNoteWrap').hidden = !$('#pfNoteWrap').hidden;
     if (!$('#pfNoteWrap').hidden) $('#pfNote').focus();
   };
