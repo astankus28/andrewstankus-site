@@ -7,7 +7,7 @@ export async function onRequestGet({ env }) {
     return json({
       projects: projects.map((p) => ({
         id: p.id, name: p.name, client: p.client, created: p.created,
-        people: p.people.length, picked: p.people.filter((x) => x.submittedAt).length,
+        people: p.people.length, picked: p.people.filter((x) => x.submittedAt).length, delivery: p.settings?.mode === 'none',
       })),
     });
   } catch (e) { return fail(e); }

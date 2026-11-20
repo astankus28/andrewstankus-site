@@ -99,9 +99,9 @@ export async function deleteProject(env, id) {
 }
 
 export function normalizeSettings(s) {
-  const mode = ['exact', 'upto', 'any'].includes(s.mode) ? s.mode : 'exact';
+  const mode = ['exact', 'upto', 'any', 'none'].includes(s.mode) ? s.mode : 'exact';
   return {
-    mode,                                                   // exact: pick N · upto: pick up to N · any: pick as many as they like
+    mode,                                                   // exact: pick N · upto: pick up to N · any: pick as many as they like · none: delivery only, they just download
     count: Math.max(1, Math.min(500, parseInt(s.count, 10) || 1)),
     watermark: !!s.watermark,                               // show the ASA mark over the proofs
     downloadProofs: !!s.downloadProofs,                     // let clients download the proofs themselves
@@ -112,6 +112,7 @@ export function normalizeSettings(s) {
 
 export function ruleText(s) {
   const n = s.count;
+  if (s.mode === 'none') return 'Download your photos';
   if (s.mode === 'any') return 'Select as many photos as you like';
   if (s.mode === 'upto') return `Select up to ${n} photo${n === 1 ? '' : 's'}`;
   return n === 1 ? 'Select your favorite photo' : `Select your ${n} favorite photos`;

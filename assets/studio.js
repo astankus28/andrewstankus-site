@@ -62,7 +62,7 @@
       <h2>All <em>projects</em></h2>
       <div class="st-list">${projects.length ? projects.map((p) => `
         <a href="#${esc(p.id)}"><span><b>${esc(p.name)}</b><small>${esc(p.client || '')}${p.client ? ' · ' : ''}${new Date(p.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</small></span>
-        <span class="st-tag${p.people && p.picked === p.people ? ' done' : ''}">${p.picked} of ${p.people} picked</span></a>`).join('')
+        <span class="st-tag${p.people && p.picked === p.people ? ' done' : ''}">${p.delivery ? 'Delivery' : `${p.picked} of ${p.people} picked`}</span></a>`).join('')
         : '<p class="muted" style="padding:1.2rem 0">No projects yet. Create one above.</p>'}</div></div>`;
     document.getElementById('nf').onsubmit = async (e) => {
       e.preventDefault();
@@ -77,6 +77,11 @@
   function emailFor(p) {
     const s = project.settings;
     const first = p.name.split(' ')[0];
+    if (s.mode === 'none') {
+      const subject = `Your ${project.name.replace(/\s*·.*$/, '')} photos are ready`;
+      const body = `Hi ${first},\n\nYour photos are ready! View and download them here:\n${p.link}\n\nPress "Download all" to save every photo at once, or use the Download link under any single photo.\n\nIf you have any questions, just reply to this email.\n\nBest,\nAndrew Stankus\nAndrew Stankus Agency\n(305) 814-0142`;
+      return { subject, body, href: `mailto:${encodeURIComponent(p.email || '')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
+    }
     const ask = s.mode === 'exact' && s.count === 1 ? 'pick your favorite' : s.mode === 'any' ? 'select the ones you like' : s.mode === 'upto' ? `select up to ${s.count}` : `select your ${s.count} favorites`;
     const by = s.deadline ? ` by ${new Date(s.deadline + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}` : '';
     const subject = `Your ${project.name.replace(/\s*·.*$/, '')} proofs are ready`;
@@ -100,7 +105,7 @@
       <div class="st-person-top">
         <label class="st-field grow"><span>Name</span><input value="${esc(p.name)}" data-field="name"></label>
         <label class="st-field grow"><span>Email (for the email button)</span><input type="email" value="${esc(p.email)}" data-field="email" placeholder="optional"></label>
-        <span class="st-tag${p.submittedAt ? ' done' : ''}">${p.submittedAt ? 'Picked ' + new Date(p.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : p.proofs.length ? 'Waiting' : 'No proofs yet'}</span>
+        ${project.settings.mode === 'none' ? `<span class="st-tag${p.finals.length ? ' done' : ''}">${p.finals.length ? p.finals.length + ' ready to download' : 'No photos yet'}</span>` : `<span class="st-tag${p.submittedAt ? ' done' : ''}">${p.submittedAt ? 'Picked ' + new Date(p.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : p.proofs.length ? 'Waiting' : 'No proofs yet'}</span>`}
       </div>
       ${picks}
       <div class="st-tools">
@@ -113,8 +118,10 @@
       </div>
       <p class="st-msg" data-msg></p>
       <div class="st-files">
-        ${files('proofs', 'Proofs to choose from', 'Drop the culled, color-corrected proofs here (or use Add photos).')}
-        ${files('finals', 'Final retouched images', 'After they pick, drop the retouched final here. They download it from the same link.')}
+        ${project.settings.mode === 'none'
+          ? files('finals', 'Photos to deliver', 'Drop the edited photos here (or use Add photos). They see them all with a Download all button.')
+          : files('proofs', 'Proofs to choose from', 'Drop the culled, color-corrected proofs here (or use Add photos).')
+            + files('finals', 'Final retouched images', 'After they pick, drop the retouched final here. They download it from the same link.')}
       </div>
     </div>`;
   }
@@ -122,11 +129,12 @@
   function projectHtml() {
     const s = project.settings;
     const picked = project.people.filter((p) => p.submittedAt).length;
+    const pickOnly = s.mode === 'none' ? ' style="display:none"' : '';
     return `<div class="st">
       <a class="st-back" href="#">← All projects</a>
       <span class="label" style="display:block;margin-top:2rem">${esc(project.client || 'Project')}</span>
       <h1>${esc(project.name)}</h1>
-      <p class="muted">${project.people.length} ${project.people.length === 1 ? 'person' : 'people'} · ${picked} picked · rule: ${esc(project.rule)}</p>
+      <p class="muted">${project.people.length} ${project.people.length === 1 ? 'person' : 'people'} · ${s.mode === 'none' ? 'delivery, no picking' : `${picked} picked · rule: ${esc(project.rule)}`}</p>
 
       <h2>Gallery <em>settings</em></h2>
       <form id="sf">
@@ -138,16 +146,17 @@
           <label class="st-field"><span>They can</span><select name="mode">
             <option value="exact"${s.mode === 'exact' ? ' selected' : ''}>Pick exactly</option>
             <option value="upto"${s.mode === 'upto' ? ' selected' : ''}>Pick up to</option>
-            <option value="any"${s.mode === 'any' ? ' selected' : ''}>Pick as many as they like</option></select></label>
-          <label class="st-field" style="flex:0 1 120px"><span>How many</span><input name="count" type="number" min="1" max="500" value="${s.count}"></label>
-          <label class="st-field"><span>Choose by (optional)</span><input name="deadline" type="date" value="${esc(s.deadline)}"></label>
+            <option value="any"${s.mode === 'any' ? ' selected' : ''}>Pick as many as they like</option>
+            <option value="none"${s.mode === 'none' ? ' selected' : ''}>Just download (no picking)</option></select></label>
+          <label class="st-field" data-pick style="flex:0 1 120px${s.mode === 'none' ? ';display:none' : ''}"><span>How many</span><input name="count" type="number" min="1" max="500" value="${s.count}"></label>
+          <label class="st-field" data-pick${pickOnly}><span>Choose by (optional)</span><input name="deadline" type="date" value="${esc(s.deadline)}"></label>
         </div>
         <div class="st-row" style="margin-top:1rem">
           <label class="st-field"><span>Note shown at the top of every gallery (optional)</span><textarea name="message" rows="2" placeholder="e.g. Thanks for coming in! Pick your favorite and I'll retouch it within 3 business days.">${esc(s.message)}</textarea></label>
         </div>
         <div class="st-row" style="margin-top:.6rem">
-          <label class="st-check"><input type="checkbox" name="watermark"${s.watermark ? ' checked' : ''}> Show ASA watermark on proofs</label>
-          <label class="st-check"><input type="checkbox" name="downloadProofs"${s.downloadProofs ? ' checked' : ''}> Let them download proofs</label>
+          <label class="st-check" data-pick${pickOnly}><input type="checkbox" name="watermark"${s.watermark ? ' checked' : ''}> Show ASA watermark on proofs</label>
+          <label class="st-check" data-pick${pickOnly}><input type="checkbox" name="downloadProofs"${s.downloadProofs ? ' checked' : ''}> Let them download proofs</label>
           <button class="btn btn-gold" type="submit" style="margin-left:auto">Save settings</button>
         </div>
         <p class="st-msg" id="sm"></p>
@@ -160,7 +169,7 @@
       </form>
       <div class="st-tools" style="margin-top:1rem">
         <button type="button" id="copyLinks">Copy all links</button>
-        <button type="button" id="copyPicks">Copy all picks</button>
+        <button type="button" id="copyPicks"${pickOnly}>Copy all picks</button>
       </div>
       <p class="st-msg" id="pm"></p>
       <div class="st-list" style="margin-top:1rem">${project.people.map(personHtml).join('') || '<p class="muted" style="padding:1.2rem 0">Add the people you photographed above.</p>'}</div>
@@ -184,6 +193,7 @@
 
   function bind() {
     const $ = (s) => app.querySelector(s);
+    $('#sf [name=mode]').onchange = (e) => app.querySelectorAll('[data-pick]').forEach((el) => (el.style.display = e.target.value === 'none' ? 'none' : ''));
     $('#sf').onsubmit = async (e) => {
       e.preventDefault();
       const f = new FormData(e.target);

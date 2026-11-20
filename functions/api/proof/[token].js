@@ -27,7 +27,8 @@ export async function onRequestGet({ params, env }) {
       submittedAt: person.submittedAt,
       selection: person.selection || [],
       note: person.note || '',
-      proofs: files.proofs.map(({ name, url }) => ({ name, url })),
+      // Delivery projects (mode "none") have nothing to pick, so only the finals are shown.
+      proofs: s.mode === 'none' ? [] : files.proofs.map(({ name, url }) => ({ name, url })),
       finals: files.finals.map(({ name, url }) => ({ name, url })),
     }, 200, { 'X-Robots-Tag': 'noindex, nofollow' });
   } catch (e) { return fail(e); }
@@ -46,6 +47,7 @@ export async function onRequestPost({ params, env, request }) {
     const { project, result: person } = await updateProject(env, projectId, (p) => {
       const s = p.settings;
       const n = picked.length;
+      if (s.mode === 'none') throw new HttpError(400, 'This gallery is for downloading only');
       if (!n) throw new HttpError(400, 'Please select a photo first');
       if (s.mode === 'exact' && n !== s.count) throw new HttpError(400, `Please select exactly ${s.count} photo${s.count === 1 ? '' : 's'}`);
       if (s.mode === 'upto' && n > s.count) throw new HttpError(400, `Please select no more than ${s.count} photos`);
