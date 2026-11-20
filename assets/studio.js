@@ -106,10 +106,24 @@
     return m ? m[0] : t.trim();
   }
 
+  // Greeting name. Handles "Doe, Jane", titles like "Ms." and "Last First" lists
+  // (when their email starts with the first name, e.g. jane.doe@ for "Doe Jane").
+  function firstName(p) {
+    let name = String(p.name || '').trim().replace(/\s+/g, ' ');
+    if (name.includes(',')) name = name.split(',').slice(1).join(' ').trim() || name.split(',')[0];
+    const titles = /^(mr|mrs|ms|miss|mx|dr|prof|hon|judge|atty)\.?$/i;
+    const words = name.split(' ').filter((w) => w && !titles.test(w));
+    if (!words.length) return 'there';
+    const local = String(p.email || '').split('@')[0].toLowerCase();
+    const lead = local.split(/[._\-+0-9]/)[0];
+    const match = lead.length > 1 && words.find((w) => w.toLowerCase().replace(/[^a-z]/g, '') === lead);
+    return match || words[0];
+  }
+
   // ---- One project ----
   function emailFor(p) {
     const s = project.settings;
-    const first = p.name.split(' ')[0];
+    const first = firstName(p);
     if (s.mode === 'none') {
       const subject = `Your ${project.name.replace(/\s*·.*$/, '')} photos are ready`;
       const body = `Hi ${first},\n\nYour photos are ready! View and download them here:\n${p.link}\n\nPress "Download all" to save every photo at once, or use the Download link under any single photo.\n\nIf you have any questions, just reply to this email.\n\nBest,\nAndrew Stankus\nAndrew Stankus Agency\n(305) 814-0142`;
