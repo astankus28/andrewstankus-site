@@ -64,7 +64,12 @@ export async function onRequestPost({ env, request }) {
         case 'person': {
           const x = person();
           if (b.name !== undefined) x.name = clean(b.name) || x.name;
-          if (b.email !== undefined) x.email = clean(b.email, 200);
+          if (b.email !== undefined) {
+            // Strip a pasted "mailto:" (Apple Mail/Safari) or "Name <address>" down to the bare address.
+            let e = String(b.email || '').trim().replace(/^mailto:/i, '').split('?')[0];
+            const m = e.match(/[^\s<>"',;:]+@[^\s<>"',;:?]+/);
+            x.email = clean(m ? m[0] : e, 200);
+          }
           break;
         }
         case 'unlock': {

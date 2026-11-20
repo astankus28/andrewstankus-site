@@ -97,6 +97,15 @@
     };
   }
 
+  // Pasted addresses from Apple Mail/Safari can arrive as "mailto:jane@x.com" or "Jane Doe <jane@x.com>": keep just the address.
+  function cleanEmail(v) {
+    let t = String(v || '').trim();
+    try { t = decodeURIComponent(t); } catch {}
+    t = t.replace(/^mailto:/i, '').split('?')[0];
+    const m = t.match(/[^\s<>"',;:]+@[^\s<>"',;:?]+/);
+    return m ? m[0] : t.trim();
+  }
+
   // ---- One project ----
   function emailFor(p) {
     const s = project.settings;
@@ -292,6 +301,7 @@
       const p = project.people.find((x) => x.id === row.dataset.person);
       const msg = row.querySelector('[data-msg]');
       row.querySelectorAll('input[data-field]').forEach((inp) => inp.onchange = async () => {
+        if (inp.dataset.field === 'email') inp.value = cleanEmail(inp.value);
         try { project = (await act('person', { personId: p.id, [inp.dataset.field]: inp.value })).project; flash(msg, 'Saved'); const fresh = project.people.find((x) => x.id === p.id); row.querySelector('a[href^="mailto:"]').href = emailFor(fresh).href; Object.assign(p, fresh); }
         catch (err) { msg.textContent = err.message; }
       });
