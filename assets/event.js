@@ -45,6 +45,8 @@
     items.forEach((b, n) => b.onclick = () => open(n));
     $('#lbX').onclick = close; $('#lbPrev').onclick = () => step(-1); $('#lbNext').onclick = () => step(1);
     $('#lb').onclick = e => { if (e.target.id === 'lb') close(); };
+    if (initLightbox.done) return; // rebuilt gallery: buttons re-wired above, page listeners already set
+    initLightbox.done = true;
     document.addEventListener('keydown', e => {
       if (!$('#lb').classList.contains('open')) return;
       if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1);
@@ -60,6 +62,40 @@
   const small = src => RESIZE && /^https:\/\/photos\.andrewstankus\.com\//.test(src)
     ? '/cdn-cgi/image/width=1000,quality=80,format=auto/' + src : src;
 
+  // Fixed masonry for R2-folder galleries: same look as the CSS columns (up to 3 columns, at least
+  // 300px wide, photos running down each column in order), but the columns are built once from the
+  // known photo shapes, so loading photos can never shuffle them while someone is scrolling.
+  function layoutFixed(gallery, tiles, ratios) {
+    const gap = parseFloat(getComputedStyle(gallery).columnGap) || 16;
+    const count = () => {
+      const cs = getComputedStyle(gallery);
+      const w = gallery.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      return Math.max(1, Math.min(3, Math.floor((w + gap) / (300 + gap))));
+    };
+    let built = 0;
+    const build = () => {
+      const k = count();
+      if (k === built) return;
+      built = k;
+      // Split the photos, in order, into k runs of roughly equal height.
+      const hs = ratios.map(r => 1 / r);
+      const total = hs.reduce((a, b) => a + b, 0);
+      const cols = Array.from({ length: k }, () => []);
+      let c = 0, acc = 0;
+      tiles.forEach((html, n) => {
+        if (c < k - 1 && acc + hs[n] / 2 > total * (c + 1) / k) c++;
+        cols[c].push(html); acc += hs[n];
+      });
+      gallery.classList.add('fixed');
+      gallery.innerHTML = cols.map(col => `<div class="gcol">${col.join('')}</div>`).join('');
+      if (gallery.dataset.ready) { markEmpty(gallery); initLightbox(); }
+    };
+    build();
+    gallery.dataset.ready = '1';
+    let t;
+    addEventListener('resize', () => { clearTimeout(t); t = setTimeout(build, 150); });
+  }
+
   async function loadFolder(gallery) {
     const folder = gallery.dataset.folder;
     const title = gallery.dataset.title || '';
@@ -68,12 +104,15 @@
     const api = (document.querySelector('link[rel=stylesheet][href*="assets/event.css"]').getAttribute('href').split('assets/event.css')[0]) + 'api/photos?folder=' + encodeURIComponent(folder);
     try {
       const { photos = [], sizes = [] } = await (await fetch(api)).json();
-      gallery.innerHTML = photos.map((src, n) => {
+      const ratios = photos.map((_, n) => sizes[n] && sizes[n][0] && sizes[n][1] ? sizes[n][0] / sizes[n][1] : 1.5);
+      const tiles = photos.map((src, n) => {
         const cap = caps[n] || '';
-        const wh = sizes[n] ? ` width="${sizes[n][0]}" height="${sizes[n][1]}"` : '';
-        return `<button aria-label="Open photo ${n + 1}"><div class="slot" data-hint=""><img src="${esc(small(src))}" data-full="${esc(src)}"${wh} alt="${esc((cap ? cap + ' — ' : '') + title)} — photo ${n + 1}" loading="lazy">` +
+        const r = ratios[n];
+        // Each tile's shape is fixed from the photo's known size, so nothing moves when the photo arrives.
+        return `<button aria-label="Open photo ${n + 1}"><div class="slot" data-hint="" style="--r:${r.toFixed(5)}"><img src="${esc(small(src))}" data-full="${esc(src)}" alt="${esc((cap ? cap + ' — ' : '') + title)} — photo ${n + 1}" loading="lazy">` +
           (cap ? `<span class="cap">${esc(cap)}</span>` : '') + `</div></button>`;
-      }).join('');
+      });
+      layoutFixed(gallery, tiles, ratios);
       const meta = document.querySelector('.meta');
       if (meta && photos.length) meta.insertAdjacentHTML('beforeend', `<div><small>Photos</small>${photos.length}</div>`);
     } catch (err) {
