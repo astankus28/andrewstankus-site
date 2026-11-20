@@ -178,6 +178,12 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 .pf-grid .pf-open:hover img { transform: scale(1.03); }
 .pf-grid figcaption { display: flex; align-items: center; gap: 1rem; padding: .7rem .8rem; font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 .pf-grid figcaption span { flex: 1; }
+/* Narrow tiles: wrap instead of overlapping; with both Select and Download, the file number gets its own line and the two buttons share the row below. */
+.pf-grid figcaption { flex-wrap: wrap; row-gap: .6rem; }
+.pf-grid figcaption span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-grid figcaption:has(.pf-pick):has(.pf-dl) { gap: .6rem; }
+.pf-grid figcaption:has(.pf-pick):has(.pf-dl) span { flex-basis: 100%; }
+.pf-grid figcaption:has(.pf-pick):has(.pf-dl) .pf-pick, .pf-grid figcaption:has(.pf-pick):has(.pf-dl) .pf-dl { flex: 1; text-align: center; }
 .pf-pick, .pf-dl { font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; padding: .55rem .9rem; border: 1px solid var(--line); color: var(--paper); transition: all .25s; }
 .pf-pick:hover, .pf-dl:hover { border-color: var(--paper); }
 .pf-tile.on .pf-pick { background: var(--accent); border-color: var(--accent); color: var(--ink); }
