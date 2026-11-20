@@ -41,6 +41,8 @@ FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">')
 e = html.escape
 CATEGORIES = json.loads((ROOT / "data/categories.json").read_text())
+# City landing pages (e.g. /miami-event-photography/): same look as the category pages.
+CITIES = json.loads((ROOT / "data/cities.json").read_text()) if (ROOT / "data/cities.json").exists() else []
 
 
 def category_of(ev):
@@ -70,7 +72,7 @@ def nav(up, active=""):
   <a href="{up}index.html" class="wordmark" aria-label="Andrew Stankus Agency home"><img src="{up}assets/asa-logo.svg" alt="ASA, Andrew Stankus Agency" width="100" height="55"></a>
   <ul class="nav-links">
     <li class="drop"><a href="{up}events/index.html"{' class="on"' if active == 'events' else ''}>Events</a>
-      <ul>{"".join(f'<li><a href="{up}{c["slug"]}/index.html">{e(c["name"])}</a></li>' for c in CATEGORIES)}</ul></li>
+      <ul>{"".join(f'<li><a href="{up}{c["slug"]}/index.html">{e(c.get("menu") or c["name"])}</a></li>' for c in CATEGORIES + CITIES)}</ul></li>
     <li><a href="{up}index.html#work">Portfolio</a></li>
     <li><a href="{up}index.html#commercial">Commercial</a></li>
     <li><a href="{up}index.html#about">About</a></li>
@@ -79,7 +81,7 @@ def nav(up, active=""):
 </nav>'''
 
 
-FOOTER = '''<footer><span>© {y} Andrew Stankus Agency</span><span>Miami · Cleveland</span>
+FOOTER = '''<footer><span>© {y} Andrew Stankus Agency</span><span><a href="/miami-event-photography/">Miami</a> · Cleveland</span>
 <a href="mailto:andrew@andrewstankus.com">andrew@andrewstankus.com</a></footer>'''.format(y=date.today().year)
 
 
@@ -254,7 +256,7 @@ def index_page(events):
   <span class="label">Events</span>
   <h1>Recent <em>coverage</em></h1>
   <p>Corporate events, openings, launches and celebrations, with a recap and the full gallery for each.</p>
-  <div class="cats">{"".join(f'<a href="{up}{c["slug"]}/index.html">{e(c["name"])}</a>' for c in CATEGORIES)}</div>
+  <div class="cats">{"".join(f'<a href="{up}{c["slug"]}/index.html">{e(c.get("menu") or c["name"])}</a>' for c in CATEGORIES + CITIES)}</div>
 </header>
 <section class="idx">
 {chr(10).join(cards)}
@@ -355,6 +357,144 @@ def category_page(c, events):
 
 {recent}
 {gallery}
+<section class="cta">
+  <span class="label">{e(c['cta'])}</span>
+  <h2>Let's make yours look <em>this good.</em></h2>
+  <a href="{up}index.html#inquire" class="btn btn-gold">Check availability</a>
+</section>
+
+{FOOTER}
+
+<div class="lb" id="lb" aria-modal="true" role="dialog">
+  <div class="lb-top"><span>{e(gal['title'] if gal else c['name'])}</span><span id="lbCount"></span><button class="lb-x" id="lbX" aria-label="Close">×</button></div>
+  <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <div class="lb-stage" id="lbStage"></div>
+  <button class="lb-arrow lb-next" id="lbNext" aria-label="Next">›</button>
+</div>
+<script src="{up}assets/event.js"></script>
+</body>
+</html>
+'''
+
+
+def city_of(ev, c):
+    """True if an event happened in this city (matched on its City field)."""
+    city = ev.get("city", "")
+    return any(m.lower() in city.lower() for m in c["match"])
+
+
+def homepage_credits():
+    """The 'Trained in Miami' festival chips and credit list, taken from index.html so they stay in sync."""
+    html_text = (ROOT / "index.html").read_text()
+    fest = re.search(r'<div class="fest[^"]*">.*?</div>', html_text, re.S)
+    cred = re.search(r'<ul class="credits[^"]*">.*?</ul>', html_text, re.S)
+    strip = lambda m: re.sub(r' reveal(?=")', "", m.group(0)) if m else ""
+    return strip(fest), strip(cred)
+
+
+def city_page(c, events):
+    """A landing page per city (e.g. /miami-event-photography/), built like the category pages:
+    intro text for search, selected credits, that city's events, a short FAQ, then the inquiry button."""
+    up = "../"
+    url = f"{SITE}/{c['slug']}/"
+    lead = events[0] if events else None
+    gal = next((ev for ev in events if ev["folder"]), None)
+    hero = (f'''<div class="ev-hero slot" data-hint="Cover photo">
+  <img src="{e(href(up, lead['cover']))}" alt="{e(c['name'])} event photography by Andrew Stankus Agency"{f' style="object-position: {e(lead["cover_position"])}"' if lead.get("cover_position") else ""}>
+</div>
+''' if lead else "")
+    recent = (f'''<section class="svc-recent">
+  <span class="label">{e(c['recent_label'])}</span>
+  <div class="idx">
+{chr(10).join(card(ev, up) for ev in events)}
+  </div>
+</section>
+''' if events else "")
+    gallery = (f'''<section class="gallery" aria-label="Photo gallery" data-folder="{e(gal['folder'])}" data-title="{e(gal['title'])}" data-captions='{e(json.dumps(gal['captions']))}'>
+</section>
+''' if gal else "")
+    intro = "\n".join(f"    <p>{e(p)}</p>" for p in c["intro"])
+    services = ", ".join(f'<a href="{up}{k["slug"]}/index.html">{e(k["name"].lower())}</a>' for k in CATEGORIES)
+    fest, cred = homepage_credits()
+    credits = (f'''<section class="svc-credits">
+  <span class="label">Selected credits</span>
+  <h2>Trained in <em>{e(c['name'])}</em></h2>
+  <p>More than a thousand events covered for World Red Eye. Each credit links to the published gallery.</p>
+  {fest}
+  {cred}
+</section>
+''' if cred else "")
+    faq = "\n".join(f"    <h3>{e(q)}</h3>\n    <p>{e(a)}</p>" for q, a in c["faq"])
+    ld = {"@context": "https://schema.org", "@type": "Service", "serviceType": "Event photography",
+          "name": c["title"], "url": url, "description": c["description"],
+          "provider": {"@type": "ProfessionalService", "name": "Andrew Stankus Agency", "url": SITE + "/",
+                       "telephone": "+1-305-814-0142", "email": "andrew@andrewstankus.com"},
+          "areaServed": [{"@type": "City", "name": "Miami, FL"}, {"@type": "City", "name": "Miami Beach, FL"},
+                         {"@type": "AdministrativeArea", "name": "Miami-Dade County"},
+                         {"@type": "AdministrativeArea", "name": "South Florida"}]}
+    faq_ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in c["faq"]]}
+    share = (f'<meta property="og:image" content="{e(absolute(lead["share"]))}">\n' if lead else
+             f'<meta property="og:image" content="{SITE}/assets/og-image.jpg">\n'
+             '<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n')
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{GTM}<meta charset="UTF-8">
+<link rel="icon" href="{up}assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
+<link rel="icon" href="{up}favicon.ico" sizes="any">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{e(c['title'])} | Andrew Stankus Agency</title>
+<meta name="description" content="{e(c['description'])}">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{e(c['title'])} | Andrew Stankus Agency">
+<meta property="og:description" content="{e(c['description'])}">
+{share}<meta property="og:url" content="{url}">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{json.dumps(ld)}</script>
+<script type="application/ld+json">{json.dumps(faq_ld)}</script>
+{breadcrumbs([("Home", SITE + "/"), ("Events", SITE + "/events/"), (c["name"], url)])}
+{FONTS}
+<link rel="stylesheet" href="{up}assets/event.css">
+</head>
+<body>
+{nav(up, 'events')}
+
+{hero}
+<header class="ev-head{'' if lead else ' no-hero'}">
+  <span class="crumb"><a href="{up}events/index.html">Events</a> &nbsp;/&nbsp; {e(c['name'])}</span>
+  <h1>{c['h1']}</h1>
+  <div class="meta"><div><small>Based in</small>{c['based']}</div><div><small>Serving</small>{c['serving']}</div><div><small>Coverage</small>{e(c['coverage'])}</div></div>
+</header>
+
+<section class="recap">
+  <div class="lede">{e(c['lede'])}</div>
+  <div>
+{intro}
+    <h3>What we cover</h3>
+    <p>Every kind of event Miami throws: {services}, plus headshots set up on-site.</p>
+    <h3>Where we work</h3>
+    <p>{e(c['areas'])}</p>
+    <h3>After the night</h3>
+    <p>{e(c['after'])}</p>
+    <h3>Video</h3>
+    <p>Pair photography with a highlight film or social cuts from our video partner, booked as one team.</p>
+  </div>
+</section>
+
+{credits}
+{recent}
+{gallery}
+<section class="recap svc-faq">
+  <div class="lede">Questions, answered.</div>
+  <div>
+{faq}
+  </div>
+</section>
+
 <section class="cta">
   <span class="label">{e(c['cta'])}</span>
   <h2>Let's make yours look <em>this good.</em></h2>
@@ -485,7 +625,7 @@ def stamp_versions():
         f = ROOT / rel
         return hashlib.sha1(f.read_bytes()).hexdigest()[:10] if f.exists() else "0"
     pages = ([ROOT / "index.html", ROOT / "events/index.html"] + list((ROOT / "events").glob("*/index.html"))
-             + [ROOT / c["slug"] / "index.html" for c in CATEGORIES])
+             + [ROOT / c["slug"] / "index.html" for c in CATEGORIES + CITIES])
     for page in pages:
         html_text = page.read_text()
         new = re.sub(r'((?:\.\./)*)(data/site\.js|events/events\.js|assets/event\.js|assets/event\.css)(\?v=[0-9a-f]+)?"',
@@ -520,6 +660,10 @@ def main():
         out = ROOT / c["slug"] / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(category_page(c, [ev for ev in events if category_of(ev) is c]))
+    for c in CITIES:
+        out = ROOT / c["slug"] / "index.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(city_page(c, [ev for ev in events if city_of(ev, c)]))
     build_site_data()
     stamp_versions()
     newest = events[0]["date"] if events else date.today().isoformat()
@@ -528,6 +672,7 @@ def main():
         return evs[0]["date"] if evs else newest
     urls = ([(f"{SITE}/", newest), (f"{SITE}/events/", newest)]
             + [(f"{SITE}/{c['slug']}/", latest(c)) for c in CATEGORIES]
+            + [(f"{SITE}/{c['slug']}/", newest) for c in CITIES]
             + [(f"{SITE}/events/{ev['slug']}/", ev["date"]) for ev in events])
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

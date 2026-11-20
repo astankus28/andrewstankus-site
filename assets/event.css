@@ -140,6 +140,23 @@ footer { padding: 2.5rem var(--pad); display: flex; justify-content: space-betwe
 .recap h3:first-child { margin-top: 0; }
 .svc-recent { padding: 3rem var(--pad) 1rem; }
 .svc-recent .idx { padding: 2rem 0 0; }
+/* City pages: the homepage's "Trained in Miami" credits, same styles as index.html */
+.svc-credits { max-width: 980px; margin: 0 auto; padding: 3rem var(--pad) 1rem; }
+.svc-credits h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 4.5vw, 3.2rem); margin: .8rem 0 1rem; }
+.svc-credits h2 em { color: var(--accent); }
+.svc-credits > p { color: var(--muted); font-size: .9rem; max-width: 520px; margin-bottom: 2rem; }
+.svc-credits .fest { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 2.5rem; }
+.svc-credits .fest span { border: 1px solid var(--line); padding: .6rem 1rem; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+.svc-credits .fest i { font-style: normal; color: var(--accent); margin-left: .4rem; }
+.svc-credits .credits { list-style: none; display: grid; grid-template-columns: 1fr 1fr; column-gap: 3rem; border-top: 1px solid var(--line); }
+.svc-credits .credits a { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: .1rem 1rem; padding: 1.15rem 0; border-bottom: 1px solid var(--line); transition: padding .25s; }
+.svc-credits .credits a:hover { padding-left: .6rem; }
+.svc-credits .credits b { font-family: var(--serif); font-weight: 400; font-size: 1.4rem; }
+.svc-credits .credits a:hover b { color: var(--accent); }
+.svc-credits .credits span { grid-column: 1; font-size: .78rem; color: var(--muted); }
+.svc-credits .credits em { grid-row: 1; grid-column: 2; font-style: normal; font-size: .7rem; letter-spacing: .15em; color: var(--muted); }
+.svc-faq { padding-top: 4rem; padding-bottom: clamp(4rem, 8vw, 6rem); }
+@media (max-width: 760px) { .svc-credits .credits { grid-template-columns: 1fr; } }
 .ev-head.no-hero { margin-top: 0; padding-top: 5rem; }
 .recap a.more { display: inline-block; margin-top: 1.4rem; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; }
 
