@@ -415,7 +415,7 @@ def city_page(c, events, everything=()):
 ''' if gal else "")
     # The agency's newest events from anywhere (each card shows its city), so the page always has recent work.
     shown = {ev["slug"] for ev in events}
-    others = [ev for ev in everything if ev["slug"] not in shown][:3]
+    others = [ev for ev in everything if ev["slug"] not in shown][:6]
     latest = (f'''<section class="svc-recent">
   <span class="label">Latest from the agency</span>
   <div class="idx">
