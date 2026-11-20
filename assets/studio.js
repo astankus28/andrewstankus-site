@@ -103,7 +103,7 @@
       </div>`;
     return `<div class="st-person" data-person="${esc(p.id)}">
       <div class="st-person-top">
-        <label class="st-field grow"><span>Name</span><input value="${esc(p.name)}" data-field="name"></label>
+        <label class="st-field grow"><span>${project.settings.mode === 'none' ? 'Link for' : 'Name'}</span><input value="${esc(p.name)}" data-field="name"></label>
         <label class="st-field grow"><span>Email (for the email button)</span><input type="email" value="${esc(p.email)}" data-field="email" placeholder="optional"></label>
         ${project.settings.mode === 'none' ? `<span class="st-tag${p.finals.length ? ' done' : ''}">${p.finals.length ? p.finals.length + ' ready to download' : 'No photos yet'}</span>` : `<span class="st-tag${p.submittedAt ? ' done' : ''}">${p.submittedAt ? 'Picked ' + new Date(p.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : p.proofs.length ? 'Waiting' : 'No proofs yet'}</span>`}
       </div>
@@ -134,7 +134,7 @@
       <a class="st-back" href="#">← All projects</a>
       <span class="label" style="display:block;margin-top:2rem">${esc(project.client || 'Project')}</span>
       <h1>${esc(project.name)}</h1>
-      <p class="muted">${project.people.length} ${project.people.length === 1 ? 'person' : 'people'} · ${s.mode === 'none' ? 'delivery, no picking' : `${picked} picked · rule: ${esc(project.rule)}`}</p>
+      <p class="muted">${project.people.length} ${s.mode === 'none' ? (project.people.length === 1 ? 'link' : 'links') : project.people.length === 1 ? 'person' : 'people'} · ${s.mode === 'none' ? 'delivery, no picking' : `${picked} picked · rule: ${esc(project.rule)}`}</p>
 
       <h2>Gallery <em>settings</em></h2>
       <form id="sf">
@@ -162,9 +162,14 @@
         <p class="st-msg" id="sm"></p>
       </form>
 
-      <h2>People <em>(one private link each)</em></h2>
+      ${s.mode === 'none'
+        ? `<h2>Gallery <em>links</em></h2>
+      <p class="muted">One link is enough for a whole office or company. Anyone you send it to can view and download.</p>
       <form id="pf" class="st-row">
-        <label class="st-field"><span>Add people, one name per line</span><textarea id="pNames" rows="3" placeholder="Jane Doe&#10;John Smith"></textarea></label>
+        <label class="st-field"><span>Name the link (who it's for)</span><textarea id="pNames" rows="2" placeholder="e.g. Somich &amp; Associates"></textarea></label>`
+        : `<h2>People <em>(one private link each)</em></h2>
+      <form id="pf" class="st-row">
+        <label class="st-field"><span>Add people, one name per line</span><textarea id="pNames" rows="3" placeholder="Jane Doe&#10;John Smith"></textarea></label>`}
         <button class="btn btn-gold" type="submit">Add</button>
       </form>
       <div class="st-tools" style="margin-top:1rem">
@@ -172,7 +177,7 @@
         <button type="button" id="copyPicks"${pickOnly}>Copy all picks</button>
       </div>
       <p class="st-msg" id="pm"></p>
-      <div class="st-list" style="margin-top:1rem">${project.people.map(personHtml).join('') || '<p class="muted" style="padding:1.2rem 0">Add the people you photographed above.</p>'}</div>
+      <div class="st-list" style="margin-top:1rem">${project.people.map(personHtml).join('') || `<p class="muted" style="padding:1.2rem 0">${s.mode === 'none' ? 'Add a link above, then drop the photos into it.' : 'Add the people you photographed above.'}</p>`}</div>
 
       <h2 style="margin-top:4rem">Danger <em>zone</em></h2>
       <div class="st-tools"><button type="button" class="danger" id="delProject">Delete this project and all its photos</button></div>
