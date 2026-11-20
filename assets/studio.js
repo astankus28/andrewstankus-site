@@ -49,13 +49,22 @@
 
   // ---- Projects list ----
   async function home() {
-    const { projects } = await call('projects');
+    const [{ projects }, { folders }] = await Promise.all([call('projects'), call('folders').catch(() => ({ folders: [] }))]);
     app.innerHTML = `<div class="st">
       <span class="label">Client galleries</span>
       <h1>Your <em>projects</em></h1>
+      ${folders.length ? `<form id="gf" class="st-row">
+        <label class="st-field grow"><span>Share a gallery that's on your site (they can download it)</span><select id="gFolder">${folders.map((f) => `<option value="${esc(f)}">${esc(f)}</option>`).join('')}</select></label>
+        <button class="btn btn-gold" type="submit">Make download link</button>
+      </form>
+      <p class="st-msg" id="gm"></p>
+      <h2>Or start a <em>new gallery</em></h2>` : ''}
       <form id="nf" class="st-row">
-        <label class="st-field"><span>New project</span><input id="nName" placeholder="e.g. Fragomen Headshots · Nov 2026" required></label>
-        <label class="st-field"><span>Client</span><input id="nClient" placeholder="e.g. Fragomen"></label>
+        <label class="st-field"><span>New gallery</span><input id="nName" placeholder="e.g. Somich Holiday Party" required></label>
+        <label class="st-field"><span>Client (optional)</span><input id="nClient" placeholder="e.g. Somich &amp; Associates"></label>
+        <label class="st-field"><span>What's it for</span><select id="nMode">
+          <option value="none">Send photos (they download)</option>
+          <option value="exact">Clients pick favorites (headshots)</option></select></label>
         <button class="btn btn-gold" type="submit">Create</button>
       </form>
       <p class="st-msg" id="nm"></p>
@@ -64,10 +73,25 @@
         <a href="#${esc(p.id)}"><span><b>${esc(p.name)}</b><small>${esc(p.client || '')}${p.client ? ' · ' : ''}${new Date(p.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</small></span>
         <span class="st-tag${p.people && p.picked === p.people ? ' done' : ''}">${p.delivery ? 'Delivery' : `${p.picked} of ${p.people} picked`}</span></a>`).join('')
         : '<p class="muted" style="padding:1.2rem 0">No projects yet. Create one above.</p>'}</div></div>`;
+    const gf = document.getElementById('gf');
+    if (gf) gf.onsubmit = async (e) => {
+      e.preventDefault();
+      const from = gFolder.value, gm = document.getElementById('gm'), btn = gf.querySelector('button');
+      const title = from.replace(/^\d{4}-\d{2}-\d{2}[-_ ]*/, '').replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || from;
+      btn.disabled = true;
+      try {
+        gm.textContent = 'Making the link…';
+        project = (await call('projects', { method: 'POST', body: { name: title, settings: { mode: 'none' } } })).project;
+        project = (await act('addPeople', { names: [title] })).project;
+        gm.textContent = 'Copying the photos (this can take a minute for a big gallery)…';
+        await call(`folders?id=${project.id}&person=${project.people[0].id}&kind=finals&from=${encodeURIComponent(from)}`, { method: 'POST' });
+        location.hash = project.id;
+      } catch (err) { gm.textContent = err.message; btn.disabled = false; }
+    };
     document.getElementById('nf').onsubmit = async (e) => {
       e.preventDefault();
       try {
-        const { project: p } = await call('projects', { method: 'POST', body: { name: nName.value, client: nClient.value } });
+        const { project: p } = await call('projects', { method: 'POST', body: { name: nName.value, client: nClient.value, settings: { mode: nMode.value } } });
         location.hash = p.id;
       } catch (err) { document.getElementById('nm').textContent = err.message; }
     };
@@ -90,6 +114,7 @@
   }
 
   function personHtml(p) {
+    const delivery = project.settings.mode === 'none';
     const picks = p.submittedAt
       ? `<div class="st-pick">Picked: <b>${p.selection.map((n) => esc(fileNo(n))).join(', ')}</b>${p.note ? ` · <q>${esc(p.note)}</q>` : ''}</div>` : '';
     const files = (kind, label, hint) => `
@@ -101,6 +126,19 @@
           <figcaption>${esc(fileNo(f.name))}</figcaption><button class="x" type="button" title="Remove" data-del="${esc(f.name)}" data-kind="${kind}">×</button></figure>`).join('')}</div>`
         : `<p class="muted" style="font-size:.78rem">${hint}</p>`}
       </div>`;
+    if (delivery) return `<div class="st-person" data-person="${esc(p.id)}">
+      <span class="label">Step 1 · Add the photos</span>
+      <div class="st-files">${files('finals', 'Photos', 'Click Add photos and choose the edited photos.')}</div>
+      <span class="label" style="margin-top:1.2rem">Step 2 · Send the link</span>
+      <div class="st-tools">
+        <button type="button" data-do="copy">Copy link</button>
+        <a href="${esc(emailFor(p).href)}">Email link</a>
+        <button type="button" data-do="copyEmail">Copy email text</button>
+        <a href="${esc(p.link)}" target="_blank" rel="noopener">Preview gallery</a>
+      </div>
+      <p class="st-msg" data-msg></p>
+      <div class="st-person-top"><label class="st-field grow"><span>Their email (optional, fills in Email link)</span><input type="email" value="${esc(p.email)}" data-field="email" placeholder="e.g. owner@company.com"></label></div>
+    </div>`;
     return `<div class="st-person" data-person="${esc(p.id)}">
       <div class="st-person-top">
         <label class="st-field grow"><span>${project.settings.mode === 'none' ? 'Link for' : 'Name'}</span><input value="${esc(p.name)}" data-field="name"></label>
@@ -126,18 +164,9 @@
     </div>`;
   }
 
-  function projectHtml() {
-    const s = project.settings;
-    const picked = project.people.filter((p) => p.submittedAt).length;
+  function settingsForm(s) {
     const pickOnly = s.mode === 'none' ? ' style="display:none"' : '';
-    return `<div class="st">
-      <a class="st-back" href="#">← All projects</a>
-      <span class="label" style="display:block;margin-top:2rem">${esc(project.client || 'Project')}</span>
-      <h1>${esc(project.name)}</h1>
-      <p class="muted">${project.people.length} ${s.mode === 'none' ? (project.people.length === 1 ? 'link' : 'links') : project.people.length === 1 ? 'person' : 'people'} · ${s.mode === 'none' ? 'delivery, no picking' : `${picked} picked · rule: ${esc(project.rule)}`}</p>
-
-      <h2>Gallery <em>settings</em></h2>
-      <form id="sf">
+    return `<form id="sf">
         <div class="st-row">
           <label class="st-field"><span>Project name</span><input name="name" value="${esc(project.name)}"></label>
           <label class="st-field"><span>Client</span><input name="client" value="${esc(project.client)}"></label>
@@ -160,7 +189,30 @@
           <button class="btn btn-gold" type="submit" style="margin-left:auto">Save settings</button>
         </div>
         <p class="st-msg" id="sm"></p>
-      </form>
+      </form>`;
+  }
+
+  function projectHtml() {
+    const s = project.settings;
+    if (s.mode === 'none') return `<div class="st">
+      <a class="st-back" href="#">← All projects</a>
+      <span class="label" style="display:block;margin-top:2rem">${esc(project.client || 'Photo delivery')}</span>
+      <h1>${esc(project.name)}</h1>
+      <div class="st-list" style="margin-top:1.5rem">${project.people.slice(0, 1).map(personHtml).join('') || '<p class="muted">Setting up your link…</p>'}</div>
+      <details style="margin-top:3rem"><summary class="label" style="cursor:pointer">More settings</summary>${settingsForm(s)}</details>
+      <h2 style="margin-top:4rem">Danger <em>zone</em></h2>
+      <div class="st-tools"><button type="button" class="danger" id="delProject">Delete this gallery and all its photos</button></div>
+    </div>`;
+    const picked = project.people.filter((p) => p.submittedAt).length;
+    const pickOnly = s.mode === 'none' ? ' style="display:none"' : '';
+    return `<div class="st">
+      <a class="st-back" href="#">← All projects</a>
+      <span class="label" style="display:block;margin-top:2rem">${esc(project.client || 'Project')}</span>
+      <h1>${esc(project.name)}</h1>
+      <p class="muted">${project.people.length} ${s.mode === 'none' ? (project.people.length === 1 ? 'link' : 'links') : project.people.length === 1 ? 'person' : 'people'} · ${s.mode === 'none' ? 'delivery, no picking' : `${picked} picked · rule: ${esc(project.rule)}`}</p>
+
+      <h2>Gallery <em>settings</em></h2>
+      ${settingsForm(s)}
 
       ${s.mode === 'none'
         ? project.people.length
@@ -221,15 +273,15 @@
         draw(); flash(app.querySelector('#sm'), 'Saved');
       } catch (err) { $('#sm').textContent = err.message; }
     };
-    $('#pf').onsubmit = async (e) => {
+    if ($('#pf')) $('#pf').onsubmit = async (e) => {
       e.preventDefault();
       const names = $('#pNames').value.split('\n').map((s) => s.trim()).filter(Boolean);
       if (!names.length) return;
       try { project = (await act('addPeople', { names })).project; draw(); }
       catch (err) { $('#pm').textContent = err.message; }
     };
-    $('#copyLinks').onclick = () => copy(project.people.map((p) => `${p.name}: ${p.link}`).join('\n'), $('#pm'));
-    $('#copyPicks').onclick = () => copy(project.people.map((p) => `${p.name}: ${p.submittedAt ? p.selection.map(fileNo).join(', ') + (p.note ? ` (note: ${p.note})` : '') : 'not picked yet'}`).join('\n'), $('#pm'));
+    if ($('#copyLinks')) $('#copyLinks').onclick = () => copy(project.people.map((p) => `${p.name}: ${p.link}`).join('\n'), $('#pm'));
+    if ($('#copyPicks')) $('#copyPicks').onclick = () => copy(project.people.map((p) => `${p.name}: ${p.submittedAt ? p.selection.map(fileNo).join(', ') + (p.note ? ` (note: ${p.note})` : '') : 'not picked yet'}`).join('\n'), $('#pm'));
     $('#delProject').onclick = async () => {
       if (!confirm(`Delete "${project.name}" and every photo in it? This can't be undone.`)) return;
       await act('delete'); location.hash = '';
