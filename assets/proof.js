@@ -37,7 +37,13 @@
 
   function render() {
     const d = data;
-    const first = (d.person.name || '').split(' ')[0];
+    // First name: "Doe, Jane" → Jane (a comma always means last name first); skip titles like "Ms.".
+    const first = (() => {
+      let n = String(d.person.name || '').trim().replace(/\s+/g, ' ');
+      if (n.includes(',')) n = n.split(',').slice(1).join(' ').trim() || n.split(',')[0];
+      const w = n.split(' ').filter((x) => x && !/^(mr|mrs|ms|miss|mx|dr|prof|hon|judge|atty)\.?$/i.test(x));
+      return (w[0] || '').replace(/,+$/, '');
+    })();
     $('#pfProject').textContent = [d.project.client, d.project.name].filter(Boolean).join(' · ') || 'Private gallery';
     $('#pfTitle').innerHTML = d.proofs.length || !d.finals.length
       ? `${esc(first ? first + ', your' : 'Your')} <em>proofs</em>`
