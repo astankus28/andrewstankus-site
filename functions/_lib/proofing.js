@@ -195,6 +195,55 @@ export const fail = (err) =>
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+// Send an email through Resend. Returns true if Resend accepted it.
+export async function sendEmail(env, { to, subject, html, text, replyTo }) {
+  if (!env.RESEND_API_KEY) return false;
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: env.NOTIFY_FROM || 'ASA Proofing <onboarding@resend.dev>',
+        to: [to], subject, html, text, ...(replyTo ? { reply_to: replyTo } : {}),
+      }),
+    });
+    if (!res.ok) console.error('Resend error', res.status, await res.text());
+    return res.ok;
+  } catch (e) { console.error('Resend failed', e); return false; }
+}
+
+// Greeting name: "Doe, Jane" → Jane (a comma always means last name first); skips titles like "Ms.".
+export function firstName(name) {
+  let n = String(name || '').trim().replace(/\s+/g, ' ');
+  if (n.includes(',')) n = n.split(',').slice(1).join(' ').trim() || n.split(',')[0];
+  const w = n.split(' ').filter((x) => x && !/^(mr|mrs|ms|miss|mx|dr|prof|hon|judge|atty)\.?$/i.test(x));
+  return (w[0] || '').replace(/,+$/, '');
+}
+
+// The reminder a client gets when they haven't picked yet (sent from Studio).
+export function reminderEmail(project, person, link) {
+  const s = project.settings;
+  const first = firstName(person.name);
+  const ask = s.mode === 'exact' && s.count === 1 ? 'pick your favorite photo' : s.mode === 'any' ? 'select the photos you like' : s.mode === 'upto' ? `select up to ${s.count} photos` : `select your ${s.count} favorite photos`;
+  const by = s.deadline ? ` by ${new Date(s.deadline + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })}` : '';
+  const title = project.name.replace(/\s*[·-]\s*[A-Z][a-z]{2} \d.*$/, '').trim() || project.name;
+  const subject = `Reminder: your ${title} proofs are waiting`;
+  const lines = [
+    `Hi ${first || 'there'},`,
+    `Just a friendly reminder that your proofs are ready. Please ${ask}${by} so I can start retouching.`,
+    'Open your private gallery here:',
+  ];
+  const sign = ['If you have any questions, just reply to this email.', 'Best,\nAndrew Stankus\nAndrew Stankus Agency\n(305) 814-0142'];
+  const p = (t) => `<p style="margin:0 0 12px">${esc(t).replace(/\n/g, '<br>')}</p>`;
+  const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#111">` +
+    lines.map(p).join('') +
+    `<p style="margin:0 0 18px"><a href="${esc(link)}" style="display:inline-block;background:#111;color:#fff;text-decoration:none;padding:12px 22px;letter-spacing:.08em">View my proofs</a></p>` +
+    `<p style="margin:0 0 12px;font-size:13px;color:#666">Or paste this link into your browser: ${esc(link)}</p>` +
+    sign.map(p).join('') + `</div>`;
+  const text = `${lines.join('\n\n')}\n${link}\n\n${sign.join('\n\n')}`;
+  return { subject, html, text };
+}
+
 // Returns true if the email was sent. Without RESEND_API_KEY it does nothing; the selection
 // still shows in /studio.
 export async function notify(env, { subject, lines, link }) {

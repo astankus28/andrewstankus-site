@@ -166,7 +166,7 @@
       <div class="st-person-top">
         <label class="st-field grow"><span>${project.settings.mode === 'none' ? 'Link for' : 'Name'}</span><input value="${esc(p.name)}" data-field="name"></label>
         <label class="st-field grow"><span>Email (for the email button)</span><input type="email" value="${esc(p.email)}" data-field="email" placeholder="optional"></label>
-        ${project.settings.mode === 'none' ? `<span class="st-tag${p.finals.length ? ' done' : ''}">${p.finals.length ? p.finals.length + ' ready to download' : 'No photos yet'}</span>` : `<span class="st-tag${p.submittedAt ? ' done' : ''}">${p.submittedAt ? 'Picked ' + new Date(p.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : p.proofs.length ? 'Waiting' : 'No proofs yet'}</span>`}
+        ${project.settings.mode === 'none' ? `<span class="st-tag${p.finals.length ? ' done' : ''}">${p.finals.length ? p.finals.length + ' ready to download' : 'No photos yet'}</span>` : `<span class="st-tag${p.submittedAt ? ' done' : ''}">${p.submittedAt ? 'Picked ' + new Date(p.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : p.proofs.length ? 'Waiting' + (p.remindedAt ? ' · reminded ' + new Date(p.remindedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '') : 'No proofs yet'}</span>`}
       </div>
       ${picks}
       <div class="st-tools">
@@ -174,7 +174,7 @@
         <a href="${esc(emailFor(p).href)}">Email link</a>
         <button type="button" data-do="copyEmail">Copy email text</button>
         <a href="${esc(p.link)}" target="_blank" rel="noopener">Open gallery</a>
-        ${p.submittedAt ? '<button type="button" data-do="unlock">Let them pick again</button>' : ''}
+        ${p.submittedAt ? '<button type="button" data-do="unlock">Let them pick again</button>' : p.proofs.length ? '<button type="button" data-do="remind">Send reminder</button>' : ''}
         <button type="button" class="danger" data-do="remove">Remove</button>
       </div>
       <p class="st-msg" data-msg></p>
@@ -254,6 +254,7 @@
       <div class="st-tools" style="margin-top:1rem">
         <button type="button" id="copyLinks">Copy all links</button>
         <button type="button" id="copyPicks"${pickOnly}>Copy all picks</button>
+        <button type="button" id="remindAll"${pickOnly}>Remind everyone who hasn't picked</button>
       </div>
       <p class="st-msg" id="pm"></p>
       <div class="st-list" style="margin-top:1rem">${project.people.map(personHtml).join('') || `<p class="muted" style="padding:1.2rem 0">${s.mode === 'none' ? 'Add a link above, then drop the photos into it.' : 'Add the people you photographed above.'}</p>`}</div>
@@ -305,6 +306,21 @@
       catch (err) { $('#pm').textContent = err.message; }
     };
     if ($('#copyLinks')) $('#copyLinks').onclick = () => copy(project.people.map((p) => `${p.name}: ${p.link}`).join('\n'), $('#pm'));
+    if ($('#remindAll')) $('#remindAll').onclick = async () => {
+      const waiting = project.people.filter((p) => !p.submittedAt && p.proofs.length);
+      const withEmail = waiting.filter((p) => p.email);
+      const noEmail = waiting.filter((p) => !p.email);
+      if (!withEmail.length) { $('#pm').textContent = waiting.length ? 'Nobody waiting has an email yet. Add their emails on their cards first.' : "Everyone has picked. There's nobody to remind."; return; }
+      const extra = noEmail.length ? `\n\nNo email on file (skipped): ${noEmail.map((p) => p.name).join(', ')}` : '';
+      if (!confirm(`Email a reminder to ${withEmail.length} ${withEmail.length === 1 ? 'person' : 'people'} who haven't picked yet? Each gets their own private link.${extra}`)) return;
+      $('#pm').textContent = 'Sending reminders…';
+      try {
+        const out = await act('remind');
+        project = out.project; draw();
+        const r = out.result;
+        $('#pm').textContent = `Reminder sent to ${r.sent.length} ${r.sent.length === 1 ? 'person' : 'people'}.` + (r.skipped.length ? ` Skipped: ${r.skipped.join(', ')}.` : '');
+      } catch (err) { $('#pm').textContent = err.message; }
+    };
     if ($('#copyPicks')) $('#copyPicks').onclick = () => copy(project.people.map((p) => `${p.name}: ${p.submittedAt ? p.selection.map(fileNo).join(', ') + (p.note ? ` (note: ${p.note})` : '') : 'not picked yet'}`).join('\n'), $('#pm'));
     $('#delProject').onclick = async () => {
       if (!confirm(`Delete "${project.name}" and every photo in it? This can't be undone.`)) return;
@@ -326,6 +342,15 @@
           if (what === 'copyEmail') { const m = emailFor(p); return copy(`Subject: ${m.subject}\n\n${m.body}`, msg); }
           if (what === 'unlock' && !confirm(`Reopen ${p.name}'s gallery so they can pick again?`)) return;
           if (what === 'remove' && !confirm(`Remove ${p.name} and all of their photos?`)) return;
+          if (what === 'remind') {
+            if (!p.email) { msg.textContent = 'Add their email above first.'; return; }
+            if (!confirm(`Email ${p.name} (${p.email}) a reminder with their gallery link?`)) return;
+            const out = await act('remind', { personId: p.id });
+            project = out.project; draw();
+            const m = document.querySelector(`.st-person[data-person="${p.id}"] [data-msg]`);
+            if (m) m.textContent = out.result.sent.length ? 'Reminder sent' : 'Not sent: ' + out.result.skipped.join(', ');
+            return;
+          }
           project = (await act(what, { personId: p.id })).project; draw();
         } catch (err) { msg.textContent = err.message; }
       });

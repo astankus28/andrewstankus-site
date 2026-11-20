@@ -5,10 +5,11 @@
 //   person     { personId, name, email }        rename / set email
 //   unlock     { personId }                     reopen a gallery so they can pick again
 //   remove     { personId }                     delete a person and their photos
+//   remind     { personId? }                    email everyone who hasn't picked (or just that person)
 //   delete     {}                               delete the whole project and its photos
 import {
   loadProject, updateProject, listFiles, deleteProject, deletePrefix, normalizeSettings, randomId,
-  linkToken, ruleText, fail, json, HttpError,
+  linkToken, ruleText, fail, json, HttpError, sendEmail, reminderEmail,
 } from '../../_lib/proofing.js';
 
 async function view(env, project, origin) {
@@ -44,6 +45,28 @@ export async function onRequestPost({ env, request }) {
       await deleteProject(env, b.id);
       return json({ ok: true });
     }
+    let result;
+    // Reminders: send the emails first (outside the save, which can retry), then record who got one.
+    if (b.action === 'remind') {
+      const cur = await loadProject(env, b.id);
+      if (!cur) throw new HttpError(404, 'Project not found');
+      const p = cur.project;
+      if (p.settings.mode === 'none') throw new HttpError(400, 'This gallery has no picking, so there is nothing to remind.');
+      if (!env.RESEND_API_KEY) throw new HttpError(400, 'Email is not set up yet (RESEND_API_KEY is missing in Cloudflare).');
+      const files = await listFiles(env, p.id);
+      const targets = b.personId ? p.people.filter((q) => q.id === b.personId) : p.people.filter((q) => !q.submittedAt);
+      if (b.personId && !targets.length) throw new HttpError(404, 'Person not found');
+      result = { sent: [], skipped: [], sentIds: [] };
+      for (const x of targets) {
+        const email = String(x.email || '').trim();
+        if (x.submittedAt) { result.skipped.push(`${x.name} (already picked)`); continue; }
+        if (!(files[x.id]?.proofs || []).length) { result.skipped.push(`${x.name} (no proofs yet)`); continue; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { result.skipped.push(`${x.name} (no email)`); continue; }
+        const m = reminderEmail(p, x, `${origin}/proof/${linkToken(p.id, x.id)}`);
+        if (await sendEmail(env, { to: email, ...m, replyTo: env.NOTIFY_TO || 'andrew@andrewstankus.com' })) { result.sent.push(x.name); result.sentIds.push(x.id); }
+        else result.skipped.push(`${x.name} (email failed)`);
+      }
+    }
     const { project } = await updateProject(env, b.id, async (p) => {
       const person = () => {
         const x = p.people.find((q) => q.id === b.personId);
@@ -77,6 +100,11 @@ export async function onRequestPost({ env, request }) {
           x.submittedAt = null;
           break;
         }
+        case 'remind': {
+          const at = new Date().toISOString();
+          for (const x of p.people) if (result?.sentIds?.includes(x.id)) x.remindedAt = at;
+          break;
+        }
         case 'remove': {
           const x = person();
           await deletePrefix(env, `_proofing/files/${p.id}/${x.id}/`);
@@ -87,6 +115,6 @@ export async function onRequestPost({ env, request }) {
           throw new HttpError(400, 'Unknown action');
       }
     });
-    return json({ project: await view(env, project, origin) });
+    return json({ project: await view(env, project, origin), ...(result ? { result } : {}) });
   } catch (e) { return fail(e); }
 }
