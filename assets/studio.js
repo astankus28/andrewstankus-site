@@ -109,7 +109,7 @@
     const ask = s.mode === 'exact' && s.count === 1 ? 'pick your favorite' : s.mode === 'any' ? 'select the ones you like' : s.mode === 'upto' ? `select up to ${s.count}` : `select your ${s.count} favorites`;
     const by = s.deadline ? ` by ${new Date(s.deadline + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}` : '';
     const subject = `Your ${project.name.replace(/\s*·.*$/, '')} proofs are ready`;
-    const body = `Hi ${first},\n\nYour proofs are ready! View your private gallery here:\n${p.link}\n\nPlease ${ask} and press "Send my selection"${by}. Once I receive it, I'll retouch your final image and send it over.\n\nIf you have any questions, just reply to this email.\n\nBest,\nAndrew Stankus\nAndrew Stankus Agency\n(305) 814-0142`;
+    const body = `Hi ${first},\n\nYour proofs are ready! View your private gallery here:\n${p.link}\n\nPlease ${ask} and press "Send my selection"${by}. ${s.downloadPicks ? 'As soon as you send it, your photos will be ready to download from the same link.' : "Once I receive it, I'll retouch your final image and send it over."}\n\nIf you have any questions, just reply to this email.\n\nBest,\nAndrew Stankus\nAndrew Stankus Agency\n(305) 814-0142`;
     return { subject, body, href: `mailto:${encodeURIComponent(p.email || '')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
   }
 
@@ -185,7 +185,8 @@
         </div>
         <div class="st-row" style="margin-top:.6rem">
           <label class="st-check" data-pick${pickOnly}><input type="checkbox" name="watermark"${s.watermark ? ' checked' : ''}> Show ASA watermark on proofs</label>
-          <label class="st-check" data-pick${pickOnly}><input type="checkbox" name="downloadProofs"${s.downloadProofs ? ' checked' : ''}> Let them download proofs</label>
+          <label class="st-check" data-pick${pickOnly}><input type="checkbox" name="downloadPicks"${s.downloadPicks ? ' checked' : ''}> Let them download their picks right away</label>
+          <label class="st-check" data-pick${pickOnly}><input type="checkbox" name="downloadProofs"${s.downloadProofs ? ' checked' : ''}> Let them download all proofs</label>
           <button class="btn btn-gold" type="submit" style="margin-left:auto">Save settings</button>
         </div>
         <p class="st-msg" id="sm"></p>
@@ -267,7 +268,7 @@
       try {
         project = (await act('settings', {
           name: f.get('name'), client: f.get('client'),
-          settings: { mode: f.get('mode'), count: f.get('count'), deadline: f.get('deadline'), message: f.get('message'), watermark: !!f.get('watermark'), downloadProofs: !!f.get('downloadProofs') },
+          settings: { mode: f.get('mode'), count: f.get('count'), deadline: f.get('deadline'), message: f.get('message'), watermark: !!f.get('watermark'), downloadProofs: !!f.get('downloadProofs'), downloadPicks: !!f.get('downloadPicks') },
         })).project;
         await ensureLink();
         draw(); flash(app.querySelector('#sm'), 'Saved');

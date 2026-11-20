@@ -29,7 +29,10 @@ export async function onRequestGet({ params, env }) {
       note: person.note || '',
       // Delivery projects (mode "none") have nothing to pick, so only the finals are shown.
       proofs: s.mode === 'none' ? [] : files.proofs.map(({ name, url }) => ({ name, url })),
-      finals: files.finals.map(({ name, url }) => ({ name, url })),
+      // With "download picks right away", their sent picks are ready to download until retouched finals replace them.
+      finals: files.finals.length || !(s.downloadPicks && person.submittedAt)
+        ? files.finals.map(({ name, url }) => ({ name, url }))
+        : files.proofs.filter((f) => (person.selection || []).includes(f.name)).map(({ name, url }) => ({ name, url, kind: 'proofs' })),
     }, 200, { 'X-Robots-Tag': 'noindex, nofollow' });
   } catch (e) { return fail(e); }
 }

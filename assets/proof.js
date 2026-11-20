@@ -24,7 +24,7 @@
   function tile(f, i, kind) {
     const wm = data.watermark && kind === 'proofs' ? stamp(f.name) : '';
     const dl = kind === 'finals' || data.downloadProofs
-      ? `<a class="pf-dl" href="/api/proof-file?t=${encodeURIComponent(token)}&kind=${kind}&f=${encodeURIComponent(f.name)}">Download</a>` : '';
+      ? `<a class="pf-dl" href="/api/proof-file?t=${encodeURIComponent(token)}&kind=${f.kind || kind}&f=${encodeURIComponent(f.name)}">Download</a>` : '';
     const pick = kind === 'proofs' && !data.submitted
       ? `<button class="pf-pick" type="button" data-name="${esc(f.name)}" aria-pressed="false">Select</button>` : '';
     return `<figure class="pf-tile" data-name="${esc(f.name)}">
@@ -59,7 +59,7 @@
       $('#pfDone').innerHTML = `<span class="label">Selection received</span>
         <h2>Thank <em>you.</em></h2>
         <p>You chose <b>${d.selection.map((n) => esc(fileNo(n))).join(', ')}</b> on ${esc(fmtDate(d.submittedAt))}.
-        ${d.finals.length ? 'Your final images are ready below.' : "I'll retouch your selection and let you know when it's ready."}
+        ${d.finals.length ? 'Your photos are ready to download below.' : "I'll retouch your selection and let you know when it's ready."}
         Need to change something? Email <a href="mailto:andrew@andrewstankus.com">andrew@andrewstankus.com</a>.</p>`;
     }
 
@@ -151,14 +151,14 @@
   const crc32 = (u8) => { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
   async function downloadAll() {
     const btn = $('#pfDlAll'), msg = $('#pfDlMsg'), files = data.finals;
-    if (files.length === 1) { location.href = `/api/proof-file?t=${encodeURIComponent(token)}&kind=finals&f=${encodeURIComponent(files[0].name)}`; return; }
+    if (files.length === 1) { location.href = `/api/proof-file?t=${encodeURIComponent(token)}&kind=${files[0].kind || 'finals'}&f=${encodeURIComponent(files[0].name)}`; return; }
     btn.disabled = true;
     const parts = [], central = [], enc = new TextEncoder();
     let offset = 0;
     try {
       for (let i = 0; i < files.length; i++) {
         msg.textContent = `Preparing ${i + 1} of ${files.length}…`;
-        const res = await fetch(`/api/proof-file?t=${encodeURIComponent(token)}&kind=finals&f=${encodeURIComponent(files[i].name)}`);
+        const res = await fetch(`/api/proof-file?t=${encodeURIComponent(token)}&kind=${files[i].kind || 'finals'}&f=${encodeURIComponent(files[i].name)}`);
         if (!res.ok) throw new Error();
         const buf = new Uint8Array(await res.arrayBuffer()), name = enc.encode(files[i].name), crc = crc32(buf);
         const h = new DataView(new ArrayBuffer(30));

@@ -1,5 +1,5 @@
 // GET /api/proof-file?t=<link>&kind=finals|proofs&f=<file name>  →  downloads one photo as a file.
-// Finals can always be downloaded; proofs only when the project allows it.
+// Finals can always be downloaded; proofs only when the project allows it (all of them, or the client's own picks).
 import { loadProject, parseToken, fileKey, safeName, KINDS, json } from '../_lib/proofing.js';
 
 export async function onRequestGet({ request, env }) {
@@ -10,7 +10,11 @@ export async function onRequestGet({ request, env }) {
   if (!t || !KINDS.includes(kind) || !safeName(name)) return json({ error: 'Not found' }, 404);
   const cur = await loadProject(env, t.projectId);
   const person = cur?.project.people.find((p) => p.id === t.personId);
-  if (!person || (kind === 'proofs' && !cur.project.settings.downloadProofs)) return json({ error: 'Not found' }, 404);
+  if (!person) return json({ error: 'Not found' }, 404);
+  // Proofs download only if the project allows all of them, or allows their own picks once sent.
+  const s = cur.project.settings;
+  const ownPick = s.downloadPicks && person.submittedAt && (person.selection || []).includes(name);
+  if (kind === 'proofs' && !s.downloadProofs && !ownPick) return json({ error: 'Not found' }, 404);
   const obj = await env.PHOTOS.get(fileKey(t.projectId, t.personId, kind, name));
   if (!obj) return json({ error: 'Not found' }, 404);
   return new Response(obj.body, {

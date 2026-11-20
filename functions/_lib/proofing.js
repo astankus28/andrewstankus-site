@@ -105,6 +105,7 @@ export function normalizeSettings(s) {
     count: Math.max(1, Math.min(500, parseInt(s.count, 10) || 1)),
     watermark: !!s.watermark,                               // show the ASA mark over the proofs
     downloadProofs: !!s.downloadProofs,                     // let clients download the proofs themselves
+    downloadPicks: !!s.downloadPicks,                       // once they send their selection, they can download those photos right away
     message: String(s.message || '').slice(0, 2000),        // note shown at the top of every client's gallery
     deadline: /^\d{4}-\d{2}-\d{2}$/.test(s.deadline || '') ? s.deadline : '',
   };
