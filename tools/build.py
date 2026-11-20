@@ -392,7 +392,7 @@ def homepage_credits():
     return strip(fest), strip(cred)
 
 
-def city_page(c, events):
+def city_page(c, events, everything=()):
     """A landing page per city (e.g. /miami-event-photography/), built like the category pages:
     intro text for search, selected credits, that city's events, a short FAQ, then the inquiry button."""
     up = "../"
@@ -413,6 +413,16 @@ def city_page(c, events):
     gallery = (f'''<section class="gallery" aria-label="Photo gallery" data-folder="{e(gal['folder'])}" data-title="{e(gal['title'])}" data-captions='{e(json.dumps(gal['captions']))}'>
 </section>
 ''' if gal else "")
+    # The agency's newest events from anywhere (each card shows its city), so the page always has recent work.
+    shown = {ev["slug"] for ev in events}
+    others = [ev for ev in everything if ev["slug"] not in shown][:3]
+    latest = (f'''<section class="svc-recent">
+  <span class="label">Latest from the agency</span>
+  <div class="idx">
+{chr(10).join(card(ev, up) for ev in others)}
+  </div>
+</section>
+''' if others else "")
     intro = "\n".join(f"    <p>{e(p)}</p>" for p in c["intro"])
     services = ", ".join(f'<a href="{up}{k["slug"]}/index.html">{e(k["name"].lower())}</a>' for k in CATEGORIES)
     fest, cred = homepage_credits()
@@ -488,6 +498,7 @@ def city_page(c, events):
 {credits}
 {recent}
 {gallery}
+{latest}
 <section class="recap svc-faq">
   <div class="lede">Questions, answered.</div>
   <div>
@@ -663,7 +674,7 @@ def main():
     for c in CITIES:
         out = ROOT / c["slug"] / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(city_page(c, [ev for ev in events if city_of(ev, c)]))
+        out.write_text(city_page(c, [ev for ev in events if city_of(ev, c)], events))
     build_site_data()
     stamp_versions()
     newest = events[0]["date"] if events else date.today().isoformat()
