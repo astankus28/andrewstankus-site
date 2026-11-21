@@ -244,6 +244,7 @@
   form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem 1.2rem; }
   .f { display: flex; flex-direction: column; gap: .4rem; }
   .f.full { grid-column: 1 / -1; }
+  .f[hidden] { display: none; }
   .f label { font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
   .f input, .f select, .f textarea {
     background: transparent; border: 0; border-bottom: 1px solid rgba(243,239,232,.22); color: var(--paper);
@@ -484,6 +485,7 @@
     <span class="label">Inquire</span>
     <h2 class="title" style="margin-top:1rem">Have a date? <em>Let's hold it.</em></h2>
     <p style="color:var(--muted);margin-top:1.4rem;max-width:420px">Dates fill quickly, especially around the holidays. Send the details and we'll confirm availability within one business day.</p>
+    <p style="color:var(--muted);margin-top:1rem;max-width:420px">Need us regularly? We work with brands, restaurant groups, firms and venues on an ongoing basis: monthly content, recurring events, seasonal menu updates and headshots as your team grows, with one point of contact and priority on dates.</p>
     <div class="contact">
       <a href="mailto:andrew@andrewstankus.com"><small>Email</small>andrew@andrewstankus.com</a>
       <a href="tel:+13058140142"><small>Phone</small>(305) 814-0142</a>
@@ -493,14 +495,22 @@
   <form id="inqForm" class="reveal">
     <div class="f"><label for="fn">Name</label><input id="fn" name="name" required></div>
     <div class="f"><label for="fe">Email</label><input id="fe" name="email" type="email" required></div>
-    <div class="f"><label for="fd">Event date</label><input id="fd" name="date" type="date"></div>
-    <div class="f"><label for="ft">Event type</label>
+    <div class="f full"><label for="fk">Looking for</label>
+      <select id="fk" name="booking">
+        <option>A single event or shoot</option><option>An ongoing partnership</option>
+      </select></div>
+    <div class="f"><label for="fd" id="fdL">Event date</label><input id="fd" name="date" type="date"></div>
+    <div class="f"><label for="ft" id="ftL">Event type</label>
       <select id="ft" name="type">
         <option>Corporate event</option><option>Opening / Launch</option><option>Fundraiser / Benefit</option><option>Private celebration</option>
         <option>Commercial / Advertising</option><option>Hospitality</option><option>Portraits / Headshots</option><option>Other</option>
       </select></div>
     <div class="f"><label for="fv">Venue / City</label><input id="fv" name="venue"></div>
-    <div class="f"><label for="fg">Guest count</label><input id="fg" name="guests"></div>
+    <div class="f" id="fgW"><label for="fg">Guest count</label><input id="fg" name="guests"></div>
+    <div class="f" id="fqW" hidden><label for="fq">How often</label>
+      <select id="fq" name="frequency">
+        <option>Weekly</option><option>A few times a month</option><option selected>Monthly</option><option>Quarterly</option><option>Seasonal</option><option>As needed</option>
+      </select></div>
     <div class="f full"><label for="fm">Tell us about it</label><textarea id="fm" name="message"></textarea></div>
     <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
     <button type="submit" class="btn btn-gold" id="inqBtn">Send inquiry</button>
@@ -673,12 +683,24 @@ let tx = 0;
 $('#lb').addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
 $('#lb').addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); });
 
+// Single vs ongoing: swap the date/guest fields to fit
+const setKind = () => {
+  const ongoing = $('#fk').value.startsWith('An ongoing');
+  $('#fdL').textContent = ongoing ? 'Ideal start date' : 'Event date';
+  $('#ftL').textContent = ongoing ? 'Main type of work' : 'Event type';
+  $('#fgW').hidden = ongoing; $('#fqW').hidden = !ongoing;
+  $('#fm').placeholder = ongoing ? 'What you need on a regular basis: events, menu or product photos, social content, video, headshots…' : '';
+};
+$('#fk').onchange = setKind;
+
 // Inquiry form → opens the visitor's email app addressed to you
 $('#inqForm').onsubmit = async e => {
   e.preventDefault();
   const form = e.target, f = Object.fromEntries(new FormData(form));
-  const subject = 'New inquiry: ' + f.type + (f.date ? ' on ' + f.date : '') + ' from ' + f.name;
-  const body = `Name: ${f.name}\nEmail: ${f.email}\nDate: ${f.date}\nType: ${f.type}\nVenue/City: ${f.venue}\nGuests: ${f.guests}\n\n${f.message}`;
+  const ongoing = f.booking.startsWith('An ongoing');
+  if (ongoing) f.guests = ''; else f.frequency = '';
+  const subject = (ongoing ? 'New ongoing-partnership inquiry: ' + f.type + ' (' + f.frequency + ')' : 'New inquiry: ' + f.type + (f.date ? ' on ' + f.date : '')) + ' from ' + f.name;
+  const body = `Name: ${f.name}\nEmail: ${f.email}\nLooking for: ${f.booking}\n${ongoing ? 'Start date' : 'Date'}: ${f.date}\nType: ${f.type}\nVenue/City: ${f.venue}\n${ongoing ? 'How often: ' + f.frequency : 'Guests: ' + f.guests}\n\n${f.message}`;
   const msg = $('#inqMsg'), btn = $('#inqBtn');
   if (f.botcheck) return;                       // hidden field only bots fill in
   if (!SITE.form_key) {                          // no form service set up: fall back to email app
@@ -692,16 +714,16 @@ $('#inqForm').onsubmit = async e => {
       ? await fetch(key, {                         // e.g. a Formspree endpoint: https://formspree.io/f/xxxxxxx
           method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({ _subject: subject, _replyto: f.email, name: f.name, email: f.email, event_date: f.date,
-            event_type: f.type, venue: f.venue, guests: f.guests, message: f.message })
+            booking: f.booking, frequency: f.frequency, event_type: f.type, venue: f.venue, guests: f.guests, message: f.message })
         })
       : await fetch('https://api.web3forms.com/submit', {
       method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ access_key: key, subject, from_name: 'andrewstankus.com', replyto: f.email,
-        name: f.name, email: f.email, event_date: f.date, event_type: f.type, venue: f.venue, guests: f.guests, message: f.message, botcheck: '' })
+        name: f.name, email: f.email, event_date: f.date, booking: f.booking, frequency: f.frequency, event_type: f.type, venue: f.venue, guests: f.guests, message: f.message, botcheck: '' })
     });
     const out = await res.json().catch(() => ({}));
     if (!res.ok || out.success === false || out.ok === false) throw new Error(out.message || res.status);
-    form.reset();
+    form.reset(); setKind();
     msg.textContent = "Thank you, we've got it. Expect a reply within one business day.";
   } catch (err) {
     msg.innerHTML = `Something went wrong. Please email <a href="mailto:${MAIL}">${MAIL}</a> or call (305) 814-0142.`;
