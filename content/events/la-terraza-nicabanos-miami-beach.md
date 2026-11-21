@@ -20,7 +20,7 @@ captions:
 - La Terraza Nicabanos to go
 ---
 
-Miami Beach, FL – You've probably walked right past it. On a stretch of Washington Avenue packed with neon and sidewalk hosts, [La Terraza Nicabanos](https://www.laterrazanicabanos.com/) sits quietly behind palm fronds in a small house built of coral rock. The restaurant isn't on the street the way its neighbors are, so plenty of people stroll by without noticing it. The ones who find it are welcomed with open arms, and they get a Mediterranean steakhouse with deep Levantine roots, much of it halal, in a room with real history.
+Miami Beach, FL – On a stretch of Washington Avenue packed with neon and sidewalk hosts, [La Terraza Nicabanos](https://www.laterrazanicabanos.com/) is tucked away inside a hotel complex, in a small house built of coral rock behind the palm fronds. Step inside and you're welcomed with open arms, with a Mediterranean steakhouse menu that has deep Levantine roots, much of it halal, in a room with real history.
 
 The house dates to 1922, before the Art Deco hotels that made South Beach famous, and its walls are faced in coral rock, the local limestone you hardly see anymore. Local lore says it was built by Henri Levy, the developer behind Normandy Isles, who lived here with his family while building out North Beach.
 
