@@ -2,12 +2,12 @@
 window.EVENTS = [
   {
     "slug": "la-terraza-nicabanos-miami-beach",
-    "title": "La Terraza Nicabanos: Hidden Mediterranean Grill in South Beach",
+    "title": "La Terraza Nicabanos: Hidden Mediterranean Steakhouse in South Beach",
     "date": "2026-11-20",
     "client": "La Terraza Nicabanos",
     "city": "Miami Beach, FL",
     "category": "Restaurants & Food",
-    "summary": "Halal Wagyu, hummus and cigars: we shot the menu at La Terraza Nicabanos, a Mediterranean grill hidden in a 1922 coral rock house in South Beach.",
+    "summary": "Halal Wagyu, hummus and cigars: we shot the menu at La Terraza Nicabanos, a Mediterranean steakhouse hidden in a 1922 coral rock house in South Beach.",
     "photos": 0,
     "cover": "api/cover?folder=la-terraza-nicabanos-miami-beach"
   },

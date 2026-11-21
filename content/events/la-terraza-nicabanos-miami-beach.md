@@ -1,11 +1,11 @@
 ---
-title: "La Terraza Nicabanos: Hidden Mediterranean Grill in South Beach"
+title: "La Terraza Nicabanos: Hidden Mediterranean Steakhouse in South Beach"
 date: '2026-11-20'
 client: La Terraza Nicabanos
 venue: La Terraza Nicabanos, 1030 Washington Ave.
 city: Miami Beach, FL
 category: Restaurants & Food
-summary: 'Halal Wagyu, hummus and cigars: we shot the menu at La Terraza Nicabanos, a Mediterranean grill hidden in a 1922 coral rock house in South Beach.'
+summary: 'Halal Wagyu, hummus and cigars: we shot the menu at La Terraza Nicabanos, a Mediterranean steakhouse hidden in a 1922 coral rock house in South Beach.'
 share_photo: 01.jpg
 photo_folder: la-terraza-nicabanos-miami-beach
 captions:
@@ -20,7 +20,7 @@ captions:
 - La Terraza Nicabanos to go
 ---
 
-Miami Beach, FL – You've probably walked right past it. On a stretch of Washington Avenue packed with neon and sidewalk hosts, [La Terraza Nicabanos](https://www.laterrazanicabanos.com/) sits quietly behind palm fronds in a small house built of coral rock. Owner Akshay will be the first to tell you the location is a challenge: the restaurant isn't on the street the way its neighbors are, so plenty of people stroll by without noticing it. The ones who find it are welcomed with open arms, and they get serious Mediterranean cooking with deep Levantine roots, much of it halal, in a room with real history.
+Miami Beach, FL – You've probably walked right past it. On a stretch of Washington Avenue packed with neon and sidewalk hosts, [La Terraza Nicabanos](https://www.laterrazanicabanos.com/) sits quietly behind palm fronds in a small house built of coral rock. The restaurant isn't on the street the way its neighbors are, so plenty of people stroll by without noticing it. The ones who find it are welcomed with open arms, and they get a Mediterranean steakhouse with deep Levantine roots, much of it halal, in a room with real history.
 
 The house dates to 1922, before the Art Deco hotels that made South Beach famous, and its walls are faced in coral rock, the local limestone you hardly see anymore. Local lore says it was built by Henri Levy, the developer behind Normandy Isles, who lived here with his family while building out North Beach.
 
