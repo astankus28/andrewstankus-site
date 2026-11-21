@@ -6,7 +6,7 @@ venue: La Terraza Nicabanos, 1030 Washington Ave.
 city: Miami Beach, FL
 category: Restaurants & Food
 summary: 'Halal Wagyu, hummus and cigars: we shot the menu at La Terraza Nicabanos, a Mediterranean grill hidden in a 1922 coral rock house in South Beach.'
-cover_focus: top
+share_photo: 01.jpg
 photo_folder: la-terraza-nicabanos-miami-beach
 captions:
 - The coral rock house, 1030 Washington Ave.
